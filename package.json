@@ -1,6 +1,6 @@
 {
   "name": "@openliate/liate",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "India's Open Source AI Agent Framework",
   "type": "module",
   "main": "./dist/liate.js",
