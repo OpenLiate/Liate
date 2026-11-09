@@ -1,6 +1,6 @@
 {
   "name": "@openliate/liate",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "India's Open Source AI Agent Framework",
   "type": "module",
   "main": "./dist/liate.js",
@@ -28,6 +28,8 @@
     "build:cli": "bun build ./src/cli/index.ts --compile --outfile dist/cli/liate",
     "build:runtime": "bun build ./src/runtime/hono.ts --target node --format esm --outfile dist/runtime/index.js",
     "build:sdk": "bun build ./src/liate.ts --target node --format esm --outfile dist/liate.js",
+    "build:compile": "bun build ./src/liate.ts --compile --outfile dist/liate",
+    "compile": "bun run build:compile",
     "serve": "bun run dist/runtime/index.js",
     "typecheck": "tsc --noEmit",
     "build:hono": "bun build ./src/runtime/hono.ts --target bun --format esm --outfile dist/runtime/hono.js",
@@ -45,6 +47,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
+    "bun-types": "1.4.4",
     "typescript": "^5.7.0"
   },
   "keywords": [

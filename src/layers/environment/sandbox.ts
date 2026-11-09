@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import os from "os";
-import type { SandboxConfig } from "./types";
+import type { SandboxConfig } from "@/layers/environment/types";
 
 export class EnvironmentResolver {
   /**
@@ -59,7 +59,7 @@ export class EnvironmentResolver {
    * Expands variable references (e.g. "$API_KEY" -> process.env.API_KEY)
    */
   public static resolve(
-    declaredEnv: Record<string, string>,
+    declaredEnv: Record<string, string | undefined>,
     systemEnv: Record<string, string | undefined> = process.env
   ): Record<string, string> {
     const resolved: Record<string, string> = {};
@@ -92,7 +92,7 @@ export class EnvironmentResolver {
    * Constructs an isolated sandbox configuration
    */
   public static createSandbox(
-    env: Record<string, string>,
+    env: Record<string, string | undefined>,
     options: Partial<SandboxConfig> = {}
   ): SandboxConfig {
     const resolvedEnv = this.resolve(env);

@@ -6,9 +6,9 @@ import type {
   AgentExecutionOptions,
   ToolCall,
   ToolResult
-} from "./types";
-import type { MemoryProvider } from "../integration/types";
-import type { LlmMessage, LlmChatResponse } from "../llm/model";
+} from "@/layers/agent/types";
+import type { MemoryProvider } from "@/layers/integration/types";
+import type { LlmMessage, LlmChatResponse } from "@/layers/llm/model";
 
 export interface LLMFunctionCaller {
   chat(messages: LlmMessage[], options?: any): Promise<LlmChatResponse & { toolCalls?: ToolCall[] }>;

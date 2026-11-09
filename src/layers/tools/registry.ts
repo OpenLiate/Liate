@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
-import type { AgentTool } from "../agent/types";
-import type { McpServerConfig, ParsedToolSpec } from "./types";
-import { MCP } from "./mcp";
+import type { AgentTool } from "@/layers/agent/types";
+import type { McpServerConfig, ParsedToolSpec } from "@/layers/tools/types";
+import { MCP } from "@/layers/tools/mcp";
 
 export class ToolRegistry {
   public static parseSpec(spec: string): ParsedToolSpec {

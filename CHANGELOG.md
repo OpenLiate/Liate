@@ -4,6 +4,22 @@ All notable changes to Liate: Open Source AI Agents Framework — Built for Sove
 
 ---
 
+## Sprint 2: Core Engine, Runtime & CLI (v0.0.6 → v0.1.0)
+
+### v0.0.6 (OOP Class & Core Architecture)
+- Added 5 layers specification in `src/core/spec.ts` (`L · I · A · T · E`).
+- Added Agent Unified Module (AUM) in `src/core/aum.ts` supporting shorthand (`L, I, A, T, E`), full name, and lowercase declarations.
+- Added Orchestration Module (OM) in `src/core/om.ts` introducing `class liate` base class (`class MyAgent extends liate`).
+- Added framework entrypoint in `src/liate.ts` for both SDK imports and direct execution.
+- Added standalone native binary compilation via Bun (`bun run compile` / `bun build ./src/liate.ts --compile --outfile dist/liate`).
+- Added graceful MCP lifecycle teardown (`agent.close()`) releasing stdio child process pipes on completion.
+- Added `src/layers/llm/types.ts` achieving 100% folder symmetry across all 5 layers.
+- Adopted modern `@/*` path aliases across the entire codebase with zero relative traversals (`./` or `../`).
+- Added `bun-types` and dual runtime type definitions for Bun and Node.
+- Verified live execution of `agent.json` with Sarvam AI 105B and `uvx mcp-server-time` in 809ms.
+
+---
+
 ## Sprint 1: The 5 Elements Foundation (v0.0.0 → v0.0.5)
 
 ### v0.0.5 (Layer E: Environment & Sandbox)

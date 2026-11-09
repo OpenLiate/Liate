@@ -13,8 +13,10 @@ export interface McpAgentLike {
  */
 export function createAgentMcpServer(agent: McpAgentLike): McpServer {
   const agentName = agent.name || "Agent";
+  const agentVersion = (agent as any).version || "0.0.1";
   const server = new McpServer({
-    name: `liate-${agentName.toLowerCase()}`
+    name: `liate-${agentName.toLowerCase()}`,
+    version: agentVersion
   });
 
   // Tool 1: Run Agent

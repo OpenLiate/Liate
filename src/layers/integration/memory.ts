@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import type { AgentMessage, MemoryProvider, SessionData } from "./types";
+import type { AgentMessage, MemoryProvider, SessionData } from "@/layers/integration/types";
 
 /**
  * Unified Session Manager for Layer [I]

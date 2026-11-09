@@ -1,7 +1,7 @@
 import { Client } from "@modelcontextprotocol/client";
 import { StdioClientTransport } from "@modelcontextprotocol/client/stdio";
-import type { AgentTool } from "../agent/types";
-import type { McpServerConfig } from "./types";
+import type { AgentTool } from "@/layers/agent/types";
+import type { McpServerConfig } from "@/layers/tools/types";
 
 export class MCP {
   private static activeClients: Client[] = [];
@@ -22,6 +22,12 @@ export class MCP {
       try {
         if (typeof transport.close === "function") {
           await transport.close();
+        }
+        const proc = (transport as any)._process || (transport as any).process;
+        if (proc && typeof proc.kill === "function" && !proc.killed) {
+          try {
+            proc.kill();
+          } catch {}
         }
       } catch {}
     }

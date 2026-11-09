@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { AgentTool, IntegrationConfig, KnowledgeContext, KnowledgeDoc, MemoryProvider } from "./types";
-import { Session } from "./memory";
+import type { AgentTool, IntegrationConfig, KnowledgeContext, KnowledgeDoc, MemoryProvider } from "@/layers/integration/types";
+import { Session } from "@/layers/integration/memory";
 
 /**
  * Layer [I] Knowledge Manager

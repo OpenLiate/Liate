@@ -1,4 +1,4 @@
-import type { AgentContext } from "../agent/types";
+import type { AgentContext } from "@/layers/agent/types";
 
 export interface LlmToolSchema {
   type: "function";

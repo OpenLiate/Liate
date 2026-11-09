@@ -1,14 +1,14 @@
-import { ReActLoop } from "./loop";
+import { ReActLoop } from "@/layers/agent/loop";
 import type {
   AgentTool,
   AgentContext,
   AgentRunResult,
   AgentExecutionOptions,
   AgentConfig
-} from "./types";
-import type { MemoryProvider } from "../integration/types";
-import { Session } from "../integration/memory";
-import { LLMRouter } from "../llm/model";
+} from "@/layers/agent/types";
+import type { MemoryProvider } from "@/layers/integration/types";
+import { Session } from "@/layers/integration/memory";
+import { LLMRouter } from "@/layers/llm/model";
 
 export interface AgentOptions extends AgentConfig {
   memory?: MemoryProvider | string;
