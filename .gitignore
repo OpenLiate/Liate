@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.npmrc
+
+# Build outputs
+dist/
+bin/
+pkg/
+build/
+out/
+*.exe
+*.wasm
+*.tsbuildinfo
+
+# Runtime Agent Sessions & State
+sessions/
+.liate/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+
+# Fern docs local cache
+.fern/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+bun.lockb
+pnpm-debug.log*
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Scratch & Local Probing Scripts
+scripts/test-*
+scripts/probe-*
+scripts/inspect-*
+scripts/create-*
+test_*.ts
+*.local.*
