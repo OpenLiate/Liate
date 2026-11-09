@@ -12,6 +12,7 @@ export interface LlmToolSchema {
 export interface McpServerConfig {
   id: string;
   name: string;
+  version?: string;
   description?: string;
   transport?: "stdio" | "sse" | "http";
   command?: string;

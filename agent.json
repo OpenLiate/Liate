@@ -1,0 +1,27 @@
+{
+  "L": "sarvam/sarvam-105b-conversations",
+  "I": {
+    "memory": "sessions/liate-agent"
+  },
+  "A": {
+    "name": "liate-agent",
+    "version": "0.0.1",
+    "intent": "Autonomous Sovereign Agent powered by Sarvam AI. Use the time tool to tell the current time accurately.",
+    "maxSteps": 5
+  },
+  "T": {
+    "time": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-time"
+      ],
+      "tools": [
+        "*"
+      ]
+    }
+  },
+  "E": {
+    "SARVAM_API_KEY": "$SARVAM_API_KEY"
+  }
+}
+

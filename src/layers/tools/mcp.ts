@@ -84,7 +84,8 @@ export class MCP {
 
       const client = new Client(
         {
-          name: `liate-${config.name}`
+          name: `liate-${config.name}`,
+          version: config.version || "0.0.1"
         },
         {
           capabilities: {},
