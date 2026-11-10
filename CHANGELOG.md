@@ -6,6 +6,13 @@ All notable changes to Liate: Open Source AI Agents Framework — Built for Sove
 
 ## Sprint 2: Core Engine, Runtime & CLI (v0.0.6 → v0.1.0)
 
+### v0.0.7 (Edge Runtime Server)
+- High-performance edge HTTP server powered by Hono on port 7071.
+- 4 pure endpoints: `GET /health`, `POST /run`, `POST /chat`, `POST /stream`.
+- Multi-turn conversational session memory handling via Session provider.
+- Real-time Server-Sent Events (SSE) streaming of agent steps and tokens.
+- Verified live with Sarvam AI 105B API.
+
 ### v0.0.6 (OOP Class & Core Architecture)
 - Added 5 layers specification in `src/core/spec.ts` (`L · I · A · T · E`).
 - Added Agent Unified Module (AUM) in `src/core/aum.ts` supporting shorthand (`L, I, A, T, E`), full name, and lowercase declarations.
