@@ -1,0 +1,37 @@
+{
+  "name": "Liate Development Environment",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:26",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "username": "node"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "latest",
+      "pip": true
+    },
+    "ghcr.io/devcontainers-extra/features/bun:1": {
+      "version": "latest"
+    }
+  },
+  "forwardPorts": [7071],
+  "portsAttributes": {
+    "7071": {
+      "label": "Liate Edge Runtime",
+      "onAutoForward": "notify"
+    }
+  },
+  "postCreateCommand": "curl -LsSf https://astral.sh/uv/install.sh | sh && echo 'export PATH=\"$HOME/.local/bin:$HOME/.cargo/bin:$PATH\"' >> ~/.zshrc && echo 'export PATH=\"$HOME/.local/bin:$HOME/.cargo/bin:$PATH\"' >> ~/.bashrc && export PATH=\"$HOME/.local/bin:$HOME/.cargo/bin:$PATH\" && bun install && bun run build:bin && bun run build:runtime",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "oven.bun-vscode",
+        "biomejs.biome",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      }
+    }
+  }
+}

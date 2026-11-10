@@ -1,0 +1,12 @@
+services:
+  liate-runtime:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: liate-runtime
+    ports:
+      - "7071:7071"
+    environment:
+      - PORT=7071
+      - SARVAM_API_KEY=${SARVAM_API_KEY}
+    restart: unless-stopped

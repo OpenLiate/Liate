@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // src/cli/index.ts
-// Liate v0.0.8 — Unified Developer CLI Engine
-// Commands: run, chat, serve
+// Liate v0.1.0 — Unified Developer CLI Engine
+// Commands: run, chat, serve, hub
 
 import { resolveAgent } from "@/cli/resolver";
 import { EnvironmentResolver } from "@/layers/environment/sandbox";
@@ -10,7 +10,7 @@ import { stdin as input, stdout as output } from "node:process";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 
-const VERSION = "0.0.8";
+const VERSION = "0.1.0";
 
 function printHelp(): void {
   console.log(`

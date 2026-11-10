@@ -6,6 +6,13 @@ All notable changes to Liate: Open Source AI Agents Framework — Built for Sove
 
 ## Sprint 2: Core Engine, Runtime & CLI (v0.0.6 → v0.1.0)
 
+### v0.1.0 — Open Source AI Agent Framework
+*Built for Sovereign AI Agents From India to the World*
+- **Universal Container Deployment**: Node 26 Active LTS runner + Bun builder + Astral uv/uvx for native MCP tool execution.
+- **Modern Compose Specification**: Zero-cloud local Docker Compose deployment on port `7071` with Sarvam AI.
+- **1-Click GitHub Codespaces**: Pre-configured `.devcontainer` with Node 26, Python 3, Bun, and auto-forwarded edge runtime port.
+- **Specification Alignment**: Synchronized `agent.json` declarative schema and cleaned documentation.
+
 ### v0.0.9 (Local Agent Hub)
 - Local agent hub under `hub/agents/` with zero remote dependencies.
 - Run hub agents directly by name (e.g. `liate run sarvam-agent`).
