@@ -238,18 +238,31 @@ app.post("/stream", async (c) => {
 // Port configuration
 const PORT = Number(process.env.PORT || 7071);
 
-// Dual-Engine Boot: Native Bun & Node Server Fallback
-if (typeof Bun !== "undefined") {
-  console.log(`🚀 [Liate] Hono Edge Runtime active at http://localhost:${PORT} (Bun Native)`);
-} else {
-  import("@hono/node-server").then(({ serve }) => {
-    serve({
-      fetch: app.fetch,
-      port: PORT
-    }, (info) => {
-      console.log(`🚀 [Liate] Hono Edge Runtime active at http://localhost:${info.port} (Node Server)`);
+/**
+ * Starts the HTTP server on specified port (Bun or Node)
+ */
+export function startServer(port: number = PORT) {
+  if (typeof Bun !== "undefined") {
+    Bun.serve({
+      port,
+      fetch: app.fetch
     });
-  });
+    console.log(`🚀 [Liate] Edge Runtime server active at http://localhost:${port} (Bun)`);
+  } else {
+    import("@hono/node-server").then(({ serve }) => {
+      serve({
+        fetch: app.fetch,
+        port
+      }, (info) => {
+        console.log(`🚀 [Liate] Edge Runtime server active at http://localhost:${info.port} (Node)`);
+      });
+    });
+  }
+}
+
+// Auto-start if executed directly as entrypoint
+if (typeof Bun !== "undefined" && import.meta.main) {
+  startServer(PORT);
 }
 
 export default {

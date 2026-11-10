@@ -6,6 +6,12 @@ All notable changes to Liate: Open Source AI Agents Framework — Built for Sove
 
 ## Sprint 2: Core Engine, Runtime & CLI (v0.0.6 → v0.1.0)
 
+### v0.0.8 (Unified Developer CLI & Dynamic Resolver)
+- Unified developer CLI (`liate`) with native Node script (`dist/bin.js`) and standalone binary (`dist/cli/liate.exe`).
+- Dynamic agent resolver supporting `agent.ts`, `agent.json`, and ephemeral sovereign agents.
+- 3 core execution commands: `liate run [file] <prompt>`, `liate chat [file]`, and `liate serve [file] [--port 7071]`.
+- Native dual runtime support for Bun and Node with zero external prompt libraries.
+
 ### v0.0.7 (Edge Runtime Server)
 - High-performance edge HTTP server powered by Hono on port 7071.
 - 4 pure endpoints: `GET /health`, `POST /run`, `POST /chat`, `POST /stream`.

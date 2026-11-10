@@ -1,6 +1,6 @@
 {
   "name": "@openliate/liate",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "India's Open Source AI Agent Framework",
   "type": "module",
   "main": "./dist/liate.js",
@@ -36,7 +36,6 @@
     "build:wasm": "bun build ./src/runtime/wasm.ts --target bun --format esm --outfile dist/runtime/wasm.js"
   },
   "dependencies": {
-    "@clack/prompts": "1.8.1",
     "@hono/node-server": "2.1.5",
     "@modelcontextprotocol/client": "2.4.0",
     "@modelcontextprotocol/core": "2.4.0",
