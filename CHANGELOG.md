@@ -6,6 +6,12 @@ All notable changes to Liate: Open Source AI Agents Framework — Built for Sove
 
 ## Sprint 2: Core Engine, Runtime & CLI (v0.0.6 → v0.1.0)
 
+### v0.0.9 (Local Agent Hub)
+- Local agent hub under `hub/agents/` with zero remote dependencies.
+- Run hub agents directly by name (e.g. `liate run sarvam-agent`).
+- `liate hub` command listing local agents, models, and intents.
+- Bundled agents: `sarvam-agent` (Sarvam 105B) and `prism-agent` (Sarvam Prism).
+
 ### v0.0.8 (Unified Developer CLI & Dynamic Resolver)
 - Unified developer CLI (`liate`) with native Node script (`dist/bin.js`) and standalone binary (`dist/cli/liate.exe`).
 - Dynamic agent resolver supporting `agent.ts`, `agent.json`, and ephemeral sovereign agents.

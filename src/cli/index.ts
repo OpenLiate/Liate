@@ -8,6 +8,7 @@ import { EnvironmentResolver } from "@/layers/environment/sandbox";
 import * as readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
 import { existsSync } from "node:fs";
+import { resolve } from "node:path";
 
 const VERSION = "0.0.8";
 
@@ -22,6 +23,7 @@ Commands:
   run [file] <prompt>    Execute an agent with a single prompt
   chat [file]            Start an interactive multi-turn REPL chat session
   serve [file] [--port]  Start the Hono edge runtime server (default: 7071)
+  hub                    List available local hub agent templates
 
 Options:
   -v, --version          Show Liate version
@@ -66,12 +68,15 @@ async function main(): Promise<void> {
     let fileCandidate: string | undefined = undefined;
     let promptParts: string[] = remaining;
 
-    // Check if first argument is a file
+    // Check if first argument is a file or hub agent name
+    const cwd = process.cwd();
+    const isHubCandidate = existsSync(resolve(cwd, "hub", "agents", remaining[0]));
     if (
       remaining[0].endsWith(".ts") ||
       remaining[0].endsWith(".json") ||
       remaining[0].endsWith(".js") ||
-      existsSync(remaining[0])
+      existsSync(remaining[0]) ||
+      isHubCandidate
     ) {
       fileCandidate = remaining[0];
       promptParts = remaining.slice(1);
@@ -168,6 +173,25 @@ async function main(): Promise<void> {
     console.log(`[Liate] Booting Edge Runtime Server on port ${port} ...`);
     const { startServer } = await import("@/runtime/hono");
     startServer(port);
+    return;
+  }
+
+  // 4. Command: hub
+  if (command === "hub") {
+    const { listLocalHubAgents } = await import("@/cli/resolver");
+    const agents = listLocalHubAgents();
+
+    if (agents.length === 0) {
+      console.log("[Liate Hub] No local hub agents found in hub/agents.");
+      process.exit(0);
+    }
+
+    console.log(`\nLiate Hub — Local Sovereign Agent Templates (${agents.length} available):\n`);
+    for (const a of agents) {
+      console.log(`  • ${a.id.padEnd(16)} [${a.model}]`);
+      console.log(`    ${a.intent}\n`);
+    }
+    console.log(`To run a hub agent:\n  liate run ${agents[0].id} "<prompt>"\n`);
     return;
   }
 
