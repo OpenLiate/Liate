@@ -1,7 +1,7 @@
 <div align="center">
 
-# OpenLiate — India's Open Source AI Agent Framework
-### Where a Class is an Agent · Built for Sovereign AI Agents From India to the World
+# OpenLiate — Open Source Backend Layer for AI Agents
+### Where a Class is an Agent · From India, For India, Beyond India 🇮🇳 🌍
 
 `L[LM] · I[ntegration] · A[gent] · T[ools] · E[nvironment]`
 
@@ -12,7 +12,7 @@
   <a href="https://github.com/OpenLiate/Liate/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-white?labelColor=black&style=flat-square" alt="License: MIT"></a>
   <a href="https://sarvam.ai"><img src="./assets/sarvam-badge.svg" alt="Startup Program: Sarvam AI"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
-  <a href="https://github.com/OpenLiate/Liate/releases"><img src="https://img.shields.io/badge/version-v0.1.0--beta-white?labelColor=black&style=flat-square" alt="v0.1.0-beta"></a>
+  <a href="https://github.com/OpenLiate/Liate/releases"><img src="https://img.shields.io/badge/version-v0.1.2-white?labelColor=black&style=flat-square" alt="v0.1.2"></a>
   <img src="https://img.shields.io/badge/Bun-Supported-white?logo=bun&logoColor=white&labelColor=black&style=flat-square" alt="Bun">
   <img src="https://img.shields.io/badge/Node.js-Supported-white?logo=node.js&logoColor=5FA04E&labelColor=black&style=flat-square" alt="Node.js">
 </p>
@@ -28,13 +28,13 @@
 <br>
 
 > **Milestone: Liate — Selected for India's Sarvam AI Startup Program 2026** <sup>IN</sup>  
-> India's Open Source AI Agent Framework by [OpenLiate](https://github.com/OpenLiate/Liate)
+> Open Source Backend Layer for AI Agents by [OpenLiate](https://github.com/OpenLiate/Liate)
 
 <br>
 
 > ### *"If Stripe did payments in 7 lines of code, why not AI Agents in 5 lines of code?*  
 > **BaaA — Backend-as-an-Agent.**  
-> *Let's Try Liate."*
+> *From India, For India, Beyond India. Let's Try Liate."*
 
 </div>
 

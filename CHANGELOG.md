@@ -1,10 +1,16 @@
 # Changelog — Liate
 
-All notable changes to Liate: Open Source AI Agents Framework — Built for Sovereign AI Agents From India to the World.
+All notable changes to Liate: Open Source Backend Layer for AI Agents — From India, For India, Beyond India 🇮🇳 🌍
 
 ---
 
 ## Sprint 3: Modular Skills, Multi-Language SDKs & Platform Ecosystem (v0.1.1 → v0.1.3)
+
+### v0.1.2 (Official Python SDK & 5-Line AUM Class Parity)
+- **Official Python SDK**: Released pip-ready package `liate` under `sdk/python/` with client and Orchestration Module (OM).
+- **OOP Class Parity**: 100% symmetry across TypeScript (`agent.ts`), Python (`agent.py`), and JSON (`agent.json`).
+- **Identity & Positioning Alignment**: Standardized brand as **"Open Source Backend Layer for AI Agents · From India, For India, Beyond India"**.
+- **CLI & SDK Multi-Language Discovery**: Extended dynamic runtime resolvers to discover and execute `.py`, `.ts`, and `.json` agents on the fly.
 
 ### v0.1.1 (Dynamic Agent Skills, Project Scaffolding & WASM Layer)
 - **Dynamic Agent Skills Engine**: Integrated with skills.sh ecosystem (`src/layers/agent/skills.ts`) with `find`, `add`, and `update` commands.
