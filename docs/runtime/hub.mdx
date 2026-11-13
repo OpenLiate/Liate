@@ -1,0 +1,39 @@
+---
+title: "The Liate Hub"
+description: "Pre-configured agents, LLM definitions, and MCP servers in the local registry"
+icon: "shapes"
+---
+
+## Overview
+
+The **Liate Hub** (`hub/`) acts as OpenLiate's local package registry. It allows you to run pre-configured agents, load model definitions, and configure MCP servers by name without specifying manual file paths.
+
+---
+
+## Directory Structure
+
+```
+hub/
+└── agents/
+    ├── sarvam-agent/agent.json   # Indic AI agent powered by Sarvam AI 105B
+    ├── neon-agent/agent.json     # Serverless agent routing via Neon AI Gateway
+    └── prism-agent/agent.json    # Agent leveraging Vercel Labs open skills (skills.sh)
+```
+
+---
+
+## Running Hub Agents by Name
+
+The CLI automatically searches `hub/agents/<name>/agent.json`:
+
+```bash
+# Execute the Sarvam Indic Agent
+liate run sarvam-agent "Namaste, who are you?"
+
+# Execute the Neon AI Gateway Agent
+liate run neon-agent "Hello from Neon AI Gateway"
+
+# Execute the Prism Skills Agent
+liate run prism-agent "Find best skills for research"
+```
+

@@ -1,0 +1,37 @@
+---
+title: "Invoke Agent"
+api: "POST /run"
+description: "Execute an autonomous agent on the fly with input prompt, session ID, and dynamic keys"
+---
+
+### Request Body
+
+```json
+{
+  "input": "Introduce yourself in one sentence and say Namaste",
+  "sessionId": "0192e3a1-7b82-7f91-8abc-123456789abc"
+}
+```
+
+---
+
+### Response
+
+```json 200 OK
+{
+  "success": true,
+  "output": "Namaste! I am an autonomous sovereign agent powered by Sarvam AI.",
+  "thought": "The user requested an introduction in one sentence.",
+  "steps": [
+    {
+      "step": 1,
+      "thought": "Generating introduction with Sarvam 105B",
+      "action": "answer",
+      "observation": "Namaste! I am an autonomous sovereign agent powered by Sarvam AI."
+    }
+  ],
+  "totalSteps": 1,
+  "model": "sarvam/sarvam-105b",
+  "durationMs": 340
+}
+```

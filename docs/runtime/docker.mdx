@@ -1,0 +1,75 @@
+---
+title: "Docker Sovereign Runtime Stack"
+description: "Deploying Liate via Docker and containerized edge environments with Dual-MCP support"
+icon: "container"
+---
+
+## Overview
+
+Liate provides a production-grade, multi-stage Alpine Docker container supporting both Stdio MCP (Node.js/npx + Python/uvx) and Remote HTTP/SSE transports.
+
+---
+
+## Running with Docker
+
+```bash
+docker run -d \
+  -p 7071:7071 \
+  -e SARVAM_API_KEY="your-sarvam-key" \
+  ghcr.io/openliate/liate:latest
+```
+
+---
+
+## Production `Dockerfile`
+
+```dockerfile
+# Liate Sovereign Runtime - Universal Production Container
+FROM oven/bun:latest AS builder
+WORKDIR /app
+
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
+COPY . .
+RUN bun run build:runtime
+
+# Runtime Stage: Node 24 + Python + Astral uv/uvx
+FROM node:24-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=7071
+
+RUN apk add --no-cache python3 py3-pip curl bash git
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+COPY --from=builder /app/dist/runtime ./dist/runtime
+COPY --from=builder /app/hub ./hub
+COPY --from=builder /app/package.json ./package.json
+
+EXPOSE 7071
+CMD ["node", "dist/runtime/index.js"]
+```
+
+---
+
+## `docker-compose.yml`
+
+```yaml
+version: "3.8"
+
+services:
+  liate-runtime:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: liate-runtime
+    ports:
+      - "7071:7071"
+    environment:
+      - PORT=7071
+      - SARVAM_API_KEY=${SARVAM_API_KEY}
+      - NEON_AI_GATEWAY_TOKEN=${NEON_AI_GATEWAY_TOKEN}
+      - NEON_AI_GATEWAY_BASE_URL=${NEON_AI_GATEWAY_BASE_URL}
+    restart: unless-stopped
+```

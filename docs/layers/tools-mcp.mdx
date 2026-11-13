@@ -1,0 +1,52 @@
+---
+title: "[T] Tools & MCP v2 Layer"
+description: "Sovereign identity verification (Aadhaar/PAN) and Model Context Protocol (MCP)"
+icon: "wrench"
+---
+
+## Overview
+
+Layer **`[T]`** manages tools, external APIs, and MCP servers. Implemented in `src/tools/`, it registers both native TypeScript functions and dynamic MCP clients.
+
+---
+
+## 1. Native Identity Verifier (`verify_identity`)
+
+OpenLiate includes built-in sovereign Indian identity verification (`src/tools/builtin/identity.ts`):
+
+### Aadhaar Validation
+* **Rule:** Must be exactly 12 numeric digits (cannot start with 0 or 1).
+* **Checksum:** Mathematical validation using the **Verhoeff algorithm** (dihedral group $D_5$ permutation and multiplication tables).
+* **Privacy:** Automatically masked as `XXXX-XXXX-1234`.
+
+### PAN Card Validation
+* **Rule:** 10-character alphanumeric regex: `^[A-Z]{5}[0-9]{4}[A-Z]{1}$`.
+* **Taxpayer Classification:** The 4th character determines entity classification (`P` = Individual, `C` = Company, `F` = Firm, `H` = HUF, `T` = Trust, `G` = Government).
+* **Privacy:** Automatically masked as `XXXXX1234X`.
+
+---
+
+## 2. Model Context Protocol (MCP)
+
+OpenLiate natively consumes MCP configs declared directly inline in Layer `[T]` or through the local workspace cache `.openliate/mcp.json`:
+
+* **Inline HTTP / SSE MCP:** Pass remote URL and headers directly.
+* **Inline CLI / Stdio MCP:** Pass `command` (e.g. `npx`, `uvx`) and `args`.
+* **Built-in `fetch`:** Safe HTTP fetcher tool.
+
+```json agent.json
+{
+  "T": [
+    "verify_identity",
+    "fetch",
+    {
+      "name": "neon-db",
+      "transport": "http",
+      "url": "https://mcp.neon.tech/mcp",
+      "headers": {
+        "Authorization": "Bearer $NEON_AI_GATEWAY_TOKEN"
+      }
+    }
+  ]
+}
+```

@@ -6,6 +6,12 @@ All notable changes to Liate: Open Source Backend Layer for AI Agents — From I
 
 ## Sprint 3: Modular Skills, Multi-Language SDKs & Platform Ecosystem (v0.1.1 → v0.1.3)
 
+### v0.1.3 (Mintlify Documentation Suite & Clean Architecture Specification)
+- **Mintlify Documentation Engine**: Configured complete `docs/` suite (`docs.json`) ready for `docs.openliate.tech` / `liate.dev`.
+- **Accurate API References**: Aligned `POST /run`, `GET /health`, and `/skills` with real Hono edge runtime contracts on port `7071`.
+- **Eliminated Outdated Terminology**: Stripped legacy cluster references, port discrepancies, and multi-cloud marketing claims in favor of real, verified architecture.
+- **Unified Branding**: Ensured 100% synchronization across `docs/`, `README.md`, `package.json`, and Python SDK specs.
+
 ### v0.1.2 (Official Python SDK & 5-Line AUM Class Parity)
 - **Official Python SDK**: Released pip-ready package `liate` under `sdk/python/` with client and Orchestration Module (OM).
 - **OOP Class Parity**: 100% symmetry across TypeScript (`agent.ts`), Python (`agent.py`), and JSON (`agent.json`).

@@ -1,2 +1,2 @@
 // src/core/version.ts
-export const VERSION = "0.1.2";
+export const VERSION = "0.1.3";
