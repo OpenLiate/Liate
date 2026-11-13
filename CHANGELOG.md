@@ -4,6 +4,19 @@ All notable changes to Liate: Open Source AI Agents Framework — Built for Sove
 
 ---
 
+## Sprint 3: Modular Skills, Multi-Language SDKs & Platform Ecosystem (v0.1.1 → v0.1.3)
+
+### v0.1.1 (Dynamic Agent Skills, Project Scaffolding & WASM Layer)
+- **Dynamic Agent Skills Engine**: Integrated with skills.sh ecosystem (`src/layers/agent/skills.ts`) with `find`, `add`, and `update` commands.
+- **Agent Skills HTTP Router**: Mounted `/skills` endpoint in Hono edge runtime.
+- **Project Scaffolding**: Built-in `liate create <name> [--py]` / `init` / `new` generator for TypeScript and Python agent templates (`src/scaffold/project.ts`).
+- **WASM Runtime Layer**: Added experimental WASM execution module (`src/runtime/wasm.ts`).
+- **Layer A Harness Extension**: Dynamic skill prompt formatting and system prompt injection.
+- **Monotonic UUID & Integration**: Added RFC 9562 UUIDv7 generator (`src/core/uuid.ts`) and repository integration helpers.
+- **Core Versioning**: Added centralized version synchronization utility (`src/core/version.ts`).
+
+---
+
 ## Sprint 2: Core Engine, Runtime & CLI (v0.0.6 → v0.1.0)
 
 ### v0.1.0 — Open Source AI Agent Framework

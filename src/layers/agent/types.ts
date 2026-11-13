@@ -50,6 +50,7 @@ export interface AgentExecutionOptions {
   systemPrompt?: string;
   temperature?: number;
   tools?: AgentTool[];
+  skills?: string[];
   apiKey?: string;
 }
 
@@ -59,5 +60,6 @@ export interface AgentConfig {
   model?: string;
   maxSteps?: number;
   tools?: AgentTool[];
+  skills?: string[];
 }
 

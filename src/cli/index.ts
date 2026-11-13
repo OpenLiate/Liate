@@ -4,13 +4,12 @@
 // Commands: run, chat, serve, hub
 
 import { resolveAgent } from "@/cli/resolver";
+import { VERSION } from "@/core/version";
 import { EnvironmentResolver } from "@/layers/environment/sandbox";
 import * as readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-
-const VERSION = "0.1.0";
 
 function printHelp(): void {
   console.log(`
@@ -23,6 +22,9 @@ Commands:
   run [file] <prompt>    Execute an agent with a single prompt
   chat [file]            Start an interactive multi-turn REPL chat session
   serve [file] [--port]  Start the Hono edge runtime server (default: 7071)
+  create <name> [--py]   Create a new Liate agent project (aliases: init, new)
+  skills <cmd> [arg]     Manage skills.sh skills (find, add, update)
+  env <set|list|rm>      Manage local .env.local secrets safely
   hub                    List available local hub agent templates
 
 Options:
@@ -176,7 +178,131 @@ async function main(): Promise<void> {
     return;
   }
 
-  // 4. Command: hub
+  // 4. Command: create (aliases: init, new)
+  if (command === "create" || command === "init" || command === "new") {
+    const rest = args.slice(1);
+    const isPy = rest.includes("--py") || rest.includes("--python");
+    const name = rest.find((a) => !a.startsWith("-"));
+    if (!name) {
+      console.error("Error: Missing agent name. Usage: liate create <name> [--py]");
+      process.exit(1);
+    }
+    const { scaffoldProject } = await import("@/scaffold/project");
+    const result = scaffoldProject({ name, lang: isPy ? "py" : "ts" });
+    console.log(`\n[Liate] Scaffolded ${result.lang.toUpperCase()} agent '${result.projectName}' (${result.className})`);
+    console.log(`Location: ${result.projectDir}`);
+    console.log(`Files:    ${result.files.join(", ")}\n`);
+    return;
+  }
+
+  // 5. Command: skills (find | add | update)
+  if (command === "skills") {
+    const sub = args[1];
+    const arg = args.slice(2).join(" ").trim();
+    const { SkillResolver } = await import("@/layers/agent/skills");
+
+    if (sub === "find" || sub === "search") {
+      if (!arg) {
+        console.error("Usage: liate skills find <query>");
+        process.exit(1);
+      }
+      const results = await SkillResolver.search(arg, 10);
+      console.log(`\n[skills.sh] Found ${results.length} skills for "${arg}":\n`);
+      for (const r of results) {
+        const installs = r.installs != null ? ` (${r.installs.toLocaleString()} installs)` : "";
+        console.log(`  • ${r.id}${installs}`);
+      }
+      console.log(`\nTo add a skill:\n  liate skills add <id>\n`);
+      return;
+    }
+
+    if (sub === "add") {
+      if (!arg) {
+        console.error("Usage: liate skills add <owner/repo/skill>");
+        process.exit(1);
+      }
+      const res = await SkillResolver.add(arg);
+      console.log(`\n[Liate] Added skill '${res.skill.name}' (${res.skill.instructions.length} bytes)`);
+      console.log(`Saved: ${res.savedPath}`);
+      if (res.updatedAgentJson) console.log(`Updated: agent.json (A.skills)\n`);
+      return;
+    }
+
+    if (sub === "update") {
+      const res = await SkillResolver.update();
+      console.log(`\n[Liate] Updated ${res.updated.length} skill(s) from upstream.`);
+      for (const u of res.updated) {
+        console.log(`  • ${u.slug} (${u.source}, ${u.bytes} bytes)`);
+      }
+      console.log();
+      return;
+    }
+
+    console.error("Usage: liate skills <find|add|update> [arg]");
+    process.exit(1);
+  }
+
+  // 6. Command: env (set | list | rm)
+  if (command === "env") {
+    const sub = (args[1] || "list").toLowerCase();
+    const envPath = resolve(process.cwd(), ".env.local");
+
+    if (sub === "set" || sub === "add") {
+      const pair = args.slice(2).find((a) => a.includes("="));
+      if (!pair) {
+        console.error("Usage: liate env set KEY=VALUE");
+        process.exit(1);
+      }
+      const eq = pair.indexOf("=");
+      const key = pair.slice(0, eq).trim();
+      const val = pair.slice(eq + 1).replace(/^["']|["']$/g, "");
+      let content = existsSync(envPath) ? readFileSync(envPath, "utf-8") : "";
+      const re = new RegExp(`^${key}=.*$`, "m");
+      content = re.test(content)
+        ? content.replace(re, `${key}="${val}"`)
+        : `${content.trim()}\n${key}="${val}"\n`;
+      writeFileSync(envPath, content.trim() + "\n", "utf-8");
+      const masked = val.length > 8 ? `${val.slice(0, 4)}...${val.slice(-4)}` : "******";
+      console.log(`[Liate] Saved '${key}' (${masked}) in .env.local`);
+      return;
+    }
+
+    if (sub === "rm" || sub === "remove" || sub === "delete") {
+      const key = args[2]?.trim();
+      if (!key) {
+        console.error("Usage: liate env rm <KEY>");
+        process.exit(1);
+      }
+      if (existsSync(envPath)) {
+        const lines = readFileSync(envPath, "utf-8")
+          .split(/\r?\n/)
+          .filter((l) => !l.startsWith(`${key}=`));
+        writeFileSync(envPath, lines.join("\n").trim() + "\n", "utf-8");
+      }
+      console.log(`[Liate] Removed '${key}' from .env.local`);
+      return;
+    }
+
+    if (!existsSync(envPath)) {
+      console.log("\n[Liate] No .env.local found. Add a key with: liate env set KEY=VALUE\n");
+      return;
+    }
+    const lines = readFileSync(envPath, "utf-8")
+      .split(/\r?\n/)
+      .filter((l) => l.trim() && !l.trim().startsWith("#") && l.includes("="));
+    console.log(`\n[Liate] .env.local (${lines.length} keys):`);
+    for (const line of lines) {
+      const eq = line.indexOf("=");
+      const k = line.slice(0, eq).trim();
+      const v = line.slice(eq + 1).trim().replace(/^["']|["']$/g, "");
+      const masked = v.length > 8 ? `${v.slice(0, 4)}...${v.slice(-4)}` : "******";
+      console.log(`  • ${k}: ${masked}`);
+    }
+    console.log();
+    return;
+  }
+
+  // 7. Command: hub
   if (command === "hub") {
     const { listLocalHubAgents } = await import("@/cli/resolver");
     const agents = listLocalHubAgents();

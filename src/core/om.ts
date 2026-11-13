@@ -55,6 +55,7 @@ export class liate {
       const agentName = typeof module.A === "object" ? module.A.name : (module.A || this.constructor.name);
       const agentIntent = typeof module.A === "object" ? module.A.intent : undefined;
       const maxSteps = typeof module.A === "object" ? module.A.maxSteps : 10;
+      const skills = typeof module.A === "object" && Array.isArray(module.A.skills) ? module.A.skills : undefined;
       const model = typeof module.L === "string" ? module.L : (module.L?.model || "sarvam/sarvam-105b-conversations");
 
       this._runner = new Agent({
@@ -62,6 +63,7 @@ export class liate {
         intent: agentIntent,
         model,
         maxSteps,
+        skills,
         memory,
         tools
       });

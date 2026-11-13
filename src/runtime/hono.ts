@@ -7,7 +7,9 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { streamSSE } from "hono/streaming";
 import { liate } from "@/core/om";
+import { VERSION } from "@/core/version";
 import { Session } from "@/layers/integration/memory";
+import { skillsRouter } from "@/routes/skills";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -16,6 +18,7 @@ export const app = new Hono();
 // Global Middleware
 app.use("*", cors());
 app.use("*", logger());
+app.route("/skills", skillsRouter);
 
 // Active agent and session cache
 let activeAgent: liate | null = null;
@@ -61,7 +64,7 @@ app.get("/health", (c) => {
   return c.json({
     status: "ok",
     framework: "Liate",
-    version: "0.0.7",
+    version: VERSION,
     uptimeSeconds: Math.floor(process.uptime()),
     timestamp: new Date().toISOString(),
     memory: mem ? {

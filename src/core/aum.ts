@@ -21,8 +21,9 @@ export const AUMSchema = z.object({
     name: z.string().min(1, "Agent name is required"),
     version: z.string().optional().default("0.0.1"),
     intent: z.string().optional(),
-    maxSteps: z.number().optional().default(10)
-  }),
+    maxSteps: z.number().optional().default(10),
+    skills: z.array(z.string()).optional()
+  }).passthrough(),
   T: z.union([
     z.array(z.union([z.string(), z.record(z.string(), z.any())])),
     z.record(z.string(), z.any())

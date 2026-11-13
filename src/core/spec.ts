@@ -48,6 +48,7 @@ export interface LayerA {
   version?: string;
   system?: string;
   maxSteps?: number;
+  skills?: string[];
   [key: string]: unknown;
 }
 

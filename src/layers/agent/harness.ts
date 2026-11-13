@@ -1,4 +1,5 @@
 import { ReActLoop } from "@/layers/agent/loop";
+import { SkillResolver } from "@/layers/agent/skills";
 import type {
   AgentTool,
   AgentContext,
@@ -24,6 +25,7 @@ export class Agent {
   public readonly intent: string;
   public readonly model: string;
   public readonly maxSteps: number;
+  public readonly skills: string[];
   private memory: MemoryProvider;
   private tools: Map<string, AgentTool> = new Map();
   private apiKey?: string;
@@ -33,6 +35,7 @@ export class Agent {
     this.intent = options.intent || "Autonomous AI Agent";
     this.model = options.model || "sarvam/sarvam-105b-conversations";
     this.maxSteps = options.maxSteps ?? 10;
+    this.skills = options.skills || [];
     this.apiKey = options.apiKey;
 
     // Resolve Layer [I] Session Memory
@@ -66,11 +69,15 @@ export class Agent {
     prompt: string,
     options?: AgentExecutionOptions
   ): Promise<AgentRunResult> {
+    const skillSlugs = [...new Set([...this.skills, ...(options?.skills || [])])];
+    const resolvedSkills = skillSlugs.length > 0 ? await SkillResolver.resolveAll(skillSlugs) : [];
+    const skillPromptBlock = SkillResolver.formatSystemPrompt(resolvedSkills);
+
     const context: AgentContext = {
       agentName: this.name,
-      intent: this.intent,
+      intent: this.intent + skillPromptBlock,
       sessionId: this.memory.sessionId,
-      state: {}
+      state: { skills: resolvedSkills.map((s) => s.slug) }
     };
 
     const combinedTools = [
@@ -88,7 +95,9 @@ export class Agent {
         model: options?.model || this.model,
         maxSteps: options?.maxSteps ?? this.maxSteps,
         temperature: options?.temperature,
-        systemPrompt: options?.systemPrompt,
+        systemPrompt: options?.systemPrompt
+          ? options.systemPrompt + skillPromptBlock
+          : undefined,
         apiKey: options?.apiKey || this.apiKey
       }
     );

@@ -13,8 +13,11 @@
 export * from "@/layers/llm/model";
 export * from "@/layers/integration/memory";
 export * from "@/layers/integration/knowledge";
+export * from "@/layers/integration/repo";
+export * from "@/layers/integration/lib";
 export * from "@/layers/agent/harness";
 export * from "@/layers/agent/loop";
+export * from "@/layers/agent/skills";
 export * from "@/layers/agent/types";
 export * from "@/layers/tools/mcp";
 export * from "@/layers/tools/server";
@@ -25,10 +28,13 @@ export * from "@/layers/environment/types";
 // Canonical exports to resolve cross-layer duplicates
 export type { AgentTool, ToolCall } from "@/layers/agent/types";
 
-// 2. Core Specification, AUM & OM Engine
+// 2. Core Specification, AUM & OM Engine + Scaffolder
 export * from "@/core/spec";
 export * from "@/core/aum";
 export * from "@/core/om";
+export * from "@/core/version";
+export * from "@/core/uuid";
+export * from "@/scaffold/project";
 
 // 3. Default Export: The universal base class
 import { liate } from "@/core/om";
