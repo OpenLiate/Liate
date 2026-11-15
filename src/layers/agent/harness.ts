@@ -29,6 +29,7 @@ export class Agent {
   private memory: MemoryProvider;
   private tools: Map<string, AgentTool> = new Map();
   private apiKey?: string;
+  private extraOptions: Record<string, any>;
 
   constructor(options: AgentOptions = { name: "agent" }) {
     this.name = options.name || "agent";
@@ -37,6 +38,7 @@ export class Agent {
     this.maxSteps = options.maxSteps ?? 10;
     this.skills = options.skills || [];
     this.apiKey = options.apiKey;
+    this.extraOptions = { ...(options as any) };
 
     // Resolve Layer [I] Session Memory
     if (!options.memory) {
@@ -92,13 +94,15 @@ export class Agent {
       combinedTools,
       context,
       {
+        ...this.extraOptions,
         model: options?.model || this.model,
         maxSteps: options?.maxSteps ?? this.maxSteps,
         temperature: options?.temperature,
         systemPrompt: options?.systemPrompt
           ? options.systemPrompt + skillPromptBlock
           : undefined,
-        apiKey: options?.apiKey || this.apiKey
+        apiKey: options?.apiKey || this.apiKey,
+        ...(options as any)
       }
     );
   }

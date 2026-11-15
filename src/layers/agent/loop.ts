@@ -51,6 +51,7 @@ export class ReActLoop {
     let currentStep = 1;
     let finalOutput = "";
     let finalThought: string | undefined = undefined;
+    let finalAudioBase64: string | undefined = undefined;
     let finishReason: "stop" | "max_steps_reached" | "error" = "max_steps_reached";
     let usedModel = options.model || "unknown";
 
@@ -92,6 +93,7 @@ Follow the ReAct methodology: Reason carefully, invoke tools when needed, observ
 
       // Query Layer [L] Model
       const response = await llm.chat(messages, {
+        ...(options as any),
         model: options.model,
         maxTokens: options.maxTokens,
         temperature: options.temperature ?? 0.2,
@@ -100,6 +102,9 @@ Follow the ReAct methodology: Reason carefully, invoke tools when needed, observ
       });
 
       usedModel = response.model || usedModel;
+      if (response.audioBase64) {
+        finalAudioBase64 = response.audioBase64;
+      }
       const thought = response.reasoningContent;
       if (thought) {
         finalThought = thought;
@@ -190,7 +195,8 @@ Follow the ReAct methodology: Reason carefully, invoke tools when needed, observ
       totalSteps: steps.length,
       model: usedModel,
       durationMs: Date.now() - startTime,
-      finishReason
+      finishReason,
+      audioBase64: finalAudioBase64
     };
   }
 }

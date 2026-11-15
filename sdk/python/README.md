@@ -13,7 +13,7 @@
   <a href="https://sarvam.ai"><img src="./assets/sarvam-badge.svg" alt="Startup Program: Sarvam AI"></a>
   <a href="https://neon.tech"><img src="https://img.shields.io/badge/Neon-Cloud_%26_AI_Gateway_Credits-white?logo=neon&logoColor=00E59B&labelColor=black&style=flat-square" alt="Neon Cloud & AI Gateway Credits"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
-  <a href="https://github.com/OpenLiate/Liate/releases"><img src="https://img.shields.io/badge/version-v0.1.2-white?labelColor=black&style=flat-square" alt="v0.1.2"></a>
+  <a href="https://github.com/OpenLiate/Liate/releases"><img src="https://img.shields.io/badge/version-v0.1.4-white?labelColor=black&style=flat-square" alt="v0.1.4"></a>
   <img src="https://img.shields.io/badge/Bun-Supported-white?logo=bun&logoColor=white&labelColor=black&style=flat-square" alt="Bun">
   <img src="https://img.shields.io/badge/Node.js-Supported-white?logo=node.js&logoColor=5FA04E&labelColor=black&style=flat-square" alt="Node.js">
   <img src="https://img.shields.io/badge/Deno-Supported-white?logo=deno&logoColor=white&labelColor=black&style=flat-square" alt="Deno">

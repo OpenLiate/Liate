@@ -10,7 +10,7 @@ export const AUMSchema = z.object({
       temperature: z.number().optional(),
       maxTokens: z.number().optional(),
       endpoint: z.string().optional()
-    })
+    }).passthrough()
   ]),
   I: z.object({
     memory: z.string().optional(),

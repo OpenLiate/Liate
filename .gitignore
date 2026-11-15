@@ -53,3 +53,6 @@ scripts/inspect-*
 scripts/create-*
 test_*.ts
 *.local.*
+temp-neon.env
+temp/
+*.wav

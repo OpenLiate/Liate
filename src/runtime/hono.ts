@@ -9,6 +9,7 @@ import { streamSSE } from "hono/streaming";
 import { liate } from "@/core/om";
 import { VERSION } from "@/core/version";
 import { Session } from "@/layers/integration/memory";
+import { LLMRouter } from "@/layers/llm/model";
 import { skillsRouter } from "@/routes/skills";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
@@ -73,6 +74,24 @@ app.get("/health", (c) => {
     } : undefined
   });
 });
+
+/**
+ * GET /models, /v1/models, /api/v1/models
+ * Live dynamic model discovery from Sarvam AI, Neon AI Gateway, and Gnani AI.
+ * Zero hardcoded models.
+ */
+const handleGetModels = async (c: any) => {
+  const provider = c.req.query("provider");
+  const models = await LLMRouter.listModels(provider);
+  return c.json({
+    object: "list",
+    data: models
+  });
+};
+
+app.get("/models", handleGetModels);
+app.get("/v1/models", handleGetModels);
+app.get("/api/v1/models", handleGetModels);
 
 /**
  * 2. POST /run

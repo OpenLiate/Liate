@@ -41,6 +41,7 @@ export interface AgentRunResult {
   model: string;
   durationMs: number;
   finishReason: "stop" | "max_steps_reached" | "error";
+  audioBase64?: string;
 }
 
 export interface AgentExecutionOptions {

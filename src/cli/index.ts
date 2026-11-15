@@ -8,7 +8,7 @@ import { VERSION } from "@/core/version";
 import { EnvironmentResolver } from "@/layers/environment/sandbox";
 import * as readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
 
 function printHelp(): void {
@@ -107,6 +107,17 @@ async function main(): Promise<void> {
       }
 
       console.log(`\n${result.text}\n`);
+
+      if (result.audioBase64) {
+        const audioDir = resolve(cwd, "temp", "audio");
+        if (!existsSync(audioDir)) {
+          mkdirSync(audioDir, { recursive: true });
+        }
+        const audioPath = resolve(audioDir, "timbre_output.wav");
+        writeFileSync(audioPath, Buffer.from(result.audioBase64, "base64"));
+        console.log(`[Audio Saved]: file:///${audioPath.replace(/\\/g, "/")}`);
+      }
+
       console.log(`[Completed in ${Date.now() - start}ms | Steps: ${result.totalSteps} | Model: ${result.model}]`);
     } catch (err: any) {
       console.error(`\n[Execution Error]: ${err.message}`);

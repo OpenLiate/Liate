@@ -1,0 +1,17 @@
+{
+  "L": "gnani/timbre-v3.0",
+  "I": {
+    "memory": "sessions/gnani-agent"
+  },
+  "A": {
+    "name": "gnani_agent",
+    "version": "0.0.1",
+    "intent": "Sovereign Indic Voice & Language Agent powered by Gnani AI & Liate",
+    "maxSteps": 5
+  },
+  "T": [],
+  "E": {
+    "GNANI_API_KEY": "$GNANI_API_KEY",
+    "GNANI_BASE_URL": "$GNANI_BASE_URL"
+  }
+}

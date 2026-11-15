@@ -18,11 +18,13 @@ export interface ToolCall {
 
 export interface LlmChatOptions {
   model: string;
+  provider?: string;
+  baseUrl?: string;
+  endpoint?: string;
   temperature?: number;
   maxTokens?: number;
   reasoningEffort?: "none" | "low" | "high" | "max";
   apiKey?: string;
-  endpoint?: string;
   tools?: any[];
   toolChoice?: string | object;
   systemPrompt?: string;
@@ -40,5 +42,23 @@ export interface LlmChatResponse {
     completionTokens: number;
     totalTokens: number;
   };
+  audioBase64?: string;
 }
+
+export interface LlmTtsOptions {
+  text: string;
+  model?: string;
+  voice?: string;
+  language?: string;
+  apiKey?: string;
+}
+
+export interface LlmTtsResponse {
+  audioBuffer: Buffer;
+  contentType: string;
+  model: string;
+  voice: string;
+  byteLength: number;
+}
+
 

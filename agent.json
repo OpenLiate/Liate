@@ -1,5 +1,5 @@
 {
-  "L": "sarvam/sarvam-105b-conversations",
+  "L": "sarvam/sarvam-105b",
   "I": {
     "memory": "sessions/liate-agent"
   },
@@ -24,4 +24,3 @@
     "SARVAM_API_KEY": "$SARVAM_API_KEY"
   }
 }
-

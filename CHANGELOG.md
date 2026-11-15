@@ -4,7 +4,15 @@ All notable changes to Liate: Open Source Backend Layer for AI Agents — From I
 
 ---
 
-## Sprint 3: Modular Skills, Multi-Language SDKs & Platform Ecosystem (v0.1.1 → v0.1.3)
+## Sprint 3: Modular Skills, Multi-Language SDKs & Platform Ecosystem (v0.1.1 → v0.1.4)
+
+### v0.1.4 (Neon AI Gateway & Gnani AI Voice Integration)
+- **Neon AI Gateway (65+ Models)**: Dynamic endpoint resolution for 65+ frontier models and JEV System-One heuristic decision routing.
+- **Gnani AI Timbre 3.0 (TTS)**: Dynamic text-to-speech synthesis supporting multi-voice selection (`Shivani`, `Avinash`, etc.).
+- **Gnani AI Prisma 3.0 (STT)**: Low-latency Speech-to-Text integration with automated `indic-auto` language detection.
+- **Dynamic Audio Pipeline**: Native decoding of raw PCM audio streams, automatic 44-byte RIFF/WAV header synthesis, and CLI auto-saving.
+- **Zero-Hardcode Runtime Passthrough**: Schema `.passthrough()` on Layer `[L]` and OM harness ensuring custom options are preserved.
+- **Hub Sovereign Agents**: Reference implementations added in `hub/agents/neon-agent/` and `hub/agents/gnani-agent/`.
 
 ### v0.1.3 (Mintlify Documentation Suite & Clean Architecture Specification)
 - **Mintlify Documentation Engine**: Configured complete `docs/` suite (`docs.json`) ready for `docs.openliate.tech` / `liate.dev`.

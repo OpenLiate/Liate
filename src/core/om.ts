@@ -57,6 +57,7 @@ export class liate {
       const maxSteps = typeof module.A === "object" ? module.A.maxSteps : 10;
       const skills = typeof module.A === "object" && Array.isArray(module.A.skills) ? module.A.skills : undefined;
       const model = typeof module.L === "string" ? module.L : (module.L?.model || "sarvam/sarvam-105b-conversations");
+      const modelExtra = typeof module.L === "object" ? module.L : {};
 
       this._runner = new Agent({
         name: agentName,
@@ -65,8 +66,9 @@ export class liate {
         maxSteps,
         skills,
         memory,
-        tools
-      });
+        tools,
+        ...modelExtra
+      } as any);
     }
     return this._runner;
   }

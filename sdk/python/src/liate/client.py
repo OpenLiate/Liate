@@ -34,7 +34,7 @@ def _resolve_via_doh(hostname: str) -> Optional[str]:
         try:
             req = urllib.request.Request(
                 p_url, 
-                headers={"Accept": "application/dns-json", "User-Agent": "OpenLiate-SDK/0.1.2"}
+                headers={"Accept": "application/dns-json", "User-Agent": "OpenLiate-SDK/0.1.4"}
             )
             with urllib.request.urlopen(req, context=ctx, timeout=5) as r:
                 data = json.loads(r.read().decode("utf-8"))
@@ -57,7 +57,7 @@ def _dispatch_direct_sni(ip: str, host: str, path: str, payload_bytes: bytes, ti
         f"Host: {host}\r\n"
         f"Content-Type: application/json\r\n"
         f"Content-Length: {len(payload_bytes)}\r\n"
-        f"User-Agent: OpenLiate-Python-SDK/0.1.2\r\n"
+        f"User-Agent: OpenLiate-Python-SDK/0.1.4\r\n"
         f"Connection: close\r\n\r\n"
     ).encode("utf-8") + payload_bytes
     ssock.sendall(wire)
