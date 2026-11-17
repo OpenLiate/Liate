@@ -47,7 +47,9 @@ jobs:
         with:
           packages-dir: sdk/python/dist/
           skip-existing: true
+          user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
+          verbose: true
 
   # ========================================================
   # JOB 2: Build & Publish TypeScript Packages to NPM

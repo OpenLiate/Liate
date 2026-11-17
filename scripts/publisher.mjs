@@ -17,6 +17,22 @@ const version = pkg.version;
 // In CI (GitHub Actions), attach cryptographic provenance via OIDC
 const provenanceFlag = process.env.CI ? ' --provenance' : '';
 
+function safePublish(cmd, pkgName) {
+  try {
+    execSync(cmd, { cwd: root, stdio: 'inherit' });
+  } catch (err) {
+    // If the version is already published on npm, do not fail
+    try {
+      const remoteVer = execSync(`npm view ${pkgName} version`, { encoding: 'utf8' }).trim();
+      if (remoteVer === version) {
+        console.log(`\n[!] Package '${pkgName}@${version}' is already published on npm. Skipping gracefully.\n`);
+        return;
+      }
+    } catch (_) {}
+    throw err;
+  }
+}
+
 try {
   // Swap in dedicated npm README
   if (fs.existsSync(npmReadmePath)) {
@@ -30,7 +46,7 @@ try {
   console.log('\n========================================');
   console.log(` Publishing openliate (v${version}) to npm...`);
   console.log('========================================');
-  execSync(`npm publish${provenanceFlag}`, { cwd: root, stdio: 'inherit' });
+  safePublish(`npm publish${provenanceFlag}`, 'openliate');
 
   // 2. Publish @openliate/liate (org-scoped)
   pkg.name = '@openliate/liate';
@@ -38,9 +54,9 @@ try {
   console.log('\n========================================');
   console.log(` Publishing @openliate/liate (v${version}) to npm...`);
   console.log('========================================');
-  execSync(`npm publish --access public${provenanceFlag}`, { cwd: root, stdio: 'inherit' });
+  safePublish(`npm publish --access public${provenanceFlag}`, '@openliate/liate');
 
-  console.log('\n[✓] Both npm packages published successfully!\n');
+  console.log('\n[✓] NPM publishing completed successfully!\n');
 } finally {
   fs.writeFileSync(pkgPath, originalPkg);
   fs.writeFileSync(readmePath, originalReadme);
