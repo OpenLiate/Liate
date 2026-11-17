@@ -1,0 +1,86 @@
+@import "tailwindcss";
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+@import 'fumadocs-openapi/css/preset.css';
+
+/* Clean hidden scrollbars */
+html,
+body,
+* {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0px;
+  height: 0px;
+}
+
+/* Hide Next.js Development Indicator badge */
+nextjs-portal,
+[data-nextjs-dev-indicator],
+#nextjs-dev-indicator {
+  display: none !important;
+}
+
+/* Enforce strict single-line ellipsis across the Flux bottom dock without clipping dropup menus */
+#flux-layout-slot {
+  min-width: 0 !important;
+  flex: 1 1 0% !important;
+}
+
+[data-toc-popover] {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+[data-toc-popover-trigger] {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+[data-toc-popover-trigger] svg {
+  flex-shrink: 0 !important;
+}
+
+[data-toc-popover-trigger] > span {
+  display: block !important;
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Tab dropdown and all button triggers inside navigation dock */
+nav button,
+[data-popup-open],
+button[aria-haspopup] {
+  min-width: 0 !important;
+}
+
+nav button span,
+nav button p,
+button[aria-haspopup] span,
+button[aria-haspopup] p {
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* TOC popover dropdown list item truncation */
+[data-toc-popover-content] a {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+

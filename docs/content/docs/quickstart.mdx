@@ -18,12 +18,24 @@ bun --version
 ## 1. Installation
 
 <CodeGroup>
-```bash Bun (Global)
-bun add -g @openliate/liate
+```powershell 1-Click (Windows)
+powershell -c "irm https://openliate.tech/install.ps1 | iex"
+```
+
+```bash 1-Click (macOS/Linux)
+curl -fsSL https://openliate.tech/install.sh | bash
 ```
 
 ```bash npm (Global)
-npm install -g @openliate/liate
+npm install -g openliate
+```
+
+```bash Bun (Global)
+bun add -g openliate
+```
+
+```bash Python (PyPI)
+pip install liate
 ```
 
 ```bash Local Clone

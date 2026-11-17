@@ -1,0 +1,43 @@
+---
+title: Announcing OpenLiate - The Sovereign AI Agent Engine
+description: Introducing OpenLiate, the mathematically decomposed framework for autonomous multi-agent execution with native Model Context Protocol (MCP) and Sarvam AI Indic models.
+date: "2026-11-15"
+tags: ["Announcement", "Architecture", "Sarvam AI"]
+authors: ["liate", "sarvam"]
+---
+
+We are thrilled to announce **OpenLiate**, the open-source backend layer designed from first principles for autonomous AI agents.
+
+## Why OpenLiate?
+
+Modern AI applications have outgrown simple chat prompts. Production agents require determinism, strict secret isolation, sandboxed execution, and native integrations with external APIs and databases.
+
+In OpenLiate, **Class is an Agent, and Agent is an API**. Every autonomous agent is declared through a sovereign configuration file and executed across a unified runtime.
+
+```json title="agent.json"
+{
+  "L": "sarvam/sarvam-105b",
+  "I": { "memory": "vector/sqlite", "session": "stateful" },
+  "A": { "mode": "react", "max_iterations": 15 },
+  "T": { "tools": ["mcp/fetch", "mcp/github"] },
+  "E": { "SARVAM_API_KEY": "$SARVAM_API_KEY" }
+}
+```
+
+## Selected for Sarvam AI Startup Program 2026
+
+OpenLiate has been selected for India's prestigious **Sarvam AI Startup Program 2026**. Through this partnership, OpenLiate natively integrates sovereign Indic frontier models:
+
+- **Sarvam 105B**: High-reasoning enterprise agentic decision-making.
+- **Sarvam 2B**: Ultralight, sub-millisecond edge agent execution.
+- **Saaras Voice & Bulbul TTS**: Full multimodal voice-to-voice agent loops across 22+ Indian languages.
+
+## Getting Started
+
+You can run your first autonomous agent in seconds with Bun or Node:
+
+```bash
+bunx @openliate/liate run agent.json
+```
+
+Explore our [Framework Documentation](/docs) or dive into the [Runtime Engine](/docs/runtime/module).

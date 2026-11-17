@@ -1,0 +1,630 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenLiate Sovereign Agent API",
+    "version": "0.0.7",
+    "description": "The official REST and Server-Sent Events (SSE) API specification for OpenLiate: Sovereign Indic Edge Agent Runtime. Execute autonomous ReAct loops, multi-turn conversational agents with session memory, stream real-time thought chains, query skills.sh registry, and inspect local Hub agent templates."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:7071",
+      "description": "Local OpenLiate Edge Runtime"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Execution",
+      "description": "Core autonomous agent execution endpoints for single-shot, conversational, and streaming invocations."
+    },
+    {
+      "name": "Agent Hub",
+      "description": "Local and decentralized sovereign agent templates from the OpenLiate Hub."
+    },
+    {
+      "name": "Skills",
+      "description": "Skills.sh integration for dynamic tool discovery, resolution, and execution."
+    },
+    {
+      "name": "System & Discovery",
+      "description": "Runtime liveness probes, memory profiling, and dynamic LLM model discovery."
+    }
+  ],
+  "paths": {
+    "/run": {
+      "post": {
+        "tags": ["Execution"],
+        "summary": "Run Autonomous Agent",
+        "operationId": "runAgent",
+        "description": "Executes a single-shot autonomous ReAct agent loop against the provided prompt, using either the default loaded agent, an explicit path, or an inline agent spec.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunAgentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Agent executed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunAgentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid prompt input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Agent execution failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chat": {
+      "post": {
+        "tags": ["Execution"],
+        "summary": "Chat with Agent (Conversational Memory)",
+        "operationId": "chatAgent",
+        "description": "Sends a message in a multi-turn conversation, preserving context and tool history across turns under a specified sessionId.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatAgentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Agent replied successfully with preserved session context",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatAgentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid message input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Chat turn failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stream": {
+      "post": {
+        "tags": ["Execution"],
+        "summary": "Stream Agent Execution (SSE)",
+        "operationId": "streamAgent",
+        "description": "Initiates real-time Server-Sent Events (SSE) streaming thought tokens, intermediate reasoning steps, tool activations, and final agent response.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StreamAgentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "SSE stream established emitting events: start, step, token, done, error",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string",
+                  "description": "Server-Sent Events event stream"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid prompt input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hub": {
+      "get": {
+        "tags": ["Agent Hub"],
+        "summary": "List Sovereign Agent Templates",
+        "operationId": "listHubAgents",
+        "description": "Returns all pre-packaged local sovereign agent templates available in hub/agents (e.g., Sarvam Agent, Prism Agent, Neon Agent, Gnani Agent).",
+        "responses": {
+          "200": {
+            "description": "List of available hub agents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HubListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hub/agents/{id}": {
+      "get": {
+        "tags": ["Agent Hub"],
+        "summary": "Get Hub Agent Specification",
+        "operationId": "getHubAgentById",
+        "description": "Retrieves the exact agent specification (agent.json) and metadata for a specific hub template by identifier.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The unique template directory name (e.g. sarvam-agent, prism-agent, neon-agent, gnani-agent)",
+            "schema": {
+              "type": "string",
+              "example": "sarvam-agent"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hub agent specification loaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HubAgentDetailResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Hub agent template not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/skills": {
+      "get": {
+        "tags": ["Skills"],
+        "summary": "List Cached Skills",
+        "operationId": "listSkills",
+        "description": "Lists all currently cached skills.sh tools and local capabilities loaded into the runtime.",
+        "responses": {
+          "200": {
+            "description": "List of cached skills",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillsListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/skills/search": {
+      "get": {
+        "tags": ["Skills"],
+        "summary": "Search Skills Registry",
+        "operationId": "searchSkills",
+        "description": "Searches the decentralized skills.sh public registry for tools matching a query keyword.",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Search term or keyword (e.g. react, postgres, weather)",
+            "schema": {
+              "type": "string",
+              "example": "react"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Maximum number of results to return (default: 10)",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results from skills registry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillSearchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing search query parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/skills/resolve": {
+      "post": {
+        "tags": ["Skills"],
+        "summary": "Resolve Skill or Tool",
+        "operationId": "resolveSkill",
+        "description": "Downloads, parses, and caches SKILL.md instructions from a slug, GitHub repository, or URL.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SkillResolveRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Skill successfully resolved and cached",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillResolveResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing slug or URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/models": {
+      "get": {
+        "tags": ["System & Discovery"],
+        "summary": "List Available Models",
+        "operationId": "listModels",
+        "description": "Dynamically discovers available sovereign models across connected providers (Sarvam AI, Neon Gateway, Gnani AI).",
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "query",
+            "required": false,
+            "description": "Optional filter by provider name (e.g. sarvam, neon, gnani)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Model catalog in OpenAI-compatible format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelsListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": ["System & Discovery"],
+        "summary": "Runtime Health & Readiness",
+        "operationId": "getHealth",
+        "description": "Liveness probe reporting engine status, framework version, uptime, and resident heap memory usage.",
+        "responses": {
+          "200": {
+            "description": "Server health status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RunAgentRequest": {
+        "type": "object",
+        "required": ["input"],
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Prompt or objective for the autonomous agent to solve",
+            "example": "Audit the database schema and propose index optimizations."
+          },
+          "path": {
+            "type": "string",
+            "description": "Optional relative or absolute path to an agent.json or agent file",
+            "example": "hub/agents/sarvam-agent/agent.json"
+          },
+          "spec": {
+            "type": "object",
+            "description": "Optional inline agent definition (L, I, A, T, E structure)"
+          },
+          "options": {
+            "type": "object",
+            "description": "Optional execution parameters such as maxSteps, temperature",
+            "properties": {
+              "maxSteps": {
+                "type": "integer",
+                "default": 10
+              },
+              "temperature": {
+                "type": "number",
+                "default": 0.2
+              }
+            }
+          }
+        }
+      },
+      "RunAgentResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "output": { "type": "string", "example": "Index audit completed. Recommendations provided below." },
+          "thought": { "type": "string", "example": "Analyzed postgres schema tables and found missing composite index on user_id and created_at." },
+          "steps": {
+            "type": "array",
+            "items": { "type": "object" }
+          },
+          "totalSteps": { "type": "integer", "example": 3 },
+          "model": { "type": "string", "example": "sarvam/sarvam-105b-conversations" },
+          "durationMs": { "type": "integer", "example": 412 }
+        }
+      },
+      "ChatAgentRequest": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message to send to conversational agent",
+            "example": "What was the index we discussed earlier?"
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Unique session ID preserving multi-turn memory",
+            "example": "session-prod-001"
+          },
+          "path": {
+            "type": "string",
+            "description": "Optional path to target agent file"
+          }
+        }
+      },
+      "ChatAgentResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "sessionId": { "type": "string", "example": "session-prod-001" },
+          "reply": { "type": "string", "example": "Earlier we identified a missing index on user_id." },
+          "thought": { "type": "string", "example": "Recalled session memory for session-prod-001." },
+          "steps": { "type": "integer", "example": 2 },
+          "durationMs": { "type": "integer", "example": 320 }
+        }
+      },
+      "StreamAgentRequest": {
+        "type": "object",
+        "required": ["input"],
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Prompt to execute over real-time SSE stream",
+            "example": "Deconstruct mathematical topology for distributed consensus."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional session ID"
+          }
+        }
+      },
+      "HubListResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "count": { "type": "integer", "example": 4 },
+          "agents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HubAgentSummary"
+            }
+          }
+        }
+      },
+      "HubAgentSummary": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "sarvam-agent" },
+          "name": { "type": "string", "example": "sarvam-sovereign-agent" },
+          "model": { "type": "string", "example": "sarvam/sarvam-105b-conversations" },
+          "intent": { "type": "string", "example": "Autonomous Sovereign Indic ReAct Agent" },
+          "path": { "type": "string", "example": "hub/agents/sarvam-agent/agent.json" }
+        }
+      },
+      "HubAgentDetailResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "id": { "type": "string", "example": "sarvam-agent" },
+          "spec": { "type": "object" }
+        }
+      },
+      "SkillsListResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "ok" },
+          "count": { "type": "integer", "example": 2 },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string", "example": "neon-postgres" },
+                "slug": { "type": "string", "example": "neon/postgres" },
+                "source": { "type": "string", "example": "skills.sh" },
+                "cachedAt": { "type": "string", "example": "2026-11-15T20:00:00Z" }
+              }
+            }
+          }
+        }
+      },
+      "SkillSearchResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "ok" },
+          "query": { "type": "string", "example": "react" },
+          "count": { "type": "integer", "example": 5 },
+          "skills": {
+            "type": "array",
+            "items": { "type": "object" }
+          }
+        }
+      },
+      "SkillResolveRequest": {
+        "type": "object",
+        "required": ["slug"],
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "Skill slug, GitHub reference, or URL",
+            "example": "neon/database"
+          }
+        }
+      },
+      "SkillResolveResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "ok" },
+          "resolved": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string", "example": "database" },
+              "slug": { "type": "string", "example": "neon/database" },
+              "source": { "type": "string", "example": "skills.sh" },
+              "bytes": { "type": "integer", "example": 4096 },
+              "instructionsPreview": { "type": "string", "example": "# Neon Database Skill..." }
+            }
+          }
+        }
+      },
+      "ModelsListResponse": {
+        "type": "object",
+        "properties": {
+          "object": { "type": "string", "example": "list" },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string", "example": "sarvam/sarvam-105b-conversations" },
+                "object": { "type": "string", "example": "model" },
+                "owned_by": { "type": "string", "example": "sarvam" }
+              }
+            }
+          }
+        }
+      },
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string", "example": "ok" },
+          "framework": { "type": "string", "example": "Liate" },
+          "version": { "type": "string", "example": "0.0.7" },
+          "uptimeSeconds": { "type": "integer", "example": 1420 },
+          "timestamp": { "type": "string", "example": "2026-11-16T03:50:00.000Z" },
+          "memory": {
+            "type": "object",
+            "properties": {
+              "heapUsedMb": { "type": "integer", "example": 42 },
+              "rssMb": { "type": "integer", "example": 89 }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": false },
+          "error": { "type": "string", "example": "Missing required parameter" },
+          "durationMs": { "type": "integer", "example": 2 }
+        }
+      }
+    }
+  }
+}

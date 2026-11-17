@@ -1,0 +1,11 @@
+{
+  "title": "Layers (L · I · A · T · E)",
+  "pages": [
+    "overview",
+    "large-models",
+    "integration-memory",
+    "agent-loop",
+    "tools-mcp",
+    "environment-sandbox"
+  ]
+}

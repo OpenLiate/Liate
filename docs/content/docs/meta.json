@@ -1,0 +1,17 @@
+{
+  "title": "Documentation",
+  "root": true,
+  "pages": [
+    "index",
+    "quickstart",
+    "doctrine",
+    "---Architecture---",
+    "layers",
+    "---Runtime---",
+    "runtime",
+    "---API Reference---",
+    "api-reference",
+    "---Changelog---",
+    "changelog"
+  ]
+}

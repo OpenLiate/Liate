@@ -1,0 +1,36 @@
+---
+title: Integrating Agents by Parts - The LIATE Mathematical Formulation
+description: How the five layers—Large Models, Integration, Agent loop, Tools, and Environment—transform messy agent prompt engineering into rigorous engineering discipline.
+date: "2026-11-10"
+tags: ["Theory", "ReAct", "MCP"]
+authors: ["liate"]
+---
+
+In calculus, **integration by parts** (`∫ u dv = uv - ∫ v du`) breaks an otherwise intractable integral into cleanly manageable components. The **LIATE rule** (Logarithmic, Inverse trig, Algebraic, Trigonometric, Exponential) dictates the exact order of decomposition.
+
+We apply this mathematical philosophy to autonomous artificial intelligence.
+
+## The Five Decomposed Layers
+
+```
+Agent = L ∘ I ∘ A ∘ T ∘ E
+```
+
+1. **L — Large Models Layer**: Pluggable reasoning backends (Sarvam AI, Ollama, OpenAI, Anthropic).
+2. **I — Integration & Memory**: Short-term conversation buffers, long-term episodic vector storage, and structured SQL state.
+3. **A — Agent Reasoning Loop**: Explicit ReAct (Thought → Action → Observation) cycle with bounded recursion guards.
+4. **T — Tools & MCP**: Native Model Context Protocol (v2) client supporting local stdio processes and remote SSE/HTTP tool servers.
+5. **E — Environment & Sandbox**: Isolated process sandboxes, secret masking, and deterministic ephemeral filesystems.
+
+```json title="agent.json"
+{
+  "name": "RepoAuditor",
+  "L": "openai/gpt-4o",
+  "T": {
+    "fetch": { "command": "uvx", "args": ["mcp-server-fetch"] }
+  },
+  "A": { "strategy": "react" }
+}
+```
+
+By decomposing agent complexity across these five isolated primitives, teams can test, benchmark, and deploy agents with zero prompt leakage.
