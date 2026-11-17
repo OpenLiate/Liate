@@ -30,7 +30,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install Build Tools
-        run: pip install build twine
+        run: pip install build twine hatchling
 
       - name: Build Both Packages (liate & openliate)
         run: |
