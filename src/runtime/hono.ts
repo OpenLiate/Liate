@@ -11,8 +11,9 @@ import { VERSION } from "@/core/version";
 import { Session } from "@/layers/integration/memory";
 import { LLMRouter } from "@/layers/llm/model";
 import { skillsRouter } from "@/routes/skills";
-import { existsSync } from "node:fs";
-import { resolve } from "node:path";
+import { listLocalHubAgents } from "@/cli/resolver";
+import { existsSync, readFileSync } from "node:fs";
+import { resolve, join } from "node:path";
 
 export const app = new Hono();
 
@@ -92,6 +93,58 @@ const handleGetModels = async (c: any) => {
 app.get("/models", handleGetModels);
 app.get("/v1/models", handleGetModels);
 app.get("/api/v1/models", handleGetModels);
+
+/**
+ * GET /hub & GET /hub/agents
+ * Lists all sovereign agent templates in the local agent hub
+ */
+app.get("/hub", (c) => {
+  const agents = listLocalHubAgents();
+  return c.json({
+    success: true,
+    count: agents.length,
+    agents
+  });
+});
+
+app.get("/hub/agents", (c) => {
+  const agents = listLocalHubAgents();
+  return c.json({
+    success: true,
+    count: agents.length,
+    agents
+  });
+});
+
+/**
+ * GET /hub/agents/:id
+ * Retrieves the full specification of a local hub agent template
+ */
+app.get("/hub/agents/:id", (c) => {
+  const id = c.req.param("id");
+  const hubCandidate = resolve(process.cwd(), "hub", "agents", id, "agent.json");
+
+  if (!existsSync(hubCandidate)) {
+    return c.json({
+      success: false,
+      error: `Hub agent '${id}' not found`
+    }, 404);
+  }
+
+  try {
+    const raw = JSON.parse(readFileSync(hubCandidate, "utf-8"));
+    return c.json({
+      success: true,
+      id,
+      spec: raw
+    });
+  } catch (err: any) {
+    return c.json({
+      success: false,
+      error: `Failed to parse agent spec for '${id}': ${err.message}`
+    }, 500);
+  }
+});
 
 /**
  * 2. POST /run

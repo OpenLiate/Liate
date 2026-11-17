@@ -1,12 +1,12 @@
 {
-  "L": "sarvam/sarvam-105b-conversations",
+  "L": "sarvam/sarvam-105b",
   "I": {
     "memory": "sessions/sarvam-agent"
   },
   "A": {
     "name": "sarvam_agent",
-    "version": "0.0.1",
-    "intent": "Indic AI Agent powered by Sarvam 105B",
+    "version": "1.0.0",
+    "intent": "Autonomous Sovereign Indic AI Agent using Sarvam MCP tools",
     "maxSteps": 5
   },
   "T": [],

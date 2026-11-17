@@ -1,18 +1,18 @@
 <div align="center">
 
-# OpenLiate — Open Source Backend Layer for AI Agents
-### Where a Class is an Agent · From India, For India, Beyond India 🇮🇳 🌍
+# LIATE — Open Source OOP Framework for AI Agents
+### Where Classes Are AI Agents · From India, For India, Beyond India 🇮🇳 🌍
 
 `L[LM] · I[ntegration] · A[gent] · T[ools] · E[nvironment]`
 
 <br>
 
 <p align="center">
-  <a href="https://docs.openliate.tech"><img src="https://img.shields.io/badge/docs-docs.openliate.tech-white?labelColor=black&style=flat-square&v=2" alt="Docs"></a>
+  <a href="https://openliate.tech/docs"><img src="https://img.shields.io/badge/docs-openliate.tech%2Fdocs-white?labelColor=black&style=flat-square" alt="Docs"></a>
   <a href="https://github.com/OpenLiate/Liate/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-white?labelColor=black&style=flat-square" alt="License: MIT"></a>
-  <a href="https://sarvam.ai"><img src="./assets/sarvam-badge.svg" alt="Startup Program: Sarvam AI"></a>
+  <a href="https://sarvam.ai"><img src="./assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
-  <a href="https://github.com/OpenLiate/Liate/releases"><img src="https://img.shields.io/badge/version-v0.1.4-white?labelColor=black&style=flat-square" alt="v0.1.4"></a>
+  <a href="https://github.com/OpenLiate/Liate/releases"><img src="https://img.shields.io/badge/version-v0.1.5-white?labelColor=black&style=flat-square" alt="v0.1.5"></a>
   <img src="https://img.shields.io/badge/Bun-Supported-white?logo=bun&logoColor=white&labelColor=black&style=flat-square" alt="Bun">
   <img src="https://img.shields.io/badge/Node.js-Supported-white?logo=node.js&logoColor=5FA04E&labelColor=black&style=flat-square" alt="Node.js">
 </p>
@@ -21,14 +21,12 @@
   <a href="#aum-architecture"><img src="https://img.shields.io/badge/Agent_Architecture-AUM_(Agent_Unified_Module)-white?labelColor=black&style=flat-square" alt="Agent Unified Module (AUM)"></a>
   &nbsp;
   <a href="#runtime-engine"><img src="https://img.shields.io/badge/Core_Runtime_Engine-OM_(Orchestration_Module)-white?labelColor=black&style=flat-square" alt="Core Runtime Engine: OM (Orchestration Module)"></a>
-  &nbsp;
-  <a href="#instant-install"><img src="https://img.shields.io/badge/Instant_Install-Zero_Dependencies-white?labelColor=black&style=flat-square" alt="Instant Install"></a>
 </p>
 
 <br>
 
 > **Milestone: Liate — Selected for India's Sarvam AI Startup Program 2026** <sup>IN</sup>  
-> Open Source Backend Layer for AI Agents by [OpenLiate](https://github.com/OpenLiate/Liate)
+> Built by **[OpenLiate](https://github.com/OpenLiate/Liate)** — Open Source Backend Layer for AI Agents
 
 <br>
 
@@ -39,6 +37,30 @@
 </div>
 
 ## <a id="instant-install"></a>[0] Quickstart & Local Run
+
+### 1-Click Fast Install:
+
+```powershell
+# Windows (PowerShell)
+powershell -c "irm https://openliate.tech/install.ps1 | iex"
+```
+
+```bash
+# macOS / Linux (Bash)
+curl -fsSL https://openliate.tech/install.sh | bash
+```
+
+```bash
+# Node / Bun Global Install:
+npm install -g openliate
+# or
+bun add -g openliate
+
+# Python SDK:
+pip install liate
+```
+
+### Run Agents:
 
 ```bash
 # Run a Local Hub Agent:
@@ -94,9 +116,11 @@ liate serve --port 7071
 liate run agent.json "Hello Agent World!"
 ```
 
-> **Class is an Agent — Developer SDKs (Coming Soon):**  
-> Direct language SDKs for **TypeScript / JavaScript** (`npm install @openliate/liate`) and **Python** (`pip install liate`) are coming soon.  
-> Right now, OpenLiate natively executes declarative **`agent.json`** agents directly via the `liate` CLI.
+> **Class is an Agent — Developer SDKs:**  
+> - **CLI & Runtime Engine:** `npm install -g openliate` or `bun add -g openliate`  
+> - **Python SDK:** `pip install liate`  
+> - **TypeScript SDK:** `npm install @openliate/liate` (or `openliate`)  
+> OpenLiate natively executes declarative **`agent.json`** agents directly via the `liate` CLI.
 
 <br>
 
@@ -302,7 +326,7 @@ Every agent implements the **Agent Unified Module (AUM)** across 5 sovereign lay
 
 <div align="center">
 
-**OpenLiate — Open Source Backend Layer for AI Agents**
+**LIATE — Open Source OOP Framework for AI Agents**
 
 <br>
 

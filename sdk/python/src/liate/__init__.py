@@ -1,10 +1,11 @@
 """
-OpenLiate Python SDK — Open Source Backend Layer for AI Agents
-Where a Class is an Agent · From India, For India, Beyond India 🇮🇳 🌍
+LIATE Python SDK — Open Source OOP Framework for AI Agents
+Where Classes Are AI Agents · From India, For India, Beyond India 🇮🇳 🌍
 """
 from .om import liate
 from .client import LiateApiClient, AgentRunResult
 
+Liate = liate
 __version__ = "0.1.4"
-__all__ = ["liate", "LiateApiClient", "AgentRunResult"]
+__all__ = ["liate", "Liate", "LiateApiClient", "AgentRunResult"]
 

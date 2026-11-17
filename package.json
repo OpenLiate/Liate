@@ -1,7 +1,7 @@
 {
   "name": "@openliate/liate",
-  "version": "0.1.4",
-  "description": "Open Source Backend Layer for AI Agents · From India, For India, Beyond India",
+  "version": "0.1.5",
+  "description": "LIATE — Open Source OOP Framework for AI Agents · From India, For India, Beyond India",
   "type": "module",
   "main": "./dist/liate.js",
   "types": "./src/liate.ts",
@@ -32,7 +32,10 @@
     "compile": "bun run build:compile",
     "serve": "bun run dist/runtime/index.js",
     "typecheck": "tsc --noEmit",
-    "build:hono": "bun build ./src/runtime/hono.ts --target bun --format esm --outfile dist/runtime/hono.js"
+    "build:hono": "bun build ./src/runtime/hono.ts --target bun --format esm --outfile dist/runtime/hono.js",
+    "pack:all": "node scripts/packer.mjs",
+    "publish:all": "node scripts/publisher.mjs",
+    "bump": "node scripts/bump.mjs"
   },
   "dependencies": {
     "@hono/node-server": "2.1.5",

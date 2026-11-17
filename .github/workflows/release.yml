@@ -1,0 +1,86 @@
+name: Release & Publish (PyPI & NPM)
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag to publish (e.g. v0.1.5)'
+        required: false
+
+jobs:
+  # ========================================================
+  # JOB 1: Build & Publish Python Packages to PyPI
+  # ========================================================
+  publish-pypi:
+    name: 🐍 Publish to PyPI (liate & openliate)
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Mandatory for PyPI Trusted Publishing (OIDC)
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Build Tools
+        run: pip install build twine
+
+      - name: Build Both Packages (liate & openliate)
+        run: |
+          cd sdk/python
+          python builder.py all
+
+      - name: Verify Wheels with Twine
+        run: |
+          cd sdk/python
+          twine check dist/*
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: sdk/python/dist/
+          skip-existing: true
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+  # ========================================================
+  # JOB 2: Build & Publish TypeScript Packages to NPM
+  # ========================================================
+  publish-npm:
+    name: 📦 Publish to NPM (openliate & @openliate/liate)
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Mandatory for NPM Trusted Publishing & Provenance
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Build TypeScript Distributions
+        run: bun run build
+
+      - name: Publish to NPM (openliate & @openliate/liate)
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          node scripts/publisher.mjs

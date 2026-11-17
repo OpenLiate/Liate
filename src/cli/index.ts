@@ -13,8 +13,8 @@ import { resolve } from "node:path";
 
 function printHelp(): void {
   console.log(`
-Liate — Open Source Backend Layer for AI Agents (v${VERSION})
-From India, For India, Beyond India 🇮🇳 🌍
+LIATE — Open Source OOP Framework for AI Agents (v${VERSION})
+Where Classes Are AI Agents · From India, For India, Beyond India 🇮🇳 🌍
 
 Usage:
   liate <command> [options]

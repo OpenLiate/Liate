@@ -40,11 +40,14 @@ export * from "@/scaffold/project";
 import { liate } from "@/core/om";
 export default liate;
 
-// 4. CLI Direct Execution Entrypoint
-if (import.meta.main) {
-  const args = process.argv.slice(2);
-  const targetFile = args[0] && !args[0].startsWith("-") ? args[0] : "agent.json";
-  const prompt = (args[0] && !args[0].startsWith("-") ? args.slice(1) : args).join(" ") || "Hello! Confirm you are running pure Liate.";
+// 4. CLI Direct Execution Entrypoint (only if run directly as script)
+if (typeof import.meta !== "undefined" && import.meta.main && process.argv[1] && (process.argv[1].endsWith("liate.ts") || process.argv[1].endsWith("liate.js"))) {
+  let rawArgs = process.argv.slice(2);
+  if (rawArgs[0] === "run") {
+    rawArgs = rawArgs.slice(1);
+  }
+  const targetFile = rawArgs[0] && !rawArgs[0].startsWith("-") ? rawArgs[0] : "agent.json";
+  const prompt = (rawArgs[0] && !rawArgs[0].startsWith("-") ? rawArgs.slice(1) : rawArgs).join(" ") || "Hello! Confirm you are running pure Liate.";
 
   try {
     const agent = await liate.load(targetFile);

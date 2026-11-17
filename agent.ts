@@ -1,9 +1,9 @@
 import { liate } from "./src/liate";
 
-export class HelloAgent extends liate {
+export class SovereignAgent extends liate {
   L = "sarvam/sarvam-105b";
-  I = { memory: "sessions/hello-agent" };
-  A = { name: "hello_agent", intent: "Autonomous Sovereign Agent" };
+  I = { memory: "sessions/sovereign-agent" };
+  A = { name: "agentyaan", intent: "Autonomous Sovereign Indic Agent", maxSteps: 5 };
   T = {
     fetch: {
       command: "uvx",
@@ -15,12 +15,12 @@ export class HelloAgent extends liate {
 }
 
 async function main() {
-  const agent = new HelloAgent();
+  const agent = new SovereignAgent();
   console.log("=== [agent.ts] Agent Unified Module (AUM) ===");
   console.log(JSON.stringify(agent.toModule(), null, 2));
 
   console.log("\n=== [agent.ts] Executing via Orchestration Module (OM) ===");
-  const result = await agent.run("Introduce yourself in one sentence and say Namaste.");
+  const result = await agent.run("Fetch https://openliate.tech and summarize.");
   console.log("\nAgent Output:\n" + result.text);
   console.log(`\nModel: ${result.model} | Latency: ${result.durationMs}ms | Steps: ${result.totalSteps}`);
 }
@@ -28,4 +28,3 @@ async function main() {
 if (import.meta.main) {
   main().catch(console.error);
 }
-

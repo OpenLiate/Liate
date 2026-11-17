@@ -104,12 +104,37 @@ export class liate {
   }
 
   /**
-   * Loads an agent directly from an agent.json file path
+   * Loads an agent directly from an agent.json file path or hub agent name
    */
   public static async load(filePath: string): Promise<liate> {
     const fs = await import("fs/promises");
+    const { existsSync } = await import("fs");
     const path = await import("path");
-    const resolvedPath = path.isAbsolute(filePath) ? filePath : path.resolve(process.cwd(), filePath);
+    
+    let resolvedPath = path.isAbsolute(filePath) ? filePath : path.resolve(process.cwd(), filePath);
+    
+    if (!existsSync(resolvedPath)) {
+      // Check if it's a directory containing agent.json
+      if (existsSync(path.join(resolvedPath, "agent.json"))) {
+        resolvedPath = path.join(resolvedPath, "agent.json");
+      } else {
+        // Check in hub/agents
+        const hubCandidate = path.resolve(process.cwd(), "hub", "agents", filePath, "agent.json");
+        if (existsSync(hubCandidate)) {
+          resolvedPath = hubCandidate;
+        }
+      }
+    } else {
+      // If path exists and is a directory, look for agent.json inside
+      const stat = await fs.stat(resolvedPath);
+      if (stat.isDirectory()) {
+        const nested = path.join(resolvedPath, "agent.json");
+        if (existsSync(nested)) {
+          resolvedPath = nested;
+        }
+      }
+    }
+
     const raw = await fs.readFile(resolvedPath, "utf-8");
     const json = JSON.parse(raw);
     return liate.from(json);
