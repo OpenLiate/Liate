@@ -4,7 +4,16 @@ All notable changes to Liate: Open Source Backend Layer for AI Agents — From I
 
 ---
 
-## Sprint 3: Modular Skills, Multi-Language SDKs & Platform Ecosystem (v0.1.1 → v0.1.4)
+## Sprint 3: Modular Skills, Multi-Language SDKs & Platform Ecosystem (v0.1.1 → v0.1.5)
+
+### v0.1.5 (Fumadocs Migration, PyPI & NPM Multi-Package Release, 1-Click Installers & CI/CD Automation)
+- **Dual-Package NPM Distribution**: Published both unscoped (`openliate`) and organization-scoped (`@openliate/liate`) packages to npm with cryptographic provenance (`--provenance`).
+- **Dual-Package PyPI Distribution**: Published both `liate` and `openliate` Python distributions to PyPI built via Hatchling (`builder.py`).
+- **Automated GitHub Actions CI/CD**: Introduced `.github/workflows/release.yml` with OIDC PyPI publishing and npm token authentication, verified end-to-end on GitHub Actions.
+- **1-Click Operating System Installers**: Created zero-dependency installation scripts `install.ps1` (Windows PowerShell) and `install.sh` (Linux / macOS) hosted directly under `docs/public`.
+- **Fumadocs Documentation Portal Migration**: Replaced legacy static documentation engine with Next.js Fumadocs interactive documentation portal (`docs.openliate.tech`), featuring OpenAPI reference playgrounds and AI Doc Search.
+- **Sovereign Documentation Assistant (`DocGyan`)**: Cleaned up legacy `doculisa` references across codebase, hub agents, and API routes in favor of official `DocGyanAgent`.
+- **Packaging & Version Synchronizer Automation**: Implemented `scripts/packer.mjs`, `scripts/publisher.mjs`, and `scripts/bump.mjs` for synchronized version bumps across TypeScript, Python, and documentation badges.
 
 ### v0.1.4 (Neon AI Gateway & Gnani AI Voice Integration)
 - **Neon AI Gateway (65+ Models)**: Dynamic endpoint resolution for 65+ frontier models and JEV System-One heuristic decision routing.
