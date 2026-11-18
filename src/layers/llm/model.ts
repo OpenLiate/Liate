@@ -456,6 +456,18 @@ export class LiateLlmClient {
       }
     }
 
+    if (provider === "sarvam") {
+      delete payload.text;
+      delete payload.name;
+      delete payload.intent;
+      delete payload.memory;
+      delete payload.maxSteps;
+      if (!Array.isArray(payload.tools) || payload.tools.length === 0) {
+        delete payload.tools;
+        delete payload.tool_choice;
+      }
+    }
+
     let response = await resilientFetch(url, {
       method: "POST",
       headers,
