@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from "react";
 import DotMatrixLogo from "@/components/ui/dot-matrix-logo";
-import { Mic, Terminal, Copy, Check, CornerDownLeft, RotateCcw, X, Sparkles, ChevronDown } from "lucide-react";
+import { Mic, Terminal, Copy, Check, CornerDownLeft, RotateCcw, X, Sparkles, ChevronDown, Volume2, VolumeX, Loader2, Languages } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -49,6 +49,8 @@ interface Message {
   text: string;
   thought?: string;
   code?: string;
+  translations?: Record<string, string>;
+  activeLang?: string;
 }
 
 function CodeBlock({ code, language }: { code: string; language: string }) {
@@ -184,7 +186,96 @@ export function AIChatPanel() {
     },
   ]);
   const [isListening, setIsListening] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
+  const [speakingIdx, setSpeakingIdx] = useState<number | null>(null);
+  const [synthesizingIdx, setSynthesizingIdx] = useState<number | null>(null);
+  const [translatingIdx, setTranslatingIdx] = useState<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const handleTranslate = async (text: string, targetLang: string, idx: number) => {
+    if (messages[idx].translations?.[targetLang]) {
+      setMessages((prev) =>
+        prev.map((msg, i) =>
+          i === idx ? { ...msg, activeLang: msg.activeLang === targetLang ? undefined : targetLang } : msg
+        )
+      );
+      return;
+    }
+
+    setTranslatingIdx(idx);
+    try {
+      const res = await fetch("/api/docgyan/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, target_language_code: targetLang }),
+      });
+      const data = await res.json();
+      if (data.success && data.translated_text) {
+        setMessages((prev) =>
+          prev.map((msg, i) =>
+            i === idx
+              ? {
+                  ...msg,
+                  translations: { ...(msg.translations || {}), [targetLang]: data.translated_text },
+                  activeLang: targetLang,
+                }
+              : msg
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Mayura translation error:", err);
+    } finally {
+      setTranslatingIdx(null);
+    }
+  };
+
+  const handleSpeak = async (text: string, idx: number) => {
+    if (speakingIdx === idx) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      setSpeakingIdx(null);
+      return;
+    }
+
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+
+    setSynthesizingIdx(idx);
+    try {
+      const res = await fetch("/api/docgyan/speak", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, speaker: "simran_en_customer" })
+      });
+      const data = await res.json();
+      if (data.success && data.audio) {
+        const audio = new Audio("data:audio/wav;base64," + data.audio);
+        audioRef.current = audio;
+        setSpeakingIdx(idx);
+        audio.onended = () => {
+          setSpeakingIdx(null);
+          audioRef.current = null;
+        };
+        audio.onerror = () => {
+          setSpeakingIdx(null);
+          audioRef.current = null;
+        };
+        await audio.play();
+      }
+    } catch (err) {
+      console.error("Bulbul v4-Flash speech synthesis failed:", err);
+    } finally {
+      setSynthesizingIdx(null);
+    }
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -256,58 +347,65 @@ export function AIChatPanel() {
     }
   };
 
-  const recognitionRef = useRef<any>(null);
-
-  const toggleMic = () => {
+  const toggleMic = async () => {
     if (typeof window === "undefined") return;
 
     if (isListening) {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+        mediaRecorderRef.current.stop();
       }
       setIsListening(false);
       return;
     }
 
-    const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      alert("Speech recognition is not supported in this browser. Please type your query.");
-      return;
-    }
-
     try {
-      const recognition = new SpeechRecognition();
-      recognition.lang = "en-IN";
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert("Microphone recording is not supported in this browser. Please type your query.");
+        return;
+      }
 
-      recognition.onstart = () => {
-        setIsListening(true);
-      };
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioChunksRef.current = [];
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
 
-      recognition.onresult = (event: any) => {
-        const transcript = event.results?.[0]?.[0]?.transcript;
-        if (transcript) {
-          setInput(transcript);
-          handleSend(transcript);
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
         }
       };
 
-      recognition.onerror = (event: any) => {
-        console.error("Speech recognition error:", event?.error);
-        setIsListening(false);
+      mediaRecorder.onstop = async () => {
+        stream.getTracks().forEach((track) => track.stop());
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+        if (audioBlob.size < 500) return;
+
+        setIsTranscribing(true);
+        try {
+          const formData = new FormData();
+          formData.append("file", audioBlob, "recording.webm");
+
+          const res = await fetch("/api/docgyan/transcribe", {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await res.json();
+          if (data.success && data.transcript) {
+            setInput(data.transcript);
+            handleSend(data.transcript);
+          }
+        } catch (err) {
+          console.error("Saaras v4 speech-to-text error:", err);
+        } finally {
+          setIsTranscribing(false);
+        }
       };
 
-      recognition.onend = () => {
-        setIsListening(false);
-      };
-
-      recognitionRef.current = recognition;
-      recognition.start();
-    } catch (err) {
-      console.error("Failed to start speech recognition:", err);
+      mediaRecorder.start();
+      setIsListening(true);
+    } catch (err: any) {
+      console.error("Microphone access error:", err);
       setIsListening(false);
     }
   };
@@ -398,13 +496,96 @@ export function AIChatPanel() {
                   </details>
                 )}
 
+                {/* Translated Language Indicator Badge if active */}
+                {m.activeLang && m.translations?.[m.activeLang] && (
+                  <div className="mb-1.5 flex items-center gap-1.5 text-[10px] text-fd-primary">
+                    <Languages className="w-3 h-3" />
+                    <span>Translated with Mayura v1 ({m.activeLang})</span>
+                    <button
+                      type="button"
+                      onClick={() => handleTranslate(m.text, m.activeLang!, idx)}
+                      className="underline hover:text-fd-foreground cursor-pointer ml-1"
+                    >
+                      Show Original
+                    </button>
+                  </div>
+                )}
+
                 {/* Markdown Content (Bold, Tables, Lists, Quotes, Highlights, Links, Code) */}
-                <MarkdownContent content={m.text} />
+                <MarkdownContent
+                  content={
+                    m.activeLang && m.translations?.[m.activeLang]
+                      ? m.translations[m.activeLang]
+                      : m.text
+                  }
+                />
 
                 {/* Backward compatibility for standalone code field */}
                 {m.code && (
                   <CodeBlock language="bash" code={m.code} />
                 )}
+
+                {/* Bulbul v4-Flash Voice & Mayura v1 Translation Actions */}
+                <div className="flex flex-wrap items-center gap-2 mt-2 pt-1 border-t border-fd-border/20 text-[11px] text-fd-muted-foreground">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleSpeak(
+                        m.activeLang && m.translations?.[m.activeLang]
+                          ? m.translations[m.activeLang]
+                          : m.text,
+                        idx
+                      )
+                    }
+                    disabled={synthesizingIdx === idx}
+                    className="flex items-center gap-1.5 px-2 py-0.5 rounded-md hover:bg-fd-muted/50 hover:text-fd-foreground text-fd-muted-foreground transition-all cursor-pointer select-none"
+                    title="Listen via Sarvam AI Bulbul v4-Flash"
+                  >
+                    {speakingIdx === idx ? (
+                      <>
+                        <VolumeX className="w-3.5 h-3.5 text-red-500 animate-pulse" />
+                        <span className="text-red-500 font-medium text-[10px]">Stop Audio</span>
+                      </>
+                    ) : synthesizingIdx === idx ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin text-fd-primary" />
+                        <span className="text-[10px]">Synthesizing (Bulbul v4-Flash)...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Volume2 className="w-3.5 h-3.5 text-fd-primary" />
+                        <span className="text-[10px]">Listen (Bulbul v4-Flash)</span>
+                      </>
+                    )}
+                  </button>
+
+                  <div className="flex items-center gap-1 pl-2 border-l border-fd-border/30 text-[10px]">
+                    <Languages className="w-3 h-3 text-fd-muted-foreground" />
+                    <span className="text-fd-muted-foreground mr-0.5">Mayura:</span>
+                    {[
+                      { label: "हिन्दी", code: "hi-IN" },
+                      { label: "தமிழ்", code: "ta-IN" },
+                      { label: "తెలుగు", code: "te-IN" },
+                      { label: "ಕನ್ನಡ", code: "kn-IN" },
+                      { label: "বাংলা", code: "bn-IN" },
+                    ].map((lang) => (
+                      <button
+                        key={lang.code}
+                        type="button"
+                        onClick={() => handleTranslate(m.text, lang.code, idx)}
+                        disabled={translatingIdx === idx}
+                        className={`px-1.5 py-0.5 rounded hover:bg-fd-muted/80 transition-colors cursor-pointer ${
+                          m.activeLang === lang.code
+                            ? "bg-fd-primary text-fd-primary-foreground font-semibold"
+                            : "hover:text-fd-foreground"
+                        }`}
+                        title={`Translate with Sarvam Mayura v1 to ${lang.label}`}
+                      >
+                        {translatingIdx === idx ? "..." : lang.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -415,6 +596,14 @@ export function AIChatPanel() {
           <div className="flex items-center gap-2 text-xs text-fd-muted-foreground py-1 animate-pulse">
             <DotMatrixLogo size={14} interactive={false} />
             <span>DocGyan is reasoning with Sarvam 105B...</span>
+          </div>
+        )}
+
+        {/* Saaras v4 Transcribing Indicator */}
+        {isTranscribing && (
+          <div className="flex items-center gap-2 text-xs text-fd-muted-foreground py-1 animate-pulse">
+            <Loader2 className="w-3.5 h-3.5 animate-spin text-fd-primary" />
+            <span>Transcribing speech with Sarvam Saaras v4...</span>
           </div>
         )}
         <div ref={messagesEndRef} />
@@ -432,16 +621,22 @@ export function AIChatPanel() {
           <input
             type="text"
             value={input}
-            disabled={isThinking}
+            disabled={isThinking || isTranscribing}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask DocGyan about OpenLiate, MCP, Sarvam 105B..."
+            placeholder={
+              isListening
+                ? "Listening... (Click mic to stop and transcribe)"
+                : isTranscribing
+                ? "Saaras v4 is transcribing..."
+                : "Ask DocGyan about OpenLiate, MCP, Sarvam 105B..."
+            }
             className="flex-1 bg-transparent text-xs sm:text-sm text-fd-foreground placeholder:text-fd-muted-foreground outline-none py-1 disabled:opacity-50"
           />
           <button
             type="button"
             onClick={toggleMic}
-            disabled={isThinking}
-            title="Voice Input (Sarvam AI Saaras)"
+            disabled={isThinking || isTranscribing}
+            title={isListening ? "Stop & Transcribe with Saaras v4" : "Voice Input (Sarvam AI Saaras v4)"}
             className={`p-1.5 rounded-full transition-colors cursor-pointer ${
               isListening
                 ? "bg-red-500 text-white animate-pulse"
@@ -452,15 +647,15 @@ export function AIChatPanel() {
           </button>
           <button
             type="submit"
-            disabled={!input.trim() || isThinking}
+            disabled={!input.trim() || isThinking || isTranscribing}
             className="p-1.5 rounded-full bg-fd-primary hover:opacity-90 disabled:opacity-20 text-fd-primary-foreground font-semibold transition-all cursor-pointer"
           >
             <CornerDownLeft className="w-3.5 h-3.5" />
           </button>
         </form>
         <div className="flex items-center justify-between text-[10px] text-fd-muted-foreground/80 px-2 pt-2">
-          <span>Built on Liate • Powered by Sarvam 105B 🇮🇳</span>
-          <span className="font-mono text-[9px]">DocGyan v0.1.0</span>
+          <span>Built on Liate • Powered by Sarvam AI (105B · Bulbul v4-Flash · Saaras v4 · Mayura v1) 🇮🇳</span>
+          <span className="font-mono text-[9px]">DocGyan v0.1.5</span>
         </div>
       </div>
     </div>

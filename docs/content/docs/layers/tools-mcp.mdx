@@ -33,20 +33,34 @@ OpenLiate natively consumes MCP configs declared directly inline in Layer `[T]` 
 * **Inline HTTP / SSE MCP:** Pass remote URL and headers directly.
 * **Inline CLI / Stdio MCP:** Pass `command` (e.g. `npx`, `uvx`) and `args`.
 * **Built-in `fetch`:** Safe HTTP fetcher tool.
+* **Official Sarvam AI MCP (`sarvam-mcp`):** Connects sovereign voice synthesis (**Bulbul v4-Flash** TTS), speech recognition (**Saaras v4** STT), translation (**Mayura**), and document vision directly as first-class tools.
 
 ```json agent.json
 {
-  "T": [
-    "verify_identity",
-    "fetch",
-    {
-      "name": "neon-db",
-      "transport": "http",
-      "url": "https://mcp.neon.tech/mcp",
-      "headers": {
-        "Authorization": "Bearer $NEON_AI_GATEWAY_TOKEN"
-      }
+  "T": {
+    "sarvam": {
+      "command": "uvx",
+      "args": ["sarvam-mcp"],
+      "tools": ["*"]
     }
-  ]
+  }
+}
+```
+
+Or in OOP TypeScript:
+
+```typescript agent.ts
+import { liate } from "openliate";
+
+export class SarvamVoiceAgent extends liate {
+  L = "sarvam/sarvam-105b";
+  T = {
+    sarvam: {
+      command: "uvx",
+      args: ["sarvam-mcp"],
+      tools: ["tts_speak", "sarvam_stt_transcribe", "translate"]
+    }
+  };
+  E = { SARVAM_API_KEY: process.env.SARVAM_API_KEY };
 }
 ```

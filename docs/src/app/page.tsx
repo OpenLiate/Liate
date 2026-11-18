@@ -5,6 +5,7 @@ import Link from "next/link";
 import { HalftoneHorizon } from "@/components/halftone-horizon";
 import HalftoneWordmarkFooter from "@/components/ui/halftone-wordmark-footer";
 import DotMatrixLogo from "@/components/ui/dot-matrix-logo";
+import { AIChat, AIChatPanel, useAIChat } from "@/components/ai/search";
 
 const INSTALL_COMMANDS = [
   {
@@ -61,6 +62,15 @@ function ExternalLinkIcon({ className = "w-3 h-3" }: { className?: string }) {
 }
 
 export default function Home() {
+  return (
+    <AIChat>
+      <HomeContent />
+    </AIChat>
+  );
+}
+
+function HomeContent() {
+  const { open, setOpen } = useAIChat();
   const [cmdIndex, setCmdIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -248,12 +258,51 @@ export default function Home() {
             </a>
           </div>
 
+          {/* Ask DocGyan: Ultra-Compact Nested Capsule with Bottom Glass Edge */}
+          <div
+            onClick={() => setOpen(true)}
+            className="group cursor-pointer flex flex-col items-center w-[205px] sm:w-[220px] max-w-[88vw] p-0.5 sm:p-1 rounded-xl sm:rounded-2xl bg-zinc-950/60 hover:bg-zinc-950/80 backdrop-blur-xl border border-white/[0.08] hover:border-orange-500/30 shadow-lg transition-all duration-200 select-none"
+            role="button"
+            tabIndex={0}
+            aria-label="Ask DocGyan: Frontier AI Agent Built on Liate · Powered by Sarvam AI"
+          >
+            {/* Inner Card — Compact & Slim */}
+            <div className="w-full flex flex-col text-left px-2.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl bg-zinc-900/80 group-hover:bg-zinc-800/90 transition-all duration-200 shadow-sm">
+              {/* Top Row: Label & Arrow */}
+              <div className="flex items-center justify-between w-full leading-none">
+                <span className="text-[9px] sm:text-[9.5px] font-medium text-zinc-400 group-hover:text-zinc-300 transition-colors">
+                  Frontier AI Agent
+                </span>
+                <ExternalLinkIcon className="w-2 h-2 text-zinc-500 group-hover:text-orange-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+              </div>
+
+              {/* Middle Row: Native DotMatrixLogo & Ask DocGyan */}
+              <div className="flex items-center gap-1.5 mt-0.5 mb-0">
+                <DotMatrixLogo size={11} color="#f0602a" interactive={false} className="shrink-0" />
+                <span className="text-xs font-bold text-white group-hover:text-orange-400 transition-colors tracking-tight leading-snug">
+                  Ask DocGyan
+                </span>
+                <span className="flex h-1 w-1 relative shrink-0 ml-0.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-1 w-1 bg-orange-500" />
+                </span>
+              </div>
+            </div>
+
+            {/* Bottom Outer Glass Edge: Powered by Sarvam AI */}
+            <div className="w-full px-2 pt-1 pb-0.5 flex items-center justify-center text-center">
+              <span className="text-[8.5px] sm:text-[9px] font-mono text-zinc-400 group-hover:text-zinc-200 transition-colors tracking-tight leading-none">
+                Built on Liate <span className="text-orange-400/90">·</span> Powered by Sarvam AI
+              </span>
+            </div>
+          </div>
+
         </div>
 
         {/* Bottom Horizon Halftone Wordmark — Giant, Full Width & Aligned Flush Down */}
         <div className="w-[calc(100%+2rem)] sm:w-[calc(100%+3rem)] lg:w-[calc(100%+6rem)] -mx-4 sm:-mx-6 lg:-mx-12 z-10 pointer-events-auto mt-auto -mb-3 sm:-mb-5">
           <HalftoneWordmarkFooter
-            wordmark="openliate"
+            wordmark="Let's Try Liate"
             label=""
             meta=""
             columns={[]}
@@ -268,6 +317,21 @@ export default function Home() {
           />
         </div>
       </HalftoneHorizon>
+
+      {/* Background Dimmer when DocGyan Drawer is Open */}
+      {open && (
+        <div
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity cursor-pointer"
+        />
+      )}
+
+      {/* Docked DocGyan Sovereign Agent Drawer on Landing Page */}
+      {open && (
+        <div className="fixed inset-y-0 right-0 z-50 w-full sm:w-[380px] md:w-[420px] border-l border-zinc-800 bg-zinc-950/95 backdrop-blur-2xl text-zinc-100 flex flex-col overflow-hidden shadow-2xl animate-in fade-in slide-in-from-right-4 duration-300 ease-in-out">
+          <AIChatPanel />
+        </div>
+      )}
     </main>
   );
 }

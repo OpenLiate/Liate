@@ -12,6 +12,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: "Empty message" }, { status: 400 });
     }
 
+    // 1. Production Mode: Route to Neon Serverless Compute Function (if configured)
+    const neonUrl = process.env.NEON_DOCGYAN_URL?.trim();
+    if (neonUrl) {
+      try {
+        const neonRes = await fetch(`${neonUrl.replace(/\/+$/, "")}/chat`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message, sessionId: body.sessionId || "default" })
+        });
+        if (neonRes.ok) {
+          const neonData = await neonRes.json();
+          return NextResponse.json(neonData);
+        }
+      } catch (neonErr) {
+        console.warn("[DocGyan] Neon compute proxy note (falling back to local agent):", neonErr);
+      }
+    }
+
     const apiKey = process.env.SARVAM_API_KEY?.trim();
     if (!apiKey) {
       return NextResponse.json({
