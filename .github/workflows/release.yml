@@ -2,12 +2,17 @@ name: Release & Publish (PyPI & NPM)
 
 on:
   push:
+    branches:
+      - main
+    paths:
+      - 'package.json'
+      - 'src/core/version.ts'
     tags:
       - 'v*'
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version tag to publish (e.g. v0.1.5)'
+        description: 'Version tag to publish (e.g. v0.1.6)'
         required: false
 
 jobs:
