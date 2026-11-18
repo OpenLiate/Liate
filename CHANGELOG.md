@@ -11,6 +11,7 @@ All notable changes to Liate: Open Source Backend Layer for AI Agents — From I
 - **7 OOP Core Paradigms Formal Verification Suite (`benchmark_oop.ts`)**: Real execution test verifying Class, Object, Inheritance, Polymorphism, Encapsulation, Abstraction, and Composition running natively on Sarvam 105B Indic foundation model.
 - **Sarvam AI Payload Sanitizer & Gateway Compatibility**: Hardened `src/layers/llm/model.ts` to automatically strip extraneous metadata fields (`memory`, `intent`, `maxSteps`, `name`, `text`) before dispatching to Sarvam's `/v2/chat/completions` API.
 - **Subclass Intent & Swarm Specialization**: Demonstrated polymorphic inheritance where specialized agents (e.g. `CashfreePaymentAgent`) inherit base configurations and execute domain-specific reasoning without DAG/chain overhead.
+- **Cryptographic Supply-Chain Verification**: Introduced formal SSH commit signing for enterprise bank-grade integrity, ensuring all commits from v0.1.6 onwards carry verified cryptographic provenance.
 
 ---
 
