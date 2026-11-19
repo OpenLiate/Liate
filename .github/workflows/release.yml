@@ -7,6 +7,7 @@ on:
     paths:
       - 'package.json'
       - 'src/core/version.ts'
+      - 'sdk/python/**'
     tags:
       - 'v*'
   workflow_dispatch:
@@ -52,8 +53,6 @@ jobs:
         with:
           packages-dir: sdk/python/dist/
           skip-existing: true
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
           verbose: true
 
   # ========================================================

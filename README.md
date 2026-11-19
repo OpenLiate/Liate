@@ -18,19 +18,13 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/openliate"><img src="https://img.shields.io/npm/v/openliate?label=npm%3Aopenliate&labelColor=black&color=white&style=flat-square" alt="npm openliate"></a>
-  <a href="https://www.npmjs.com/package/openliate"><img src="https://img.shields.io/npm/dw/openliate?label=downloads&labelColor=black&color=white&style=flat-square" alt="npm openliate downloads"></a>
+  <a href="https://www.npmjs.com/package/openliate"><img src="https://img.shields.io/npm/dw/openliate?logo=npm&logoColor=CB3837&label=openliate&labelColor=black&color=white&style=flat-square" alt="npm openliate"></a>
+  &nbsp;
+  <a href="https://www.npmjs.com/package/@openliate/liate"><img src="https://img.shields.io/npm/dw/@openliate/liate?logo=npm&logoColor=CB3837&label=%40openliate%2Fliate&labelColor=black&color=white&style=flat-square" alt="npm @openliate/liate"></a>
   &nbsp;&bull;&nbsp;
-  <a href="https://www.npmjs.com/package/@openliate/liate"><img src="https://img.shields.io/npm/v/@openliate/liate?label=npm%3A%40openliate%2Fliate&labelColor=black&color=white&style=flat-square" alt="npm @openliate/liate"></a>
-  <a href="https://www.npmjs.com/package/@openliate/liate"><img src="https://img.shields.io/npm/dw/@openliate/liate?label=downloads&labelColor=black&color=white&style=flat-square" alt="npm @openliate/liate downloads"></a>
-</p>
-
-<p align="center">
-  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/pypi/v/liate?label=pypi%3Aliate&labelColor=black&color=white&style=flat-square" alt="PyPI liate"></a>
-  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/pypi/dm/liate?label=downloads&labelColor=black&color=white&style=flat-square" alt="PyPI liate downloads"></a>
-  &nbsp;&bull;&nbsp;
-  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/pypi/v/openliate?label=pypi%3Aopenliate&labelColor=black&color=white&style=flat-square" alt="PyPI openliate"></a>
-  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/pypi/dm/openliate?label=downloads&labelColor=black&color=white&style=flat-square" alt="PyPI openliate downloads"></a>
+  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/pypi/v/liate?logo=pypi&logoColor=FFD43B&label=liate&labelColor=black&color=white&style=flat-square" alt="PyPI liate"></a>
+  &nbsp;
+  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/pypi/v/openliate?logo=pypi&logoColor=FFD43B&label=openliate&labelColor=black&color=white&style=flat-square" alt="PyPI openliate"></a>
 </p>
 
 <p align="center">
