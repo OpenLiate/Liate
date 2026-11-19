@@ -9,12 +9,28 @@ import { AIChat, AIChatPanel, useAIChat } from "@/components/ai/search";
 
 const INSTALL_COMMANDS = [
   {
-    prefix: "PS>",
-    cmd: 'powershell -c "irm https://openliate.tech/install.ps1 | iex"',
+    prefix: "$",
+    cmd: "npm i openliate",
+  },
+  {
+    prefix: "$",
+    cmd: "npm i @openliate/liate",
+  },
+  {
+    prefix: "$",
+    cmd: "pip install openliate",
+  },
+  {
+    prefix: "$",
+    cmd: "pip install liate",
   },
   {
     prefix: "$",
     cmd: "curl -fsSL https://openliate.tech/install.sh | bash",
+  },
+  {
+    prefix: "PS>",
+    cmd: 'powershell -c "irm https://openliate.tech/install.ps1 | iex"',
   },
 ];
 
@@ -261,31 +277,29 @@ function HomeContent() {
           {/* Ask DocGyan: Ultra-Compact Nested Capsule with Bottom Glass Edge */}
           <div
             onClick={() => setOpen(true)}
-            className="group cursor-pointer flex flex-col items-center w-[205px] sm:w-[220px] max-w-[88vw] p-0.5 sm:p-1 rounded-xl sm:rounded-2xl bg-zinc-950/60 hover:bg-zinc-950/80 backdrop-blur-xl border border-white/[0.08] hover:border-orange-500/30 shadow-lg transition-all duration-200 select-none"
+            className="group cursor-pointer flex flex-col items-center w-[235px] sm:w-[250px] max-w-[90vw] p-0.5 sm:p-1 rounded-xl sm:rounded-2xl bg-zinc-950/60 hover:bg-zinc-950/80 backdrop-blur-xl border border-white/[0.08] hover:border-orange-500/30 shadow-lg transition-all duration-200 select-none"
             role="button"
             tabIndex={0}
             aria-label="Ask DocGyan: Frontier AI Agent Built on Liate · Powered by Sarvam AI"
           >
-            {/* Inner Card — Compact & Slim */}
-            <div className="w-full flex flex-col text-left px-2.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl bg-zinc-900/80 group-hover:bg-zinc-800/90 transition-all duration-200 shadow-sm">
-              {/* Top Row: Label & Arrow */}
-              <div className="flex items-center justify-between w-full leading-none">
-                <span className="text-[9px] sm:text-[9.5px] font-medium text-zinc-400 group-hover:text-zinc-300 transition-colors">
-                  Frontier AI Agent
-                </span>
-                <ExternalLinkIcon className="w-2 h-2 text-zinc-500 group-hover:text-orange-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-              </div>
-
-              {/* Middle Row: Native DotMatrixLogo & Ask DocGyan */}
-              <div className="flex items-center gap-1.5 mt-0.5 mb-0">
+            {/* Inner Header Row — Single Sleek Line */}
+            <div className="w-full flex items-center justify-between px-2.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl bg-zinc-900/80 group-hover:bg-zinc-800/90 transition-all duration-200 shadow-sm">
+              <div className="flex items-center gap-1.5">
                 <DotMatrixLogo size={11} color="#f0602a" interactive={false} className="shrink-0" />
                 <span className="text-xs font-bold text-white group-hover:text-orange-400 transition-colors tracking-tight leading-snug">
                   Ask DocGyan
                 </span>
-                <span className="flex h-1 w-1 relative shrink-0 ml-0.5">
+                <span className="flex h-1.5 w-1.5 relative shrink-0 ml-0.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-1 w-1 bg-orange-500" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-orange-500" />
                 </span>
+              </div>
+
+              <div className="flex items-center gap-1">
+                <span className="text-[9px] sm:text-[9.5px] font-medium text-zinc-400 group-hover:text-zinc-300 transition-colors">
+                  Frontier AI Agent
+                </span>
+                <ExternalLinkIcon className="w-2.5 h-2.5 text-zinc-500 group-hover:text-orange-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
               </div>
             </div>
 
