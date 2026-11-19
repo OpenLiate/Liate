@@ -46,12 +46,19 @@ jobs:
       - name: Verify Wheels with Twine
         run: |
           cd sdk/python
-          twine check dist/*
+          twine check dist/*/*
 
-      - name: Publish to PyPI
+      - name: Publish 'liate' to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          packages-dir: sdk/python/dist/
+          packages-dir: sdk/python/dist/liate/
+          skip-existing: true
+          verbose: true
+
+      - name: Publish 'openliate' to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: sdk/python/dist/openliate/
           skip-existing: true
           verbose: true
 

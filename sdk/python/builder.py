@@ -32,8 +32,11 @@ def build_package(target: str) -> None:
     shutil.copyfile(config_file, dest_file)
     print(f"[+] Loaded config from: pyproject.{target}.toml")
 
+    target_dist = ROOT / "dist" / target
+    target_dist.mkdir(parents=True, exist_ok=True)
+
     # Run standard python -m build with --no-isolation for instant speed
-    cmd = [sys.executable, "-m", "build", "--no-isolation"]
+    cmd = [sys.executable, "-m", "build", "--no-isolation", "--outdir", str(target_dist)]
     result = subprocess.run(cmd, cwd=str(ROOT))
 
     if result.returncode != 0:
