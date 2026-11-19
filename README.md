@@ -147,12 +147,12 @@ Measured on real hardware with zero mocks (`bun benchmark_runtime.ts`):
 | Metric | OpenLiate (Liate OOP) | LangChain (AgentExecutor) | CrewAI (Python) |
 | :--- | :--- | :--- | :--- |
 | **Language** | **TypeScript (Bun / Node)** | TypeScript | Python |
-| **Framework Boot Overhead** | **45.70 µs (0.045 ms) ⚡** | ~85,000 µs (85 ms) | ~210,000 µs (210 ms) |
-| **Throughput (Agents / sec)** | **21,880 ops/sec 🚀** | ~12 ops/sec | ~5 ops/sec |
+| **Framework Boot Overhead** | **31.86 µs – 45.70 µs (0.03 ms) ⚡** | ~85,000 µs (85 ms) | ~210,000 µs (210 ms) |
+| **Throughput (Agents / sec)** | **Up to 31,386 ops/sec 🚀** | ~12 ops/sec | ~5 ops/sec |
 | **Cold Start Footprint** | **< 25 KB** | > 18 MB | > 45 MB |
 | **Architecture** | **Zero-Dependency OOP (L.I.A.T.E)** | Chained Graphs & Polyfills | Multi-threaded Process Pool |
 
-> **Result:** OpenLiate is **1,860x FASTER** in framework boot overhead than LangChain, enabling 20,000+ autonomous agent instances to spin up per second.
+> **Result:** OpenLiate is **over 1,860x to 2,668x FASTER** in framework boot overhead than LangChain, enabling **31,000+ autonomous agent instances** to spin up per second on consumer hardware. See full reproducible benchmark report in [`benchmark/README.md`](./benchmark/README.md).
 
 ### 🏛️ The 7 Classical OOP Paradigms in OpenLiate (`benchmark_oop.ts`)
 

@@ -7,7 +7,7 @@ All notable changes to Liate: Open Source Backend Layer for AI Agents — From I
 ## Sprint 4: Sovereign Agent Benchmarks, 7 OOP Paradigms & Sarvam Payload Hardening (v0.1.6)
 
 ### v0.1.6 (High-Speed Runtime Benchmark, 7 OOP Paradigms Suite & Frontier Model Payload Hardening)
-- **1,860x Faster Framework Overhead Benchmark (`benchmark_runtime.ts`)**: Proved native Object-Oriented Programming (OOP) agent instantiation latency at 45.7 µs vs LangChain's ~85,000 µs (1,860x faster) and 21,880 agent boots/second on real hardware.
+- **1,860x to 2,668x Faster Framework Overhead Benchmark (`benchmark_runtime.ts`)**: Proved native Object-Oriented Programming (OOP) agent instantiation latency at 31.86 µs – 45.70 µs vs LangChain's ~85,000 µs (up to 2,668x faster) and achieving over 31,380 agent boots/second on real hardware. Full reproducible benchmark report published in `benchmark/README.md`.
 - **7 OOP Core Paradigms Formal Verification Suite (`benchmark_oop.ts`)**: Real execution test verifying Class, Object, Inheritance, Polymorphism, Encapsulation, Abstraction, and Composition running natively on Sarvam 105B Indic foundation model.
 - **Sarvam AI Payload Sanitizer & Gateway Compatibility**: Hardened `src/layers/llm/model.ts` to automatically strip extraneous metadata fields (`memory`, `intent`, `maxSteps`, `name`, `text`) before dispatching to Sarvam's `/v2/chat/completions` API.
 - **Subclass Intent & Swarm Specialization**: Demonstrated polymorphic inheritance where specialized agents (e.g. `CashfreePaymentAgent`) inherit base configurations and execute domain-specific reasoning without DAG/chain overhead.
