@@ -86,9 +86,18 @@ class FrontierAgent(Liate):
 
     # [T] Tools & MCP Layer (Stdio uvx/npx & Remote SSE)
     T = {
+        # Local Stdio MCP: Sarvam AI Indic STT, TTS & Document tools
         "sarvam_ai": {
             "command": "uvx",
             "args": ["sarvam-mcp"],
+            "tools": ["*"]
+        },
+        # Remote Hosted MCP: Bolna AI (YC-backed Voice Agent & Telephony Orchestration)
+        "bolna_voice": {
+            "url": "https://mcp.bolna.ai/api/mcp",
+            "headers": {
+                "Authorization": "Bearer $BOLNA_API_KEY"
+            },
             "tools": ["*"]
         }
     }
@@ -96,6 +105,7 @@ class FrontierAgent(Liate):
     # [E] Environment & Sandbox Layer
     E = {
         "SARVAM_API_KEY": "$SARVAM_API_KEY",
+        "BOLNA_API_KEY": "$BOLNA_API_KEY",
         "GNANI_API_KEY": "$GNANI_API_KEY",
         "NEON_API_KEY": "$NEON_API_KEY"
     }

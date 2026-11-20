@@ -21,11 +21,21 @@ export class FrontierAgent extends liate {
     maxSteps: 5 
   };
 
-  // [T] Tools: Model Context Protocol (Anthropic MCP v2 stdio uvx/npx & HTTP SSE)
+  // [T] Tools: Model Context Protocol (Anthropic MCP v2 stdio uvx/npx & Remote HTTP/SSE)
   T = {
+    // Local Stdio MCP: Sarvam AI Indic STT, TTS & Document tools
     sarvam_ai: {
       command: "uvx",
       args: ["sarvam-mcp"],
+      tools: ["*"]
+    },
+    // Remote Hosted MCP: Bolna AI (YC-backed Voice Agent & Telephony Orchestration)
+    // 100+ tools: dispatch phone calls, manage Truecaller verified agents, call batching
+    bolna_voice: {
+      url: "https://mcp.bolna.ai/api/mcp",
+      headers: {
+        Authorization: "Bearer $BOLNA_API_KEY"
+      },
       tools: ["*"]
     }
   };
@@ -33,6 +43,7 @@ export class FrontierAgent extends liate {
   // [E] Environment: Enterprise Sandbox Guardrails & Secret Masking
   E = { 
     SARVAM_API_KEY: "$SARVAM_API_KEY",
+    BOLNA_API_KEY: "$BOLNA_API_KEY",
     GNANI_API_KEY: "$GNANI_API_KEY",
     NEON_API_KEY: "$NEON_API_KEY"
   };

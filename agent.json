@@ -18,9 +18,19 @@
       "tools": [
         "*"
       ]
+    },
+    "bolna_voice": {
+      "url": "https://mcp.bolna.ai/api/mcp",
+      "headers": {
+        "Authorization": "Bearer $BOLNA_API_KEY"
+      },
+      "tools": [
+        "*"
+      ]
     }
   },
   "E": {
-    "SARVAM_API_KEY": "$SARVAM_API_KEY"
+    "SARVAM_API_KEY": "$SARVAM_API_KEY",
+    "BOLNA_API_KEY": "$BOLNA_API_KEY"
   }
 }
