@@ -1,4 +1,4 @@
-# ⚡ OpenLiate Runtime & Framework Benchmark Report (2026)
+# OpenLiate Runtime & Framework Benchmark Report (2026)
 **Official Hardware Verification, Latency Analysis & Industry Baseline Comparison**  
 **Repository:** [OpenLiate/Liate](https://github.com/OpenLiate/Liate)  
 **Date:** November 19, 2026  
@@ -106,4 +106,4 @@ cd Liate
 bun benchmark_runtime.ts
 ```
 
-*Built by OpenLiate · From India, For India, Beyond India 🇮🇳 🌍*
+*Built by OpenLiate · From India, For India, Beyond India*

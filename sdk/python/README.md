@@ -1,7 +1,7 @@
 <div align="center">
 
 # LIATE — Open Source OOP Framework for AI Agents
-### Where Classes Are AI Agents · From India, For India, Beyond India 🇮🇳 🌍
+### Where Classes Are AI Agents · From India, For India, Beyond India
 
 `L[LM] · I[ntegration] · A[gent] · T[ools] · E[nvironment]`
 
@@ -42,17 +42,21 @@
 
 ---
 
-## Installation
+## [0] Installation
 
+### #1 Direct Package
 ```bash
 pip install liate
-# or
+```
+
+### #2 Alternative Package
+```bash
 pip install openliate
 ```
 
 ---
 
-## Quickstart: Frontier Sovereign Agent (`FrontierAgent` / `agentyaan`)
+## [1] Quickstart: Frontier Sovereign Agent (`FrontierAgent` / `agentyaan`)
 
 Every agent is declared natively as a Python class inheriting from `Liate`. The 5 layers map 1-to-1 to NVIDIA CEO Jensen Huang's 5 foundational agent elements:
 
@@ -62,6 +66,7 @@ from liate import Liate
 class FrontierAgent(Liate):
     # [L] Large Models: Native Routing across Sovereign & 65+ Frontier AI Models:
     # - "sarvam/sarvam-105b" (Sarvam AI Indic Foundation Model - Startup Program 2026)
+    # - "sarvam/sarvam-prism" (Sarvam AI Nov 2026 Frontier Decision & System-1 LoRA Model ~44ms)
     # - "sarvam/sarvam-30b" | "sarvam/bulbul-v4" | "sarvam/saaras-v4"
     # - "gnani/prisma-v3" (Gnani AI STT 10+ Indic Languages) | "gnani/timbre-v3" (Gnani AI TTS Multilingual)
     # - "neon/gemini-2.5-pro" | "neon/gemini-2.5-flash" (Google Gemini Frontier Series)
@@ -103,7 +108,7 @@ print(result.response)
 
 ---
 
-## The 5 Layers (L · I · A · T · E)
+## [2] The 5 Layers (L · I · A · T · E)
 
 | Layer | Component | Description |
 | :--- | :--- | :--- |
@@ -115,7 +120,7 @@ print(result.response)
 
 ---
 
-## 📈 Real Production Ecosystem Traction
+## [3] Real Production Ecosystem Traction
 
 | Registry | Package Distribution | Total Downloads | Telemetry Source |
 | :--- | :--- | :--- | :--- |
@@ -123,16 +128,18 @@ print(result.response)
 | **PyPI** | [`liate`](https://pypi.org/project/liate/) | **236+** | [pypistats.org/packages/liate](https://pypistats.org/packages/liate) |
 | **npm** | [`openliate`](https://www.npmjs.com/package/openliate) | **531+** | Direct Developer CLI & Runners |
 | **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **270+** | TypeScript SDK Imports |
-| **Total** | **Combined Ecosystem** | **1,495+ Total Installs 🚀** | **Over 800+ Direct Human Installs (`without_mirrors`)** |
+| **Total** | **Combined Ecosystem** | **1,495+ Total Installs** | **Over 800+ Direct Human Installs (`without_mirrors`)** |
 
 ---
 
-## Links & Ecosystem
+## [4] Links & Ecosystem
 
 * **Website & Documentation:** [https://openliate.tech](https://openliate.tech)
 * **GitHub Repository:** [https://github.com/OpenLiate/Liate](https://github.com/OpenLiate/Liate)
 * **Developer Community:** [OpenLiate Community](https://github.com/OpenLiate/Liate/discussions)
 
-## License
+---
+
+## [5] License
 
 [MIT License](https://github.com/OpenLiate/Liate/blob/main/LICENSE) © 2026 OpenLiate.

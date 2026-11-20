@@ -1,7 +1,7 @@
 <div align="center">
 
 # LIATE — Open Source OOP Framework for AI Agents
-### Where Classes Are AI Agents · From India, For India, Beyond India 🇮🇳 🌍
+### Where Classes Are AI Agents · From India, For India, Beyond India 
 
 `L[LM] · I[ntegration] · A[gent] · T[ools] · E[nvironment]`
 
@@ -138,25 +138,25 @@ liate run agent.json "Introduce Mission AgentYaan and explain why sovereign OOP 
 
 ---
 
-## ⚡ High-Performance Runtime & Benchmarks (v0.1.6)
+## <a id="benchmarks"></a>[1] High-Performance Runtime & Benchmarks (v0.1.6)
 
 OpenLiate is engineered from the ground up on native **Object-Oriented Programming (OOP)** classes instead of heavy directed acyclic graph (DAG) pipelines and chain polyfills.
 
-### 🥊 Real Hardware Benchmark: OpenLiate vs. Legacy Frameworks
+### #1 Real Hardware Benchmark: OpenLiate vs. Legacy Frameworks
 
 Measured on real hardware with zero mocks (`bun benchmark_runtime.ts`):
 
 | Metric | OpenLiate (Liate OOP) | LangChain (AgentExecutor) | CrewAI (Python) |
 | :--- | :--- | :--- | :--- |
 | **Language** | **TypeScript (Bun / Node)** | TypeScript | Python |
-| **Framework Boot Overhead** | **31.86 µs – 45.70 µs (0.03 ms) ⚡** | ~85,000 µs (85 ms) | ~210,000 µs (210 ms) |
-| **Throughput (Agents / sec)** | **Up to 31,386 ops/sec 🚀** | ~12 ops/sec | ~5 ops/sec |
+| **Framework Boot Overhead** | **31.86 µs – 45.70 µs (0.03 ms)** | ~85,000 µs (85 ms) | ~210,000 µs (210 ms) |
+| **Throughput (Agents / sec)** | **Up to 31,386 ops/sec** | ~12 ops/sec | ~5 ops/sec |
 | **Cold Start Footprint** | **< 25 KB** | > 18 MB | > 45 MB |
 | **Architecture** | **Zero-Dependency OOP (L.I.A.T.E)** | Chained Graphs & Polyfills | Multi-threaded Process Pool |
 
 > **Result:** OpenLiate is **over 1,860x to 2,668x FASTER** in framework boot overhead than LangChain, enabling **31,000+ autonomous agent instances** to spin up per second on consumer hardware. See full reproducible benchmark report in [`benchmark/README.md`](./benchmark/README.md).
 
-### 🏛️ The 7 Classical OOP Paradigms in OpenLiate (`benchmark_oop.ts`)
+### #2 The 7 Classical OOP Paradigms in OpenLiate (`benchmark_oop.ts`)
 
 OpenLiate is the first agent runtime to formally map autonomous AI agents to all 7 classical Object-Oriented Programming (OOP) paradigms:
 
@@ -172,7 +172,7 @@ OpenLiate is the first agent runtime to formally map autonomous AI agents to all
 
 ---
 
-## <a id="traction"></a>📈 Real Production Ecosystem Traction
+## <a id="traction"></a>[2] Real Production Ecosystem Traction
 
 Verified multi-registry telemetry across npm and official PyPI statistics (`pypistats.org`):
 
@@ -182,7 +182,7 @@ Verified multi-registry telemetry across npm and official PyPI statistics (`pypi
 | **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **270+** | TypeScript SDK Imports | [npmjs.com/package/@openliate/liate](https://www.npmjs.com/package/@openliate/liate) |
 | **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **458+** | **460+** (Clean Human Installs) | [pypistats.org/packages/openliate](https://pypistats.org/packages/openliate) |
 | **PyPI** | [`liate`](https://pypi.org/project/liate/) | **236+** | **230+** (Clean Human Installs) | [pypistats.org/packages/liate](https://pypistats.org/packages/liate) |
-| **Global** | **Combined Ecosystem** | **1,495+ Total Installs 🚀** | **800+ Direct Human Installs** | **100% Cryptographic Provenance** |
+| **Global** | **Combined Ecosystem** | **1,495+ Total Installs** | **800+ Direct Human Installs** | **100% Cryptographic Provenance** |
 
 <br>
 
@@ -216,6 +216,7 @@ import { liate } from "@openliate/liate";
 export class FrontierAgent extends liate {
   // [L] Large Models: Native Routing across Sovereign & 65+ Frontier AI Models:
   // - "sarvam/sarvam-105b" (Sarvam AI Indic Foundation Model - Startup Program 2026)
+  // - "sarvam/sarvam-prism" (Sarvam AI Nov 2026 Frontier Decision & System-1 LoRA Model ~44ms)
   // - "sarvam/sarvam-30b" | "sarvam/bulbul-v4" | "sarvam/saaras-v4"
   // - "gnani/prisma-v3" (Gnani AI STT 10+ Indic Languages) | "gnani/timbre-v3" (Gnani AI TTS Multilingual)
   // - "neon/gemini-2.5-pro" | "neon/gemini-2.5-flash" (Google Gemini Frontier Series)
@@ -240,7 +241,7 @@ export class FrontierAgent extends liate {
   T = { 
     sarvam_ai: {
       command: "uvx",
-      args: ["mcp-server-sarvam"],
+      args: ["sarvam-mcp"],
       tools: ["*"]
     }
   };
@@ -278,6 +279,7 @@ from liate import liate
 class FrontierAgent(liate):
     # [L] Large Models: Native Routing across Sovereign & 65+ Frontier AI Models:
     # - "sarvam/sarvam-105b" (Sarvam AI Indic Foundation Model - Startup Program 2026)
+    # - "sarvam/sarvam-prism" (Sarvam AI Nov 2026 Frontier Decision & System-1 LoRA Model ~44ms)
     # - "sarvam/sarvam-30b" | "sarvam/bulbul-v4" | "sarvam/saaras-v4"
     # - "gnani/prisma-v3" (Gnani AI STT 10+ Indic Languages) | "gnani/timbre-v3" (Gnani AI TTS Multilingual)
     # - "neon/gemini-2.5-pro" | "neon/gemini-2.5-flash" (Google Gemini Frontier Series)
@@ -330,7 +332,7 @@ python agent.py
 
 ---
 
-## <a id="runtime-engine"></a>[1] Core Runtime Engine: OM (Orchestration Module)
+## <a id="runtime-engine"></a>[3] Core Runtime Engine: OM (Orchestration Module)
 
 **Liate's Orchestration Module (OM) is the runtime engine** — just like Docker executes containers and Ollama executes models, **Liate executes AI agents via OM** across the 5 layers (`L · I · A · T · E`).
 
@@ -390,7 +392,7 @@ curl -X POST http://localhost:7071/chat \
 
 ---
 
-## <a id="aum-architecture"></a>[2] Architecture: The 5 Layers (AUM)
+## <a id="aum-architecture"></a>[4] Architecture: The 5 Layers (AUM)
 
 Every agent implements the **Agent Unified Module (AUM)** across 5 sovereign layers declared as module keys or class properties:
 
@@ -414,7 +416,7 @@ Every agent implements the **Agent Unified Module (AUM)** across 5 sovereign lay
 
 ---
 
-## [3] License
+## [5] License
 
 [MIT](LICENSE) © 2026 OpenLiate. Free and open source forever.
 
@@ -426,6 +428,6 @@ Every agent implements the **Agent Unified Module (AUM)** across 5 sovereign lay
 
 <br>
 
-Built with ❤️ from India to the World
+Built from India to the World
 
 </div>

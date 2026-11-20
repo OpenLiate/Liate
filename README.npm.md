@@ -1,7 +1,7 @@
 <div align="center">
 
 # LIATE — Open Source OOP Framework for AI Agents
-### Where Classes Are AI Agents · From India, For India, Beyond India 🇮🇳 🌍
+### Where Classes Are AI Agents · From India, For India, Beyond India 
 
 `L[LM] · I[ntegration] · A[gent] · T[ools] · E[nvironment]`
 
@@ -44,21 +44,22 @@
 
 ---
 
-## Installation
+## [0] Installation
 
 ```bash
-# Direct Package:
+# #1 Direct Package:
 npm install openliate
-# or Org-Scoped Package:
+
+# #2 Org-Scoped Package:
 npm install @openliate/liate
 
-# or via Bun:
+# #3 via Bun:
 bun add openliate
 ```
 
 ---
 
-## Quickstart: Frontier Sovereign Agent (`FrontierAgent` / `agentyaan`)
+## [1] Quickstart: Frontier Sovereign Agent (`FrontierAgent` / `agentyaan`)
 
 Every agent is declared natively as a TypeScript class inheriting from `liate`. The 5 layers map 1-to-1 to NVIDIA CEO Jensen Huang's 5 foundational agent elements:
 
@@ -70,6 +71,7 @@ import { liate } from "openliate";
 export class FrontierAgent extends liate {
   // [L] Large Models: Native Routing across Sovereign & 65+ Frontier AI Models:
   // - "sarvam/sarvam-105b" (Sarvam AI Indic Foundation Model - Startup Program 2026)
+  // - "sarvam/sarvam-prism" (Sarvam AI Nov 2026 Frontier Decision & System-1 LoRA Model ~44ms)
   // - "sarvam/sarvam-30b" | "sarvam/bulbul-v4" | "sarvam/saaras-v4"
   // - "gnani/prisma-v3" (Gnani AI STT 10+ Indic Languages) | "gnani/timbre-v3" (Gnani AI TTS Multilingual)
   // - "neon/gemini-2.5-pro" | "neon/gemini-2.5-flash" (Google Gemini Frontier Series)
@@ -112,7 +114,7 @@ console.log(result.text);
 
 ---
 
-## Instant Run (Zero Install)
+## [2] Instant Run (Zero Install)
 
 Run any agent directly without installation using `npx`:
 
@@ -122,7 +124,7 @@ npx openliate run agent.ts "Fetch https://openliate.tech and summarize"
 
 ---
 
-## The 5 Layers (L · I · A · T · E)
+## [3] The 5 Layers (L · I · A · T · E)
 
 | Layer | Name | Description |
 | :--- | :--- | :--- |
@@ -134,7 +136,7 @@ npx openliate run agent.ts "Fetch https://openliate.tech and summarize"
 
 ---
 
-## CLI Reference
+## [4] CLI Reference
 
 | Command | Action |
 | :--- | :--- |
@@ -146,7 +148,7 @@ npx openliate run agent.ts "Fetch https://openliate.tech and summarize"
 
 ---
 
-## 📈 Real Production Ecosystem Traction
+## [5] Real Production Ecosystem Traction
 
 | Registry | Package Distribution | Total Downloads | Telemetry Source |
 | :--- | :--- | :--- | :--- |
@@ -154,7 +156,7 @@ npx openliate run agent.ts "Fetch https://openliate.tech and summarize"
 | **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **270+** | TypeScript SDK Imports |
 | **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **458+** | Python AI Pipelines |
 | **PyPI** | [`liate`](https://pypi.org/project/liate/) | **236+** | Python AUM/OM Imports |
-| **Total** | **Combined Ecosystem** | **1,495+ Total Installs 🚀** | **Over 800+ Direct Human Installs** |
+| **Total** | **Combined Ecosystem** | **1,495+ Total Installs** | **Over 800+ Direct Human Installs** |
 
 ---
 
@@ -162,6 +164,6 @@ npx openliate run agent.ts "Fetch https://openliate.tech and summarize"
 
 **[Documentation](https://openliate.tech/docs)** · **[Website](https://openliate.tech)** · **[GitHub](https://github.com/OpenLiate/Liate)**
 
-Built with ❤️ from India, for India, and beyond India 🇮🇳 🌍
+Built from India, for India, and beyond India
 
 </div>

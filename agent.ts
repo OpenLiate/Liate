@@ -3,6 +3,7 @@ import { liate } from "./src/liate";
 export class FrontierAgent extends liate {
   // [L] Large Models: Native Routing across Sovereign & 65+ Frontier AI Models:
   // - "sarvam/sarvam-105b" (Sarvam AI Indic Foundation Model - Startup Program 2026)
+  // - "sarvam/sarvam-prism" (Sarvam AI Nov 2026 Frontier Decision & System-1 LoRA Model ~44ms)
   // - "sarvam/sarvam-30b" | "sarvam/bulbul-v4" | "sarvam/saaras-v4"
   // - "gnani/prisma-v3" (Gnani AI STT 10+ Indic Languages) | "gnani/timbre-v3" (Gnani AI TTS Multilingual)
   // - "neon/gemini-2.5-pro" | "neon/gemini-2.5-flash" (Google Gemini Frontier Series)
