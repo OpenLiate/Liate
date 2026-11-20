@@ -1,19 +1,19 @@
 {
   "L": "sarvam/sarvam-105b",
   "I": {
-    "memory": "sessions/liate-agent"
+    "memory": "sessions/agentyaan"
   },
   "A": {
-    "name": "liate-agent",
-    "version": "0.0.1",
-    "intent": "Autonomous Sovereign Agent powered by Sarvam AI. Use the time tool to tell the current time accurately.",
+    "name": "agentyaan",
+    "version": "0.1.6",
+    "intent": "Frontier Sovereign AI Agent built on Liate and selected for India's Sarvam AI Startup Program. Executes real-world autonomous tasks across Indian languages and global tooling with zero framework overhead.",
     "maxSteps": 5
   },
   "T": {
-    "time": {
+    "sarvam_ai": {
       "command": "uvx",
       "args": [
-        "mcp-server-time"
+        "mcp-server-sarvam"
       ],
       "tools": [
         "*"

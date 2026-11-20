@@ -100,32 +100,32 @@ liate serve --port 7071
 
 ```jsonc
 {
-  "L": "sarvam/sarvam-105b-conversations",                                            // [L] LLM: Sarvam AI Sovereign Indic Models (2026)
+  "L": "sarvam/sarvam-105b",                                                          // [L] LLM: Sarvam AI 105B Indic Model (Sarvam Startup Program 2026)
   "I": { 
-    "memory": "sessions/liate-agent"                                                  // [I] Integration: Session Memory & State
+    "memory": "sessions/agentyaan"                                                    // [I] Integration: Co-located Persistent Session State
   },
   "A": { 
-    "name": "liate-agent", 
-    "version": "0.0.1",                                                               // [A] Agent: Identity, Version & ReAct Loop
-    "intent": "Autonomous Sovereign Agent powered by Sarvam AI", 
+    "name": "agentyaan", 
+    "version": "0.1.6",                                                               // [A] Agent: Identity, Version & ReAct Reasoning Loop
+    "intent": "Frontier Sovereign AI Agent · Built on Liate · Selected for India's Sarvam AI Startup Program 2026", 
     "maxSteps": 5 
   },
-  "T": {                                                                              // [T] Tools: Model Context Protocol (MCP v2 Local Stdio & Remote SSE)
-    "time": {
+  "T": {                                                                              // [T] Tools: Model Context Protocol (Anthropic MCP v2 Stdio & Remote SSE)
+    "sarvam_ai": {
       "command": "uvx",
-      "args": ["mcp-server-time"],
+      "args": ["mcp-server-sarvam"],
       "tools": ["*"]
     }
   },
   "E": { 
-    "SARVAM_API_KEY": "$SARVAM_API_KEY"                                              // [E] Environment: Secrets & API Keys
+    "SARVAM_API_KEY": "$SARVAM_API_KEY"                                              // [E] Environment: Enterprise Sandbox Guardrails & Keys
   }
 }
 ```
 
 ```bash
-# Execute your agent (reads L·I·A·T·E directly from agent.json)
-liate run agent.json "Hello Agent World!"
+# Execute your frontier agent (reads L·I·A·T·E directly from agent.json)
+liate run agent.json "Introduce Mission AgentYaan and explain why sovereign OOP AI agents matter for India."
 ```
 
 > **Class is an Agent — Developer SDKs:**  
@@ -195,7 +195,7 @@ Verified multi-registry telemetry across npm and official PyPI statistics (`pypi
 
 <br>
 
-## **Class is an Agent. Agent is a Function. Function is an API. (Coming Soon)**
+## **Class is an Agent. Agent is a Function. Function is an API.**
 
 #### *Agent Protocol Interface (Liate API) Architecture*
 
@@ -207,38 +207,55 @@ Write your agent directly in code. OpenLiate maps the 5 layers (`L · I · A · 
 
 <br>
 
-#### 1. TypeScript & JavaScript SDK (Coming Soon)
+#### 1. TypeScript & JavaScript SDK (`@openliate/liate` / `openliate`)
 
 ```typescript
 // agent.ts
 import { liate } from "@openliate/liate";
 
-export class LiateAgent extends liate {
-  L = "sarvam/sarvam-105b-conversations";                                             // [L] LLM: Sarvam AI Sovereign Models
+export class FrontierAgent extends liate {
+  // [L] Large Models: Native Routing across Sovereign & 65+ Frontier AI Models:
+  // - "sarvam/sarvam-105b" (Sarvam AI Indic Foundation Model - Startup Program 2026)
+  // - "sarvam/sarvam-30b" | "sarvam/bulbul-v4" | "sarvam/saaras-v4"
+  // - "gnani/prisma-v3" (Gnani AI STT 10+ Indic Languages) | "gnani/timbre-v3" (Gnani AI TTS Multilingual)
+  // - "neon/gemini-2.5-pro" | "neon/gemini-2.5-flash" (Google Gemini Frontier Series)
+  // - "neon/claude-3-7-sonnet" | "neon/claude-3-5-haiku" (Anthropic Frontier Series)
+  // - 65+ Frontier AI Models via Neon AI Gateway with JEV System-One Heuristic Routing
+  L = "sarvam/sarvam-105b";
+
+  // [I] Integration: Co-located Persistent Session State
   I = { 
-    memory: "sessions/liate-agent"                                                    // [I] Integration: Co-located Session State
+    memory: "sessions/agentyaan" 
   };
+
+  // [A] Agent Harness: Identity, ReAct Reasoning Loop & Intent
   A = { 
-    name: "liate-agent", 
-    version: "0.0.1", 
-    intent: "Autonomous Sovereign Agent powered by Sarvam AI", 
-    maxSteps: 5                                                                       // [A] Agent: Identity & ReAct Loop
+    name: "agentyaan", 
+    version: "0.1.6", 
+    intent: "Frontier Sovereign AI Agent · Built on Liate · Selected for India's Sarvam AI Startup Program 2026", 
+    maxSteps: 5 
   };
-  T = {                                                                              // [T] Tools: Model Context Protocol (MCP v2)
-    time: {
+
+  // [T] Tools: Model Context Protocol (Anthropic MCP v2 stdio uvx/npx & HTTP SSE)
+  T = { 
+    sarvam_ai: {
       command: "uvx",
-      args: ["mcp-server-time"],
+      args: ["mcp-server-sarvam"],
       tools: ["*"]
     }
   };
+
+  // [E] Environment: Enterprise Sandbox Guardrails & Secret Masking
   E = { 
-    SARVAM_API_KEY: "$SARVAM_API_KEY"                                                // [E] Environment: Secrets & API Keys
+    SARVAM_API_KEY: "$SARVAM_API_KEY",
+    GNANI_API_KEY: "$GNANI_API_KEY",
+    NEON_API_KEY: "$NEON_API_KEY"
   };
 }
 
 // Run in-process:
-const agent = new LiateAgent();
-const result = await agent.run("Hello Agent World!");
+const agent = new FrontierAgent();
+const result = await agent.run("Introduce Mission AgentYaan and explain why sovereign OOP AI agents matter for India.");
 console.log(result.text);
 
 // Or convert to a standard Web API handler:
@@ -252,37 +269,54 @@ bun run agent.ts
 
 <br>
 
-#### 2. Python SDK (Coming Soon)
+#### 2. Python SDK (`liate` / `openliate`)
 
 ```python
 # agent.py
 from liate import liate
 
-class LiateAgent(liate):
-    L = "sarvam/sarvam-105b-conversations"                                            # [L] LLM: Sarvam AI Sovereign Models
+class FrontierAgent(liate):
+    # [L] Large Models: Native Routing across Sovereign & 65+ Frontier AI Models:
+    # - "sarvam/sarvam-105b" (Sarvam AI Indic Foundation Model - Startup Program 2026)
+    # - "sarvam/sarvam-30b" | "sarvam/bulbul-v4" | "sarvam/saaras-v4"
+    # - "gnani/prisma-v3" (Gnani AI STT 10+ Indic Languages) | "gnani/timbre-v3" (Gnani AI TTS Multilingual)
+    # - "neon/gemini-2.5-pro" | "neon/gemini-2.5-flash" (Google Gemini Frontier Series)
+    # - "neon/claude-3-7-sonnet" | "neon/claude-3-5-haiku" (Anthropic Frontier Series)
+    # - 65+ Frontier AI Models via Neon AI Gateway with JEV System-One Heuristic Routing
+    L = "sarvam/sarvam-105b"
+
+    # [I] Integration: Co-located Persistent Session State
     I = {
-        "memory": "sessions/liate-agent"                                              # [I] Integration: Co-located Session State
+        "memory": "sessions/agentyaan"
     }
+
+    # [A] Agent Harness: Identity, ReAct Reasoning Loop & Intent
     A = {
-        "name": "liate-agent",
-        "version": "0.0.1",
-        "intent": "Autonomous Sovereign Agent powered by Sarvam AI",
-        "maxSteps": 5                                                                 # [A] Agent: Identity & ReAct Loop
+        "name": "agentyaan",
+        "version": "0.1.6",
+        "intent": "Frontier Sovereign AI Agent · Built on Liate · Selected for India's Sarvam AI Startup Program 2026",
+        "maxSteps": 5
     }
-    T = {                                                                             # [T] Tools: Model Context Protocol (MCP v2)
-        "time": {
+
+    # [T] Tools: Model Context Protocol (Anthropic MCP v2 stdio uvx/npx & HTTP SSE)
+    T = {
+        "sarvam_ai": {
             "command": "uvx",
-            "args": ["mcp-server-time"],
+            "args": ["mcp-server-sarvam"],
             "tools": ["*"]
         }
     }
+
+    # [E] Environment: Enterprise Sandbox Guardrails & Secret Masking
     E = {
-        "SARVAM_API_KEY": "$SARVAM_API_KEY"                                          # [E] Environment: Secrets & API Keys
+        "SARVAM_API_KEY": "$SARVAM_API_KEY",
+        "GNANI_API_KEY": "$GNANI_API_KEY",
+        "NEON_API_KEY": "$NEON_API_KEY"
     }
 
 # Run via Liate API engine:
-agent = LiateAgent()
-result = agent.run("Hello Agent World!")
+agent = FrontierAgent()
+result = agent.run("Introduce Mission AgentYaan and explain why sovereign OOP AI agents matter for India.")
 print(result.response)
 ```
 

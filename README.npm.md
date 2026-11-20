@@ -58,7 +58,7 @@ bun add openliate
 
 ---
 
-## Quickstart: The Frontier Agent (`SovereignAgent`)
+## Quickstart: Frontier Sovereign Agent (`FrontierAgent` / `agentyaan`)
 
 Every agent is declared natively as a TypeScript class inheriting from `liate`. The 5 layers map 1-to-1 to NVIDIA CEO Jensen Huang's 5 foundational agent elements:
 
@@ -67,27 +67,46 @@ import { liate } from "openliate";
 // or if using the org-scoped package:
 // import { liate } from "@openliate/liate";
 
-export class SovereignAgent extends liate {
-  L = "sarvam/sarvam-105b";                         // [L] Large Models Layer (Sarvam Indic 105B)
-  I = { memory: "sessions/sovereign-agent" };       // [I] Integration & Memory Layer
-  A = {                                             // [A] Agent Harness Layer
+export class FrontierAgent extends liate {
+  // [L] Large Models: Native Routing across Sovereign & 65+ Frontier AI Models:
+  // - "sarvam/sarvam-105b" (Sarvam AI Indic Foundation Model - Startup Program 2026)
+  // - "sarvam/sarvam-30b" | "sarvam/bulbul-v4" | "sarvam/saaras-v4"
+  // - "gnani/prisma-v3" (Gnani AI STT 10+ Indic Languages) | "gnani/timbre-v3" (Gnani AI TTS Multilingual)
+  // - "neon/gemini-2.5-pro" | "neon/gemini-2.5-flash" (Google Gemini Frontier Series)
+  // - "neon/claude-3-7-sonnet" | "neon/claude-3-5-haiku" (Anthropic Frontier Series)
+  // - 65+ Frontier AI Models via Neon AI Gateway with JEV System-One Heuristic Routing
+  L = "sarvam/sarvam-105b";
+
+  // [I] Integration & Memory Layer
+  I = { memory: "sessions/agentyaan" };
+
+  // [A] Agent Harness Layer
+  A = {
     name: "agentyaan",
-    intent: "Autonomous Sovereign Indic Agent",
+    intent: "Frontier Sovereign AI Agent · Built on Liate · Selected for India's Sarvam AI Startup Program 2026",
     maxSteps: 5
   };
-  T = {                                             // [T] Tools & MCP Layer (Stdio & SSE)
-    fetch: {
+
+  // [T] Tools & MCP Layer (Stdio uvx/npx & Remote SSE)
+  T = {
+    sarvam_ai: {
       command: "uvx",
-      args: ["mcp-server-fetch"],
+      args: ["mcp-server-sarvam"],
       tools: ["*"]
     }
   };
-  E = { SARVAM_API_KEY: "$SARVAM_API_KEY" };        // [E] Environment & Sandbox Layer
+
+  // [E] Environment & Sandbox Layer
+  E = { 
+    SARVAM_API_KEY: "$SARVAM_API_KEY",
+    GNANI_API_KEY: "$GNANI_API_KEY",
+    NEON_API_KEY: "$NEON_API_KEY"
+  };
 }
 
 // Run the agent via the autonomous ReAct loop:
-const agent = new SovereignAgent();
-const result = await agent.run("Fetch https://openliate.tech and summarize.");
+const agent = new FrontierAgent();
+const result = await agent.run("Introduce Mission AgentYaan and explain why sovereign OOP AI agents matter for India.");
 console.log(result.text);
 ```
 
