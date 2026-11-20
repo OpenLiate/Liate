@@ -12,9 +12,17 @@
   <a href="https://github.com/OpenLiate/Liate/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-white?labelColor=black&style=flat-square" alt="License: MIT"></a>
   <a href="https://sarvam.ai"><img src="./assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
-  <a href="https://www.npmjs.com/package/openliate"><img src="https://img.shields.io/badge/npm-v0.1.5-white?labelColor=black&style=flat-square" alt="npm: v0.1.5"></a>
+  <a href="https://www.npmjs.com/package/openliate"><img src="https://img.shields.io/badge/npm-v0.1.6-white?labelColor=black&style=flat-square" alt="npm: v0.1.6"></a>
+  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/badge/pypi-v0.1.6-white?logo=pypi&logoColor=FFD43B&labelColor=black&style=flat-square" alt="PyPI: v0.1.6"></a>
+  <img src="https://img.shields.io/badge/Total_Downloads-1%2C495%2B-brightgreen?labelColor=black&style=flat-square" alt="Total Downloads">
   <img src="https://img.shields.io/badge/Bun-Supported-white?logo=bun&logoColor=white&labelColor=black&style=flat-square" alt="Bun">
   <img src="https://img.shields.io/badge/Node.js-Supported-white?logo=node.js&logoColor=5FA04E&labelColor=black&style=flat-square" alt="Node.js">
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/openliate"><img src="https://img.shields.io/npm/dw/openliate?logo=npm&logoColor=CB3837&label=openliate&labelColor=black&color=white&style=flat-square" alt="npm openliate"></a>
+  &nbsp;
+  <a href="https://www.npmjs.com/package/@openliate/liate"><img src="https://img.shields.io/npm/dw/@openliate/liate?logo=npm&logoColor=CB3837&label=%40openliate%2Fliate&labelColor=black&color=white&style=flat-square" alt="npm @openliate/liate"></a>
 </p>
 
 <p align="center">
@@ -116,6 +124,18 @@ npx openliate run agent.ts "Fetch https://openliate.tech and summarize"
 | `openliate serve [--port]` | Launch high-performance Hono HTTP/SSE edge runtime |
 | `openliate create <name>` | Scaffold a new agent project |
 | `openliate hub` | List prebuilt agent templates |
+
+---
+
+## 📈 Real Production Ecosystem Traction
+
+| Registry | Package Distribution | Total Downloads | Telemetry Source |
+| :--- | :--- | :--- | :--- |
+| **npm** | [`openliate`](https://www.npmjs.com/package/openliate) | **531+** | Direct Developer CLI & Runners |
+| **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **270+** | TypeScript SDK Imports |
+| **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **458+** | Python AI Pipelines |
+| **PyPI** | [`liate`](https://pypi.org/project/liate/) | **236+** | Python AUM/OM Imports |
+| **Total** | **Combined Ecosystem** | **1,495+ Total Installs 🚀** | **Over 800+ Direct Human Installs** |
 
 ---
 

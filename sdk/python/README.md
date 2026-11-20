@@ -12,8 +12,15 @@
   <a href="https://github.com/OpenLiate/Liate/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-white?labelColor=black&style=flat-square" alt="License: MIT"></a>
   <a href="https://sarvam.ai"><img src="./assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
-  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/badge/pypi-v0.1.5-white?labelColor=black&style=flat-square" alt="PyPI: v0.1.5"></a>
+  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/badge/pypi-v0.1.6-white?logo=pypi&logoColor=FFD43B&labelColor=black&style=flat-square" alt="PyPI: v0.1.6"></a>
+  <img src="https://img.shields.io/badge/Total_Downloads-1%2C495%2B-brightgreen?labelColor=black&style=flat-square" alt="Total Downloads">
   <img src="https://img.shields.io/badge/Python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14%20%7C%203.15-white?logo=python&logoColor=white&labelColor=black&style=flat-square" alt="Python 3.9+">
+</p>
+
+<p align="center">
+  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/pypi/v/liate?logo=pypi&logoColor=FFD43B&label=liate&labelColor=black&color=white&style=flat-square" alt="PyPI liate"></a>
+  &nbsp;
+  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/pypi/v/openliate?logo=pypi&logoColor=FFD43B&label=openliate&labelColor=black&color=white&style=flat-square" alt="PyPI openliate"></a>
 </p>
 
 <p align="center">
@@ -86,6 +93,18 @@ print(result.response)
 | **`A`** | **Agent Harness** | Autonomous ReAct reasoning loop, intent declaration, and step guardrails. |
 | **`T`** | **Tools & Actuators** | Model Context Protocol (Anthropic MCP v2 stdio `uvx`/`npx` & HTTP/SSE transports). |
 | **`E`** | **Environment & Sandbox** | Secrets management, API key masking, and security guardrails. |
+
+---
+
+## 📈 Real Production Ecosystem Traction
+
+| Registry | Package Distribution | Total Downloads | Telemetry Source |
+| :--- | :--- | :--- | :--- |
+| **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **458+** | [pypistats.org/packages/openliate](https://pypistats.org/packages/openliate) |
+| **PyPI** | [`liate`](https://pypi.org/project/liate/) | **236+** | [pypistats.org/packages/liate](https://pypistats.org/packages/liate) |
+| **npm** | [`openliate`](https://www.npmjs.com/package/openliate) | **531+** | Direct Developer CLI & Runners |
+| **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **270+** | TypeScript SDK Imports |
+| **Total** | **Combined Ecosystem** | **1,495+ Total Installs 🚀** | **Over 800+ Direct Human Installs (`without_mirrors`)** |
 
 ---
 

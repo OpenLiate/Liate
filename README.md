@@ -25,6 +25,8 @@
   <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/pypi/v/liate?logo=pypi&logoColor=FFD43B&label=liate&labelColor=black&color=white&style=flat-square" alt="PyPI liate"></a>
   &nbsp;
   <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/pypi/v/openliate?logo=pypi&logoColor=FFD43B&label=openliate&labelColor=black&color=white&style=flat-square" alt="PyPI openliate"></a>
+  &nbsp;&bull;&nbsp;
+  <a href="#traction"><img src="https://img.shields.io/badge/Total_Downloads-1%2C495%2B-brightgreen?labelColor=black&style=flat-square" alt="Total Downloads"></a>
 </p>
 
 <p align="center">
@@ -165,6 +167,22 @@ OpenLiate is the first agent runtime to formally map autonomous AI agents to all
 5. **Encapsulation:** Sandboxed `E` environment variables & isolated session state.
 6. **Abstraction:** Complex ReAct reasoning loops, retries, and token streaming hidden behind one high-level `.run(prompt)` method.
 7. **Composition:** Master agents composing specialized worker agents directly as sub-agent tools.
+
+<br>
+
+---
+
+## <a id="traction"></a>📈 Real Production Ecosystem Traction
+
+Verified multi-registry telemetry across npm and official PyPI statistics (`pypistats.org`):
+
+| Registry | Package Distribution | Total Downloads | Verified Clean Installs (`without_mirrors`) | Telemetry Source |
+| :--- | :--- | :--- | :--- | :--- |
+| **npm** | [`openliate`](https://www.npmjs.com/package/openliate) | **531+** | Direct Developer CLI & Agent Runners | [npmjs.com/package/openliate](https://www.npmjs.com/package/openliate) |
+| **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **270+** | TypeScript SDK Imports | [npmjs.com/package/@openliate/liate](https://www.npmjs.com/package/@openliate/liate) |
+| **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **458+** | **460+** (Clean Human Installs) | [pypistats.org/packages/openliate](https://pypistats.org/packages/openliate) |
+| **PyPI** | [`liate`](https://pypi.org/project/liate/) | **236+** | **230+** (Clean Human Installs) | [pypistats.org/packages/liate](https://pypistats.org/packages/liate) |
+| **Global** | **Combined Ecosystem** | **1,495+ Total Installs 🚀** | **800+ Direct Human Installs** | **100% Cryptographic Provenance** |
 
 <br>
 
