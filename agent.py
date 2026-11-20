@@ -40,7 +40,7 @@ class FrontierAgent(liate):
     T = {
         "sarvam_ai": {
             "command": "uvx",
-            "args": ["mcp-server-sarvam"],
+            "args": ["sarvam-mcp"],
             "tools": ["*"]
         }
     }

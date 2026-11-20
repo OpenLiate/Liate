@@ -13,7 +13,7 @@
     "sarvam_ai": {
       "command": "uvx",
       "args": [
-        "mcp-server-sarvam"
+        "sarvam-mcp"
       ],
       "tools": [
         "*"

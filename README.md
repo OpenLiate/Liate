@@ -113,7 +113,7 @@ liate serve --port 7071
   "T": {                                                                              // [T] Tools: Model Context Protocol (Anthropic MCP v2 Stdio & Remote SSE)
     "sarvam_ai": {
       "command": "uvx",
-      "args": ["mcp-server-sarvam"],
+      "args": ["sarvam-mcp"],
       "tools": ["*"]
     }
   },
@@ -302,7 +302,7 @@ class FrontierAgent(liate):
     T = {
         "sarvam_ai": {
             "command": "uvx",
-            "args": ["mcp-server-sarvam"],
+            "args": ["sarvam-mcp"],
             "tools": ["*"]
         }
     }
