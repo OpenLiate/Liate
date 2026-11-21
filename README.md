@@ -39,6 +39,7 @@
 
 > **#1 Selected for Sarvam AI Startup Program 2026** <sup>IN</sup> — Sovereign Indic AI Infrastructure  
 > **#2 Selected for Exa.ai Startup Program (YC S21)** — \$2,500 Search API Credits  
+> **#3 Architecture Validation (NVIDIA Keynote 2026)** — 1-to-1 Mapping to Jensen Huang's 5 Elements of an Agent  
 > Built by **[OpenLiate](https://github.com/OpenLiate/Liate)** — Open Source Backend Layer for AI Agents
 
 <br>
@@ -414,6 +415,25 @@ curl -X POST http://localhost:7071/chat \
 ---
 
 ## <a id="aum-architecture"></a>[4] Architecture: The 5 Layers (AUM)
+
+### #1 Industry Architecture Parity: NVIDIA Keynote 2026
+
+In the **NVIDIA Keynote 2026**, NVIDIA CEO Jensen Huang defined the five foundational elements of an autonomous agent:  
+> *"AI Factories Produce Intelligence. Agents Put Intelligence to Work... Model, Knowledge, Tools, Sandbox, Harness — These are the five elements of an agent."*
+
+OpenLiate is engineered ground-up with 1-to-1 fidelity to this 5-element architecture:
+
+| 5 Elements of an Agent (NVIDIA Keynote 2026) | Liate Layer (L · I · A · T · E) | Production File | Architecture Role |
+| :--- | :--- | :--- | :--- |
+| **[1] Model** | **`[L]` LLM** | `src/layers/llm/model.ts` | Native model routing across Sarvam 105B & 65+ models |
+| **[2] Knowledge** | **`[I]` Integration** | `src/layers/integration/knowledge.ts` | Persistent session memory & vector document context |
+| **[3] Harness** | **`[A]` Agent** | `src/layers/agent/harness.ts` | ReAct autonomous reasoning loop & agent harness |
+| **[4] Tools** | **`[T]` Tools** | `src/layers/tools/mcp.ts` | Anthropic Model Context Protocol (MCP v2) stdio & SSE |
+| **[5] Sandbox** | **`[E]` Environment** | `src/layers/environment/sandbox.ts` | Isolated execution sandbox guardrails & secret masking |
+
+<br>
+
+### #2 The 5 Layers Specification Matrix (AUM)
 
 Every agent implements the **Agent Unified Module (AUM)** across 5 sovereign layers declared as module keys or class properties:
 
