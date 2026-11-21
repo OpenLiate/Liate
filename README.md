@@ -26,7 +26,7 @@
   &nbsp;
   <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/pypi/v/openliate?logo=pypi&logoColor=FFD43B&label=openliate&labelColor=black&color=white&style=flat-square" alt="PyPI openliate"></a>
   &nbsp;&bull;&nbsp;
-  <a href="#traction"><img src="https://img.shields.io/badge/Total_Downloads-1%2C495%2B-brightgreen?labelColor=black&style=flat-square" alt="Total Downloads"></a>
+  <a href="#traction"><img src="https://img.shields.io/badge/Total_Downloads-2%2C087%2B-brightgreen?labelColor=black&style=flat-square" alt="Total Downloads"></a>
 </p>
 
 <p align="center">
@@ -37,7 +37,8 @@
 
 <br>
 
-> **Milestone: Liate — Selected for India's Sarvam AI Startup Program 2026** <sup>IN</sup>  
+> 🇮🇳 **Selected for Sarvam AI Startup Program 2026** — Sovereign Indic AI Infrastructure  
+> 🔍 **Selected for Exa.ai Startup Program (YC S21)** — \$2,500 Search API Credits  
 > Built by **[OpenLiate](https://github.com/OpenLiate/Liate)** — Open Source Backend Layer for AI Agents
 
 <br>
@@ -106,8 +107,8 @@ liate serve --port 7071
   },
   "A": { 
     "name": "agentyaan", 
-    "version": "0.1.6",                                                               // [A] Agent: Identity, Version & ReAct Reasoning Loop
-    "intent": "Frontier Sovereign AI Agent · Built on Liate · Selected for India's Sarvam AI Startup Program 2026", 
+    "version": "0.1.9",                                                               // [A] Agent: Identity, Version & ReAct Reasoning Loop
+    "intent": "Frontier Sovereign AI Agent · Built on Liate · Selected for Sarvam AI Startup Program 2026 · Exa.ai Startup Program (YC S21)", 
     "maxSteps": 5 
   },
   "T": {                                                                              // [T] Tools: Model Context Protocol (Anthropic MCP v2 Stdio & Remote SSE)
@@ -178,11 +179,11 @@ Verified multi-registry telemetry across npm and official PyPI statistics (`pypi
 
 | Registry | Package Distribution | Total Downloads | Verified Clean Installs (`without_mirrors`) | Telemetry Source |
 | :--- | :--- | :--- | :--- | :--- |
-| **npm** | [`openliate`](https://www.npmjs.com/package/openliate) | **531+** | Direct Developer CLI & Agent Runners | [npmjs.com/package/openliate](https://www.npmjs.com/package/openliate) |
-| **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **270+** | TypeScript SDK Imports | [npmjs.com/package/@openliate/liate](https://www.npmjs.com/package/@openliate/liate) |
-| **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **458+** | **460+** (Clean Human Installs) | [pypistats.org/packages/openliate](https://pypistats.org/packages/openliate) |
-| **PyPI** | [`liate`](https://pypi.org/project/liate/) | **236+** | **230+** (Clean Human Installs) | [pypistats.org/packages/liate](https://pypistats.org/packages/liate) |
-| **Global** | **Combined Ecosystem** | **1,495+ Total Installs** | **800+ Direct Human Installs** | **100% Cryptographic Provenance** |
+| **npm** | [`openliate`](https://www.npmjs.com/package/openliate) | **672+** | Direct Developer CLI & Agent Runners | [npmjs.com/package/openliate](https://www.npmjs.com/package/openliate) |
+| **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **505+** | TypeScript SDK Imports | [npmjs.com/package/@openliate/liate](https://www.npmjs.com/package/@openliate/liate) |
+| **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **567+** | **567+** (Clean Human Installs) | [pypistats.org/packages/openliate](https://pypistats.org/packages/openliate) |
+| **PyPI** | [`liate`](https://pypi.org/project/liate/) | **343+** | **343+** (Clean Human Installs) | [pypistats.org/packages/liate](https://pypistats.org/packages/liate) |
+| **Global** | **Combined Ecosystem** | **2,087+ Total Installs** | **1,000+ Direct Human Installs** | **100% Cryptographic OIDC Provenance** |
 
 <br>
 
@@ -232,8 +233,8 @@ export class FrontierAgent extends liate {
   // [A] Agent Harness: Identity, ReAct Reasoning Loop & Intent
   A = { 
     name: "agentyaan", 
-    version: "0.1.6", 
-    intent: "Frontier Sovereign AI Agent · Built on Liate · Selected for India's Sarvam AI Startup Program 2026", 
+    version: "0.1.9", 
+    intent: "Frontier Sovereign AI Agent · Built on Liate · Selected for Sarvam AI Startup Program 2026 · Exa.ai Startup Program (YC S21)", 
     maxSteps: 5 
   };
 
@@ -305,8 +306,8 @@ class FrontierAgent(liate):
     # [A] Agent Harness: Identity, ReAct Reasoning Loop & Intent
     A = {
         "name": "agentyaan",
-        "version": "0.1.6",
-        "intent": "Frontier Sovereign AI Agent · Built on Liate · Selected for India's Sarvam AI Startup Program 2026",
+        "version": "0.1.9",
+        "intent": "Frontier Sovereign AI Agent · Built on Liate · Selected for Sarvam AI Startup Program 2026 · Exa.ai Startup Program (YC S21)",
         "maxSteps": 5
     }
 
