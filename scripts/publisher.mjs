@@ -56,7 +56,7 @@ try {
   console.log('\n========================================');
   console.log(` Publishing openliate (v${version}) to npm...`);
   console.log('========================================');
-  safePublish(`npm publish${provenanceFlag}`, 'openliate');
+  safePublish(`npm publish --access public${provenanceFlag}`, 'openliate');
 
   // 2. Publish @openliate/liate (org-scoped)
   pkg.name = '@openliate/liate';
