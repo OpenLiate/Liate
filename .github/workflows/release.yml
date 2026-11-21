@@ -8,8 +8,6 @@ on:
       - 'package.json'
       - 'src/core/version.ts'
       - 'sdk/python/**'
-    tags:
-      - 'v*'
   workflow_dispatch:
     inputs:
       version:
@@ -92,8 +90,6 @@ jobs:
       - name: Build TypeScript Distributions
         run: bun run build
 
-      - name: Publish to NPM (openliate & @openliate/liate)
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to NPM (openliate & @openliate/liate via OIDC Trusted Publishing)
         run: |
           node scripts/publisher.mjs
