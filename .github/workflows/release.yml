@@ -70,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write  # Mandatory for NPM Trusted Publishing & Provenance
-      contents: read
+      contents: write
 
     steps:
       - uses: actions/checkout@v4

@@ -17,8 +17,18 @@ const version = pkg.version;
 // In CI (GitHub Actions), attach cryptographic provenance via OIDC
 const provenanceFlag = process.env.CI ? ' --provenance' : '';
 
+function prepareCleanGit(pkgName) {
+  if (process.env.CI) {
+    try {
+      execSync('git config user.name "github-actions[bot]" && git config user.email "github-actions[bot]@users.noreply.github.com"', { cwd: root, stdio: 'ignore' });
+      execSync(`git commit -am "chore(release): package ${pkgName}@${version} for OIDC provenance" || true`, { cwd: root, stdio: 'ignore' });
+    } catch (_) {}
+  }
+}
+
 function safePublish(cmd, pkgName) {
   try {
+    prepareCleanGit(pkgName);
     execSync(cmd, { cwd: root, stdio: 'inherit' });
   } catch (err) {
     // If the version is already published on npm, do not fail

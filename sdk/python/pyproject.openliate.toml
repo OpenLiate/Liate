@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "openliate"
-version = "0.1.6"
+version = "0.1.7"
 description = "OpenLiate — Open Source Backend Layer for AI Agents · From India, For India, Beyond India"
 readme = "README.md"
 requires-python = ">=3.9"
