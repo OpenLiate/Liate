@@ -13,7 +13,7 @@
   <a href="https://sarvam.ai"><img src="./assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
   <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/badge/pypi-v0.1.9-white?logo=pypi&logoColor=FFD43B&labelColor=black&style=flat-square" alt="PyPI: v0.1.9"></a>
-  <img src="https://img.shields.io/badge/Total_Downloads-1%2C495%2B-brightgreen?labelColor=black&style=flat-square" alt="Total Downloads">
+  <img src="https://img.shields.io/badge/Total_Downloads-2%2C087%2B-brightgreen?labelColor=black&style=flat-square" alt="Total Downloads">
   <img src="https://img.shields.io/badge/Python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14%20%7C%203.15-white?logo=python&logoColor=white&labelColor=black&style=flat-square" alt="Python 3.9+">
 </p>
 
@@ -31,7 +31,8 @@
 
 <br>
 
-> **Milestone: Liate — Selected for India's Sarvam AI Startup Program 2026** <sup>IN</sup>  
+> **Selected for Sarvam AI Startup Program 2026** <sup>IN</sup> — Sovereign Indic AI Infrastructure  
+> **Selected for Exa.ai Startup Program (YC S21)** — \$2,500 Search API Credits  
 > Built by **[OpenLiate](https://github.com/OpenLiate/Liate)** — Open Source Backend Layer for AI Agents
 
 > *"If Stripe did payments in 7 lines of code, why not AI Agents in 5 lines of code?*  
@@ -134,11 +135,11 @@ print(result.response)
 
 | Registry | Package Distribution | Total Downloads | Telemetry Source |
 | :--- | :--- | :--- | :--- |
-| **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **458+** | [pypistats.org/packages/openliate](https://pypistats.org/packages/openliate) |
-| **PyPI** | [`liate`](https://pypi.org/project/liate/) | **236+** | [pypistats.org/packages/liate](https://pypistats.org/packages/liate) |
-| **npm** | [`openliate`](https://www.npmjs.com/package/openliate) | **531+** | Direct Developer CLI & Runners |
-| **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **270+** | TypeScript SDK Imports |
-| **Total** | **Combined Ecosystem** | **1,495+ Total Installs** | **Over 800+ Direct Human Installs (`without_mirrors`)** |
+| **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **567+** | [pypistats.org/packages/openliate](https://pypistats.org/packages/openliate) |
+| **PyPI** | [`liate`](https://pypi.org/project/liate/) | **343+** | [pypistats.org/packages/liate](https://pypistats.org/packages/liate) |
+| **npm** | [`openliate`](https://www.npmjs.com/package/openliate) | **672+** | Direct Developer CLI & Runners |
+| **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **505+** | TypeScript SDK Imports |
+| **Total** | **Combined Ecosystem** | **2,087+ Total Installs** | **Over 1,000+ Direct Human Installs (`without_mirrors`)** |
 
 ---
 

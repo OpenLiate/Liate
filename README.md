@@ -37,8 +37,8 @@
 
 <br>
 
-> 🇮🇳 **Selected for Sarvam AI Startup Program 2026** — Sovereign Indic AI Infrastructure  
-> 🔍 **Selected for Exa.ai Startup Program (YC S21)** — \$2,500 Search API Credits  
+> **Selected for Sarvam AI Startup Program 2026** <sup>IN</sup> — Sovereign Indic AI Infrastructure  
+> **Selected for Exa.ai Startup Program (YC S21)** — \$2,500 Search API Credits  
 > Built by **[OpenLiate](https://github.com/OpenLiate/Liate)** — Open Source Backend Layer for AI Agents
 
 <br>
