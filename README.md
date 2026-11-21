@@ -77,10 +77,10 @@ pip install liate
 
 ```bash
 # Run a Local Hub Agent:
-liate run sarvam-agent "Hello World"
+liate run sarvam-agent "Hello Agent"
 
 # Run any custom agent.json:
-liate run ./path/to/agent.json "Hello World"
+liate run ./path/to/agent.json "Hello Agent"
 
 # Start an interactive chat session:
 liate chat sarvam-agent
