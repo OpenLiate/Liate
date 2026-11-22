@@ -26,7 +26,7 @@
   &nbsp;
   <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/badge/openliate-v0.2.0-white?logo=pypi&logoColor=FFD43B&label=openliate&labelColor=black&color=white&style=flat-square" alt="PyPI openliate"></a>
   &nbsp;&bull;&nbsp;
-  <a href="#traction"><img src="https://img.shields.io/badge/Total_Downloads-2%2C087%2B-brightgreen?labelColor=black&style=flat-square" alt="Total Downloads"></a>
+  <a href="#traction"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fvinodhatti%2F4e50442b9bc06000069dd0c1552ab66b%2Fraw%2Fdownloads.json&style=flat-square&labelColor=black" alt="Total Downloads"></a>
 </p>
 
 <p align="center">
@@ -180,11 +180,11 @@ Verified multi-registry telemetry across npm and official PyPI statistics (`pypi
 
 | Registry | Package Distribution | Total Downloads | Verified Clean Installs (`without_mirrors`) | Telemetry Source |
 | :--- | :--- | :--- | :--- | :--- |
-| **npm** | [`openliate`](https://www.npmjs.com/package/openliate) | **672+** | Direct Developer CLI & Agent Runners | [npmjs.com/package/openliate](https://www.npmjs.com/package/openliate) |
-| **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **505+** | TypeScript SDK Imports | [npmjs.com/package/@openliate/liate](https://www.npmjs.com/package/@openliate/liate) |
-| **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **567+** | **567+** (Clean Human Installs) | [pypistats.org/packages/openliate](https://pypistats.org/packages/openliate) |
-| **PyPI** | [`liate`](https://pypi.org/project/liate/) | **343+** | **343+** (Clean Human Installs) | [pypistats.org/packages/liate](https://pypistats.org/packages/liate) |
-| **Global** | **Combined Ecosystem** | **2,087+ Total Installs** | **1,000+ Direct Human Installs** | **100% Cryptographic OIDC Provenance** |
+| **npm** | [`openliate`](https://www.npmjs.com/package/openliate) | **949+** | Direct Developer CLI & Agent Runners | [npmjs.com/package/openliate](https://www.npmjs.com/package/openliate) |
+| **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **848+** | TypeScript SDK Imports | [npmjs.com/package/@openliate/liate](https://www.npmjs.com/package/@openliate/liate) |
+| **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **848+** | **848+** (Clean Human Installs) | [pypistats.org/packages/openliate](https://pypistats.org/packages/openliate) |
+| **PyPI** | [`liate`](https://pypi.org/project/liate/) | **619+** | **619+** (Clean Human Installs) | [pypistats.org/packages/liate](https://pypistats.org/packages/liate) |
+| **Global** | **Combined Ecosystem** | **3,264+ Total Installs** | **1,460+ Direct Human Installs** | **100% Cryptographic OIDC Provenance** |
 
 <br>
 

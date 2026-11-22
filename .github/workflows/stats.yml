@@ -1,0 +1,27 @@
+name: Auto-Update Telemetry & Download Badges
+
+on:
+  schedule:
+    # Runs every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-metrics:
+    name: Sync Live NPM & PyPI Telemetry to Gist
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Stats Sync
+        env:
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+          GIST_ID: '4e50442b9bc06000069dd0c1552ab66b'
+        run: node scripts/update-stats.mjs

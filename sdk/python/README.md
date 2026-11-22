@@ -13,7 +13,7 @@
   <a href="https://sarvam.ai"><img src="./assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
   <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/badge/pypi-v0.2.0-white?logo=pypi&logoColor=FFD43B&labelColor=black&style=flat-square" alt="PyPI: v0.2.0"></a>
-  <img src="https://img.shields.io/badge/Total_Downloads-2%2C087%2B-brightgreen?labelColor=black&style=flat-square" alt="Total Downloads">
+  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fvinodhatti%2F4e50442b9bc06000069dd0c1552ab66b%2Fraw%2Fdownloads.json&style=flat-square&labelColor=black" alt="Total Downloads">
   <img src="https://img.shields.io/badge/Python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14%20%7C%203.15-white?logo=python&logoColor=white&labelColor=black&style=flat-square" alt="Python 3.9+">
 </p>
 
@@ -155,11 +155,11 @@ OpenLiate maps 1-to-1 to this 5-element architecture:
 
 | Registry | Package Distribution | Total Downloads | Telemetry Source |
 | :--- | :--- | :--- | :--- |
-| **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **567+** | [pypistats.org/packages/openliate](https://pypistats.org/packages/openliate) |
-| **PyPI** | [`liate`](https://pypi.org/project/liate/) | **343+** | [pypistats.org/packages/liate](https://pypistats.org/packages/liate) |
-| **npm** | [`openliate`](https://www.npmjs.com/package/openliate) | **672+** | Direct Developer CLI & Runners |
-| **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **505+** | TypeScript SDK Imports |
-| **Total** | **Combined Ecosystem** | **2,087+ Total Installs** | **Over 1,000+ Direct Human Installs (`without_mirrors`)** |
+| **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **848+** | [pypistats.org/packages/openliate](https://pypistats.org/packages/openliate) |
+| **PyPI** | [`liate`](https://pypi.org/project/liate/) | **619+** | [pypistats.org/packages/liate](https://pypistats.org/packages/liate) |
+| **npm** | [`openliate`](https://www.npmjs.com/package/openliate) | **949+** | Direct Developer CLI & Runners |
+| **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **848+** | TypeScript SDK Imports |
+| **Total** | **Combined Ecosystem** | **3,264+ Total Installs** | **Over 1,460+ Direct Human Installs (`without_mirrors`)** |
 
 ---
 
