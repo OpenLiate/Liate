@@ -1,48 +1,20 @@
 {
-  "name": "liate-web",
+  "name": "@openliate/docs",
   "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+  "description": "OpenLiate Official Open-Source Documentation Content",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openliate/liate.git",
+    "directory": "docs"
   },
-  "dependencies": {
-    "clsx": "^2.1.1",
-    "fumadocs-core": "16.19.0",
-    "fumadocs-mdx": "15.6.1",
-    "fumadocs-openapi": "^12.6.4",
-    "fumadocs-ui": "npm:@fumadocs/base-ui@16.19.0",
-    "lucide-react": "^1.73.0",
-    "next": "16.4.6",
-    "openliate": "^0.1.5",
-    "react": "19.3.0",
-    "react-dom": "19.3.0",
-    "react-markdown": "^10.1.0",
-    "remark-gfm": "^4.0.1",
-    "shiki": "^4.6.0",
-    "tailwind-merge": "^3.7.0",
-    "vercel": "^66.2.0"
+  "publishConfig": {
+    "access": "public"
   },
-  "devDependencies": {
-    "@tailwindcss/turbopack": "4.3.3",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.4.6",
-    "tailwindcss": "4.3.3",
-    "turbo": "^2.11.11",
-    "typescript": "^5"
-  },
-  "packageManager": "bun@1.4.4",
-  "ignoreScripts": [
-    "sharp",
-    "unrs-resolver"
-  ],
-  "trustedDependencies": [
-    "sharp",
-    "unrs-resolver"
-  ]
+  "exports": {
+    "./docs/*": "./content/docs/*",
+    "./blog/*": "./content/blog/*",
+    "./*": "./content/*",
+    ".": "./content/docs/index.mdx"
+  }
 }
