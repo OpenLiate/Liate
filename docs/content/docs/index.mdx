@@ -6,17 +6,253 @@ icon: "sparkles"
 
 ## Welcome to OpenLiate
 
-OpenLiate is the sovereign, open-source OOP framework for autonomous AI agents. Built on the **LIATE mathematical decomposition rule**, it unifies reasoning loops, persistent memory, and Model Context Protocol (MCP) tool execution into production-ready API microservices.
+OpenLiate is the sovereign, open-source Object-Oriented Programming (OOP) framework for autonomous AI agents. Built on the **LIATE mathematical decomposition rule**, it unifies reasoning loops, persistent session memory, and Model Context Protocol (MCP) tool execution into production-ready API microservices.
 
-```bash
-npx openliate run agent.json
-```
-
-<Callout type="info" title="Selected for Sarvam AI Startup Program 2026 🇮🇳">
-OpenLiate natively supports sovereign Indic models including Sarvam 105B and Bulbul voice across 22+ Indian languages.
+<Callout type="info" title="Selected for Sarvam AI & Exa AI Startup Programs">
+OpenLiate is officially selected for the **Sarvam AI Startup Program 2026** (Sovereign Indic AI infrastructure with Sarvam 105B and Bulbul voice across 22+ languages) and the **Exa.ai Startup Program** (YC S21 neural web search and semantic knowledge retrieval).
 </Callout>
 
-## The LIATE Mathematical Foundation
+---
+
+## 1. Installation & Distribution
+
+OpenLiate is distributed across multiple language ecosystems and official registries. Choose your preferred package manager or installer:
+
+<Tabs items={["npm", "PyPI (Python)", "1-Click Script", "Local Clone"]}>
+
+<Tab value="npm">
+
+### Node.js & Bun
+
+Install the CLI globally or add the library to your project:
+
+```bash
+# Global CLI runner (liate)
+npm install -g openliate
+# or with bun:
+bun add -g openliate
+
+# Project dependency (direct package)
+npm install openliate
+
+# Project dependency (org-scoped package)
+npm install @openliate/liate
+
+# Run instantly without installation
+npx openliate run agent.json "Analyze trends in autonomous systems"
+```
+
+</Tab>
+
+<Tab value="PyPI (Python)">
+
+### Python SDK
+
+Available on PyPI under both package names:
+
+```bash
+# Direct core package
+pip install liate
+
+# Alternative package distribution
+pip install openliate
+```
+
+Verify your Python installation:
+
+```bash
+python -c "import liate; print(liate.__version__)"
+```
+
+</Tab>
+
+<Tab value="1-Click Script">
+
+### 1-Click Fast Installers
+
+Install the precompiled standalone runtime binary instantly:
+
+**Windows (PowerShell):**
+```powershell
+powershell -c "irm https://liate.dev/install.ps1 | iex"
+```
+
+**macOS / Linux (Bash):**
+```bash
+curl -fsSL https://liate.dev/install.sh | bash
+```
+
+</Tab>
+
+<Tab value="Local Clone">
+
+### Build from Source
+
+Clone the sovereign repository and run locally with Bun:
+
+```bash
+git clone https://github.com/OpenLiate/Liate.git
+cd Liate
+bun install
+bun run build
+```
+
+</Tab>
+
+</Tabs>
+
+---
+
+## 2. Frontier Agent in 5 Lines
+
+An autonomous agent in OpenLiate is composed of five foundational layers: **L** (Model), **I** (Integration & Memory), **A** (Agent Harness Loop), **T** (Tools & MCP), and **E** (Environment & Sandbox).
+
+### Python SDK (`liate` / `openliate`)
+
+```python
+from liate import Liate
+
+class FrontierAgent(Liate):
+    # [L] Large Models: Sarvam AI 105B Indic reasoning or Exa-powered frontier LLMs
+    L = "sarvam/sarvam-105b"
+
+    # [I] Integration: Co-located persistent session state
+    I = {"memory": "sessions/agentyaan"}
+
+    # [A] Agent Harness: Autonomous ReAct loop with guardrails
+    A = {
+        "name": "agentyaan",
+        "version": "0.2.0",
+        "intent": "Frontier Sovereign AI Agent built on Liate",
+        "maxSteps": 5
+    }
+
+    # [T] Tools: Model Context Protocol (MCP v2 stdio & remote SSE)
+    T = {
+        "sarvam_ai": {
+            "command": "uvx",
+            "args": ["sarvam-mcp"],
+            "tools": ["*"]
+        }
+    }
+
+    # [E] Environment: Enterprise sandbox guardrails & secret injection
+    E = {
+        "SARVAM_API_KEY": "$SARVAM_API_KEY"
+    }
+
+# Execute agent in-process
+agent = FrontierAgent()
+result = agent.run("Introduce Mission AgentYaan and sovereign AI architectures.")
+print(result.response)
+```
+
+### TypeScript SDK (`@openliate/liate` / `openliate`)
+
+```typescript
+import { liate } from "@openliate/liate";
+
+export class FrontierAgent extends liate {
+  L = "sarvam/sarvam-105b";
+  I = { memory: "sessions/agentyaan" };
+  A = {
+    name: "agentyaan",
+    version: "0.2.0",
+    intent: "Frontier Sovereign AI Agent built on Liate",
+    maxSteps: 5,
+  };
+  T = {
+    sarvam_ai: {
+      command: "uvx",
+      args: ["sarvam-mcp"],
+      tools: ["*"],
+    },
+  };
+  E = {
+    SARVAM_API_KEY: "$SARVAM_API_KEY",
+  };
+}
+
+// In-process execution:
+const agent = new FrontierAgent();
+const response = await agent.run("Execute sovereign reasoning workflow.");
+console.log(response.text);
+
+// Convert directly into a standard Web API endpoint:
+export const POST = agent.toHandler();
+```
+
+### Declarative Agent Module (`agent.json`)
+
+```json
+{
+  "L": "sarvam/sarvam-105b",
+  "I": {
+    "memory": "sessions/agentyaan"
+  },
+  "A": {
+    "name": "agentyaan",
+    "version": "0.2.0",
+    "intent": "Frontier Sovereign AI Agent built on Liate",
+    "maxSteps": 5
+  },
+  "T": {
+    "sarvam_ai": {
+      "command": "uvx",
+      "args": ["sarvam-mcp"],
+      "tools": ["*"]
+    }
+  },
+  "E": {
+    "SARVAM_API_KEY": "$SARVAM_API_KEY"
+  }
+}
+```
+
+---
+
+## 3. CLI Command Reference
+
+Execute agents locally, launch interactive multi-turn REPL sessions, or boot the HTTP runtime server:
+
+```bash
+# Run declarative agent.json with prompt:
+liate run agent.json "Summarize sovereign AI roadmap"
+
+# Run a pre-packaged Hub agent by name:
+liate run sarvam-agent "Namaste! Introduce yourself."
+
+# Launch interactive terminal chat session:
+liate chat sarvam-agent
+
+# List all available prebuilt agents in Hub:
+liate hub
+
+# Launch high-performance Hono HTTP API server on port 7071:
+liate serve --port 7071
+```
+
+---
+
+## 4. Industry Architecture Parity: NVIDIA Keynote 2026
+
+In the **NVIDIA Keynote 2026**, NVIDIA CEO Jensen Huang defined the five foundational elements of an autonomous agent:
+
+> *"AI Factories Produce Intelligence. Agents Put Intelligence to Work... Model, Knowledge, Tools, Sandbox, Harness — These are the five elements of an agent."*
+
+OpenLiate is engineered ground-up with 1-to-1 fidelity to this 5-element architecture:
+
+| 5 Elements of an Agent (NVIDIA 2026) | Liate Layer (L · I · A · T · E) | Production File | Architecture Role |
+| :--- | :--- | :--- | :--- |
+| **[1] Model** | **`[L]` LLM / Large Models** | `src/layers/llm/model.ts` | Routing across Sarvam 105B, Ollama, and 65+ models |
+| **[2] Knowledge** | **`[I]` Integration & Memory** | `src/layers/integration/knowledge.ts` | Persistent session state, vector storage & graph memory |
+| **[3] Harness** | **`[A]` Agent Harness Loop** | `src/layers/agent/harness.ts` | Autonomous ReAct reasoning loop & step guardrails |
+| **[4] Tools** | **`[T]` Tools & MCP** | `src/layers/tools/mcp.ts` | Anthropic Model Context Protocol (MCP v2) stdio & SSE |
+| **[5] Sandbox** | **`[E]` Environment & Sandbox** | `src/layers/environment/sandbox.ts` | Isolated execution sandbox guardrails & secret masking |
+
+---
+
+## 5. The LIATE Mathematical Foundation
 
 In calculus, the **LIATE Rule** is the universal mnemonic used to break down complex mathematical integration by parts:
 
@@ -24,25 +260,41 @@ In calculus, the **LIATE Rule** is the universal mnemonic used to break down com
 
 | Calculus LIATE Rule | OpenLiate LIATE Architecture | Purpose |
 | :--- | :--- | :--- |
-| **`L`** — **Logarithmic** | **`[L]`** — **Large Models Layer** | Sarvam AI 105B/2B, local Ollama, cloud LLMs |
+| **`L`** — **Logarithmic** | **`[L]`** — **Large Models & Knowledge Layer** | Sarvam AI 105B/2B, Exa AI neural search, local Ollama & cloud LLMs |
 | **`I`** — **Inverse Trig** | **`[I]`** — **Integration & Memory** | Sessions, Postgres, state & persistent memory |
 | **`A`** — **Algebraic** | **`[A]`** — **Agent Harness Layer** | Autonomous ReAct reasoning loop & step guardrails |
 | **`T`** — **Trigonometric** | **`[T]`** — **Tools & MCP Layer** | Model Context Protocol v2 (stdio & HTTP servers) |
 | **`E`** — **Exponential** | **`[E]`** — **Environment & Sandbox** | Process isolation, deterministic guardrails |
 
+---
+
+## 6. Real Production Ecosystem Traction
+
+Multi-registry verified metrics across npm and official PyPI stats:
+
+| Registry | Package Distribution | Total Downloads | Telemetry Type |
+| :--- | :--- | :--- | :--- |
+| **npm** | [`openliate`](https://www.npmjs.com/package/openliate) | **949+** | Developer CLI & Autonomous Agent Runners |
+| **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **848+** | TypeScript SDK Imports |
+| **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **848+** | Clean Human Python Installs |
+| **PyPI** | [`liate`](https://pypi.org/project/liate/) | **619+** | Clean Human Python Installs |
+| **Combined** | **Global Ecosystem** | **3,264+ Total** | **1,460+ Direct Human Installs** |
+
+---
+
 ## Explore the Architecture
 
 <Cards cols={2}>
-  <Card title="Quickstart Guide" icon="zap" href="/docs/quickstart">
+  <Card title="Quickstart Guide" icon="zap" href="/quickstart">
     Run your first agent in under 10 seconds.
   </Card>
-  <Card title="The Doctrine" icon="book-open" href="/docs/doctrine">
+  <Card title="The Doctrine" icon="book-open" href="/doctrine">
     Learn the design patterns powering OpenLiate.
   </Card>
-  <Card title="Agent Unified Module (AUM)" icon="file-code" href="/docs/runtime/module">
+  <Card title="Agent Unified Module (AUM)" icon="file-code" href="/runtime/module">
     Explore the `agent.json` declarative specification.
   </Card>
-  <Card title="Liate API Protocol" icon="server" href="/docs/runtime/api">
+  <Card title="Liate API Protocol" icon="server" href="/runtime/api">
     Serve agents as high-performance HTTP microservices.
   </Card>
 </Cards>

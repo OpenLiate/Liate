@@ -8,7 +8,7 @@
 <br>
 
 <p align="center">
-  <a href="https://openliate.tech/docs"><img src="https://img.shields.io/badge/docs-openliate.tech%2Fdocs-white?labelColor=black&style=flat-square" alt="Docs"></a>
+  <a href="https://liate.dev"><img src="https://img.shields.io/badge/docs-liate.dev-white?labelColor=black&style=flat-square" alt="Docs"></a>
   <a href="https://github.com/OpenLiate/Liate/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-white?labelColor=black&style=flat-square" alt="License: MIT"></a>
   <a href="https://sarvam.ai"><img src="./assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
@@ -56,12 +56,12 @@
 
 ```powershell
 # Windows (PowerShell)
-powershell -c "irm https://openliate.tech/install.ps1 | iex"
+powershell -c "irm https://liate.dev/install.ps1 | iex"
 ```
 
 ```bash
 # macOS / Linux (Bash)
-curl -fsSL https://openliate.tech/install.sh | bash
+curl -fsSL https://liate.dev/install.sh | bash
 ```
 
 ```bash

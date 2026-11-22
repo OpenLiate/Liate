@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # OpenLiate macOS / Linux 1-Click Installer
-# AgentYaan Mission · India's Sovereign AI Agent Layer 🇮🇳
+# AgentYaan Mission · India's Sovereign AI Agent Layer
 
 set -e
 

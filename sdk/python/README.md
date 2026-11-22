@@ -8,7 +8,7 @@
 <br>
 
 <p align="center">
-  <a href="https://openliate.tech/docs"><img src="https://img.shields.io/badge/docs-openliate.tech%2Fdocs-white?labelColor=black&style=flat-square" alt="Docs"></a>
+  <a href="https://liate.dev"><img src="https://img.shields.io/badge/docs-liate.dev-white?labelColor=black&style=flat-square" alt="Docs"></a>
   <a href="https://github.com/OpenLiate/Liate/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-white?labelColor=black&style=flat-square" alt="License: MIT"></a>
   <a href="https://sarvam.ai"><img src="./assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
@@ -165,7 +165,7 @@ OpenLiate maps 1-to-1 to this 5-element architecture:
 
 ## [4] Links & Ecosystem
 
-* **Website & Documentation:** [https://openliate.tech](https://openliate.tech)
+* **Website & Documentation:** [https://liate.dev](https://liate.dev)
 * **GitHub Repository:** [https://github.com/OpenLiate/Liate](https://github.com/OpenLiate/Liate)
 * **Developer Community:** [OpenLiate Community](https://github.com/OpenLiate/Liate/discussions)
 

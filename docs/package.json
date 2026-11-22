@@ -11,6 +11,7 @@
   "publishConfig": {
     "access": "public"
   },
+  "homepage": "https://liate.dev",
   "exports": {
     "./docs/*": "./content/docs/*",
     "./blog/*": "./content/blog/*",

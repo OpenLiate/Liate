@@ -33,9 +33,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://openliate.tech"
+Homepage = "https://liate.dev"
 Repository = "https://github.com/OpenLiate/Liate"
-Documentation = "https://openliate.tech/docs"
+Documentation = "https://liate.dev"
 Issues = "https://github.com/OpenLiate/Liate/issues"
 
 [tool.hatch.build.targets.wheel]

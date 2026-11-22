@@ -1,5 +1,5 @@
 # OpenLiate Windows 1-Click Installer
-# AgentYaan Mission · India's Sovereign AI Agent Layer 🇮🇳
+# AgentYaan Mission · India's Sovereign AI Agent Layer
 
 Write-Host "==========================================" -ForegroundColor DarkGray
 Write-Host "  Installing OpenLiate (BaaA Engine)...   " -ForegroundColor Cyan

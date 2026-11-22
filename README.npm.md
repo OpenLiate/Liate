@@ -8,7 +8,7 @@
 <br>
 
 <p align="center">
-  <a href="https://openliate.tech/docs"><img src="https://img.shields.io/badge/docs-openliate.tech%2Fdocs-white?labelColor=black&style=flat-square" alt="Docs"></a>
+  <a href="https://liate.dev"><img src="https://img.shields.io/badge/docs-liate.dev-white?labelColor=black&style=flat-square" alt="Docs"></a>
   <a href="https://github.com/OpenLiate/Liate/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-white?labelColor=black&style=flat-square" alt="License: MIT"></a>
   <a href="https://sarvam.ai"><img src="./assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
@@ -131,7 +131,7 @@ console.log(result.text);
 Run any agent directly without installation using `npx`:
 
 ```bash
-npx openliate run agent.ts "Fetch https://openliate.tech and summarize"
+npx openliate run agent.ts "Fetch https://liate.dev and summarize"
 ```
 
 ---
@@ -193,7 +193,7 @@ OpenLiate maps 1-to-1 to this 5-element architecture:
 
 <div align="center">
 
-**[Documentation](https://openliate.tech/docs)** · **[Website](https://openliate.tech)** · **[GitHub](https://github.com/OpenLiate/Liate)**
+**[Documentation](https://liate.dev)** · **[Website](https://liate.dev)** · **[GitHub](https://github.com/OpenLiate/Liate)**
 
 Built from India, for India, and beyond India
 
