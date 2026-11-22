@@ -6,6 +6,6 @@ from .om import liate
 from .client import LiateApiClient, AgentRunResult
 
 Liate = liate
-__version__ = "0.1.4"
+__version__ = "0.2.0"
 __all__ = ["liate", "Liate", "LiateApiClient", "AgentRunResult"]
 

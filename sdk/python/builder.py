@@ -25,7 +25,7 @@ def build_package(target: str) -> None:
         sys.exit(1)
 
     print(f"\n{'='*50}")
-    print(f"  Building PyPI package: '{target}' (v0.1.6)")
+    print(f"  Building PyPI package: '{target}' (v0.2.0)")
     print(f"{'='*50}")
 
     # Copy target configuration to active pyproject.toml

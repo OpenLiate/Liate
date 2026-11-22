@@ -1,6 +1,6 @@
 {
   "name": "@openliate/liate",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "LIATE — Open Source OOP Framework for AI Agents · From India, For India, Beyond India",
   "type": "module",
   "main": "./dist/liate.js",

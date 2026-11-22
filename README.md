@@ -12,7 +12,7 @@
   <a href="https://github.com/OpenLiate/Liate/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-white?labelColor=black&style=flat-square" alt="License: MIT"></a>
   <a href="https://sarvam.ai"><img src="./assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
-  <a href="https://github.com/OpenLiate/Liate/releases"><img src="https://img.shields.io/badge/version-v0.1.9-white?labelColor=black&style=flat-square" alt="v0.1.9"></a>
+  <a href="https://github.com/OpenLiate/Liate/releases"><img src="https://img.shields.io/badge/version-v0.2.0-white?labelColor=black&style=flat-square" alt="v0.2.0"></a>
   <img src="https://img.shields.io/badge/Bun-Supported-white?logo=bun&logoColor=white&labelColor=black&style=flat-square" alt="Bun">
   <img src="https://img.shields.io/badge/Node.js-Supported-white?logo=node.js&logoColor=5FA04E&labelColor=black&style=flat-square" alt="Node.js">
 </p>
@@ -108,7 +108,7 @@ liate serve --port 7071
   },
   "A": { 
     "name": "agentyaan", 
-    "version": "0.1.9",                                                               // [A] Agent: Identity, Version & ReAct Reasoning Loop
+    "version": "0.2.0",                                                               // [A] Agent: Identity, Version & ReAct Reasoning Loop
     "intent": "Frontier Sovereign AI Agent · Built on Liate · Selected for Sarvam AI Startup Program 2026 · Exa.ai Startup Program (YC S21)", 
     "maxSteps": 5 
   },
@@ -234,7 +234,7 @@ export class FrontierAgent extends liate {
   // [A] Agent Harness: Identity, ReAct Reasoning Loop & Intent
   A = { 
     name: "agentyaan", 
-    version: "0.1.9", 
+    version: "0.2.0", 
     intent: "Frontier Sovereign AI Agent · Built on Liate · Selected for Sarvam AI Startup Program 2026 · Exa.ai Startup Program (YC S21)", 
     maxSteps: 5 
   };
@@ -307,7 +307,7 @@ class FrontierAgent(liate):
     # [A] Agent Harness: Identity, ReAct Reasoning Loop & Intent
     A = {
         "name": "agentyaan",
-        "version": "0.1.9",
+        "version": "0.2.0",
         "intent": "Frontier Sovereign AI Agent · Built on Liate · Selected for Sarvam AI Startup Program 2026 · Exa.ai Startup Program (YC S21)",
         "maxSteps": 5
     }
