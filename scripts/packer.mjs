@@ -24,7 +24,7 @@ try {
   pkg.name = '@openliate/liate';
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
   console.log('\n========================================');
-  console.log(' Packing @openliate/liate (v0.1.4)...');
+  console.log(` Packing @openliate/liate (v${pkg.version})...`);
   console.log('========================================');
   execSync('npm pack', { cwd: root, stdio: 'inherit' });
 
@@ -32,7 +32,7 @@ try {
   pkg.name = 'openliate';
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
   console.log('\n========================================');
-  console.log(' Packing openliate (v0.1.4)...');
+  console.log(` Packing openliate (v${pkg.version})...`);
   console.log('========================================');
   execSync('npm pack', { cwd: root, stdio: 'inherit' });
 

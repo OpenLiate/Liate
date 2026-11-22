@@ -4,6 +4,17 @@ All notable changes to Liate: Open Source Backend Layer for AI Agents — From I
 
 ---
 
+## Sprint 4: Architecture Validation & Pure MDX Docs (v0.2.0)
+
+### v0.2.0 (NVIDIA Keynote 2026 Architecture Parity, Standalone Docs Package & Runtime Benchmarks)
+- **NVIDIA Keynote 2026 Architecture Parity**: Formal 1-to-1 indexed mapping of Liate's 5 mathematical layers ($L \circ I \circ A \circ T \circ E$) with Jensen Huang's 5 Elements of an Agent (Model, Knowledge, Harness, Tools, Sandbox). Enforced strict `#1`, `#2`, `#3` indexing doctrine across all READMEs and SDKs.
+- **Dev-Native MDX Docs Package**: Refactored `docs/` into a standalone, lightweight MIT-licensed content package (`@openliate/docs`). Stripped all website code, dependencies, and build overhead from the open-source repo for zero-friction community contributions.
+- **Hardware & Runtime Benchmark Verification**: Verified 32.45 µs average agent instantiation overhead, 30,821 agent instantiations/sec throughput, and 2.76 ms for 50-agent parallel swarm initialization on real hardware. Full report in `benchmark/README.md`.
+- **Hello Agent Standardization**: Replaced legacy "Hello World" patterns with the sovereign "Hello Agent" standard across all runtime examples and CLI runners.
+- **Traction & Ecosystem Growth**: Surpassed 2,087+ package installs across npm (`openliate`, `@openliate/liate`) and PyPI (`liate`, `openliate`); inducted into Exa.ai (YC S21) Startup Program and Sarvam AI Startup Program 2026.
+
+---
+
 ## Sprint 4: Sovereign Agent Benchmarks, 7 OOP Paradigms & Sarvam Payload Hardening (v0.1.6)
 
 ### v0.1.6 (High-Speed Runtime Benchmark, 7 OOP Paradigms Suite & Frontier Model Payload Hardening)

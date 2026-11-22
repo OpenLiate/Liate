@@ -22,9 +22,9 @@
   &nbsp;
   <a href="https://www.npmjs.com/package/@openliate/liate"><img src="https://img.shields.io/npm/dw/@openliate/liate?logo=npm&logoColor=CB3837&label=%40openliate%2Fliate&labelColor=black&color=white&style=flat-square" alt="npm @openliate/liate"></a>
   &nbsp;&bull;&nbsp;
-  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/pypi/v/liate?logo=pypi&logoColor=FFD43B&label=liate&labelColor=black&color=white&style=flat-square" alt="PyPI liate"></a>
+  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/badge/liate-v0.2.0-white?logo=pypi&logoColor=FFD43B&label=liate&labelColor=black&color=white&style=flat-square" alt="PyPI liate"></a>
   &nbsp;
-  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/pypi/v/openliate?logo=pypi&logoColor=FFD43B&label=openliate&labelColor=black&color=white&style=flat-square" alt="PyPI openliate"></a>
+  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/badge/openliate-v0.2.0-white?logo=pypi&logoColor=FFD43B&label=openliate&labelColor=black&color=white&style=flat-square" alt="PyPI openliate"></a>
   &nbsp;&bull;&nbsp;
   <a href="#traction"><img src="https://img.shields.io/badge/Total_Downloads-2%2C087%2B-brightgreen?labelColor=black&style=flat-square" alt="Total Downloads"></a>
 </p>
@@ -140,7 +140,7 @@ liate run agent.json "Introduce Mission AgentYaan and explain why sovereign OOP 
 
 ---
 
-## <a id="benchmarks"></a>[1] High-Performance Runtime & Benchmarks (v0.1.6)
+## <a id="benchmarks"></a>[1] High-Performance Runtime & Benchmarks (v0.2.0)
 
 OpenLiate is engineered from the ground up on native **Object-Oriented Programming (OOP)** classes instead of heavy directed acyclic graph (DAG) pipelines and chain polyfills.
 

@@ -18,9 +18,9 @@
 </p>
 
 <p align="center">
-  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/pypi/v/liate?logo=pypi&logoColor=FFD43B&label=liate&labelColor=black&color=white&style=flat-square" alt="PyPI liate"></a>
+  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/badge/liate-v0.2.0-white?logo=pypi&logoColor=FFD43B&label=liate&labelColor=black&color=white&style=flat-square" alt="PyPI liate"></a>
   &nbsp;
-  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/pypi/v/openliate?logo=pypi&logoColor=FFD43B&label=openliate&labelColor=black&color=white&style=flat-square" alt="PyPI openliate"></a>
+  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/badge/openliate-v0.2.0-white?logo=pypi&logoColor=FFD43B&label=openliate&labelColor=black&color=white&style=flat-square" alt="PyPI openliate"></a>
 </p>
 
 <p align="center">
