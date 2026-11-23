@@ -12,7 +12,7 @@
   <a href="https://github.com/OpenLiate/Liate/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-white?labelColor=black&style=flat-square" alt="License: MIT"></a>
   <a href="https://sarvam.ai"><img src="./assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
-  <a href="https://github.com/OpenLiate/Liate/releases"><img src="https://img.shields.io/badge/version-v0.2.0-white?labelColor=black&style=flat-square" alt="v0.2.0"></a>
+  <a href="https://github.com/OpenLiate/Liate/releases"><img src="https://img.shields.io/badge/version-v0.2.1-white?labelColor=black&style=flat-square" alt="v0.2.1"></a>
   <img src="https://img.shields.io/badge/Bun-Supported-white?logo=bun&logoColor=white&labelColor=black&style=flat-square" alt="Bun">
   <img src="https://img.shields.io/badge/Node.js-Supported-white?logo=node.js&logoColor=5FA04E&labelColor=black&style=flat-square" alt="Node.js">
 </p>
@@ -180,11 +180,11 @@ Verified multi-registry telemetry across npm and official PyPI statistics (`pypi
 
 | Registry | Package Distribution | Total Downloads | Verified Clean Installs (`without_mirrors`) | Telemetry Source |
 | :--- | :--- | :--- | :--- | :--- |
-| **npm** | [`openliate`](https://www.npmjs.com/package/openliate) | **949+** | Direct Developer CLI & Agent Runners | [npmjs.com/package/openliate](https://www.npmjs.com/package/openliate) |
-| **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **848+** | TypeScript SDK Imports | [npmjs.com/package/@openliate/liate](https://www.npmjs.com/package/@openliate/liate) |
-| **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **848+** | **848+** (Clean Human Installs) | [pypistats.org/packages/openliate](https://pypistats.org/packages/openliate) |
-| **PyPI** | [`liate`](https://pypi.org/project/liate/) | **619+** | **619+** (Clean Human Installs) | [pypistats.org/packages/liate](https://pypistats.org/packages/liate) |
-| **Global** | **Combined Ecosystem** | **3,264+ Total Installs** | **1,460+ Direct Human Installs** | **100% Cryptographic OIDC Provenance** |
+| **npm** | [`openliate`](https://www.npmjs.com/package/openliate) | **1,148+** | Direct Developer CLI & Agent Runners | [npmjs.com/package/openliate](https://www.npmjs.com/package/openliate) |
+| **npm** | [`@openliate/liate`](https://www.npmjs.com/package/@openliate/liate) | **1,047+** | TypeScript SDK Imports | [npmjs.com/package/@openliate/liate](https://www.npmjs.com/package/@openliate/liate) |
+| **PyPI** | [`openliate`](https://pypi.org/project/openliate/) | **3,401+** | **945+** (Clean Human Installs) | [pypistats.org/packages/openliate](https://pypistats.org/packages/openliate) |
+| **PyPI** | [`liate`](https://pypi.org/project/liate/) | **2,500+** | **729+** (Clean Human Installs) | [pypistats.org/packages/liate](https://pypistats.org/packages/liate) |
+| **Global** | **Combined Ecosystem** | **8,096+ Total Installs** | **3,869+ Direct Human Installs** | **100% Cryptographic OIDC Provenance** |
 
 <br>
 
