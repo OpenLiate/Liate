@@ -53,6 +53,11 @@ export interface AgentExecutionOptions {
   tools?: AgentTool[];
   skills?: string[];
   apiKey?: string;
+  stream?: boolean;
+  onToken?: (chunk: string) => void;
+  onReasoningToken?: (chunk: string) => void;
+  onStep?: (step: AgentStep) => void;
+  sandboxTimeoutMs?: number;
 }
 
 export interface AgentConfig {

@@ -9,6 +9,7 @@ import type {
 } from "@/layers/agent/types";
 import type { MemoryProvider } from "@/layers/integration/types";
 import type { LlmMessage, LlmChatResponse } from "@/layers/llm/model";
+import { EnvironmentResolver } from "@/layers/environment/sandbox";
 
 export interface LLMFunctionCaller {
   chat(messages: LlmMessage[], options?: any): Promise<LlmChatResponse & { toolCalls?: ToolCall[] }>;
@@ -98,7 +99,10 @@ Follow the ReAct methodology: Reason carefully, invoke tools when needed, observ
         maxTokens: options.maxTokens,
         temperature: options.temperature ?? 0.2,
         tools: formattedTools,
-        apiKey: options.apiKey
+        apiKey: options.apiKey,
+        stream: options.stream ?? Boolean(options.onToken || options.onReasoningToken),
+        onToken: options.onToken,
+        onReasoningToken: options.onReasoningToken
       });
 
       usedModel = response.model || usedModel;
@@ -132,7 +136,13 @@ Follow the ReAct methodology: Reason carefully, invoke tools when needed, observ
             resultStr = `Error: Tool '${tc.name}' not found. Available: ${Array.from(toolMap.keys()).join(", ")}`;
           } else {
             try {
-              const res = await tool.execute(tc.arguments, context);
+              const res = options.sandboxTimeoutMs && options.sandboxTimeoutMs > 0
+                ? await EnvironmentResolver.runWithTimeout(
+                    () => tool.execute(tc.arguments, context),
+                    options.sandboxTimeoutMs,
+                    `Tool '${tc.name}'`
+                  )
+                : await tool.execute(tc.arguments, context);
               resultStr = typeof res === "string" ? res : JSON.stringify(res);
             } catch (err: any) {
               resultStr = `Error executing tool '${tc.name}': ${err.message}`;
@@ -155,13 +165,15 @@ Follow the ReAct methodology: Reason carefully, invoke tools when needed, observ
           });
         }
 
-        steps.push({
+        const stepObj: AgentStep = {
           step: currentStep,
           thought,
           toolCalls: requestedToolCalls,
           toolResults: stepResults,
           timestamp: stepStartTime
-        });
+        };
+        steps.push(stepObj);
+        options.onStep?.(stepObj);
 
         currentStep++;
       } else {
@@ -169,12 +181,14 @@ Follow the ReAct methodology: Reason carefully, invoke tools when needed, observ
         finalOutput = response.text;
         finishReason = "stop";
 
-        steps.push({
+        const stepObj: AgentStep = {
           step: currentStep,
           thought,
           output: finalOutput,
           timestamp: stepStartTime
-        });
+        };
+        steps.push(stepObj);
+        options.onStep?.(stepObj);
 
         // Append final assistant reply to Layer [I] session memory
         await memory.append({

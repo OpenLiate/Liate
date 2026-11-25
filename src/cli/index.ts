@@ -100,13 +100,25 @@ async function main(): Promise<void> {
 
     const start = Date.now();
     try {
-      const result = await agent.run(prompt);
+      let streamedChars = 0;
+      const result = await agent.run(prompt, {
+        stream: true,
+        onToken: (chunk: string) => {
+          if (streamedChars === 0) process.stdout.write("\n");
+          streamedChars += chunk.length;
+          process.stdout.write(chunk);
+        }
+      });
 
       if (result.thought) {
-        console.log(`\n[Reasoning]:\n${result.thought}`);
+        console.log(`\n\n[Reasoning]:\n${result.thought}`);
       }
 
-      console.log(`\n${result.text}\n`);
+      if (streamedChars === 0) {
+        console.log(`\n${result.text}\n`);
+      } else {
+        console.log("\n");
+      }
 
       if (result.audioBase64) {
         const audioDir = resolve(cwd, "temp", "audio");
@@ -157,8 +169,20 @@ async function main(): Promise<void> {
 
         const start = Date.now();
         try {
-          const result = await agent.run(trimmed);
-          console.log(`\n${result.text}\n`);
+          let streamedChars = 0;
+          const result = await agent.run(trimmed, {
+            stream: true,
+            onToken: (chunk: string) => {
+              if (streamedChars === 0) process.stdout.write("\n");
+              streamedChars += chunk.length;
+              process.stdout.write(chunk);
+            }
+          });
+          if (streamedChars === 0) {
+            console.log(`\n${result.text}\n`);
+          } else {
+            console.log("\n");
+          }
           console.log(`[${Date.now() - start}ms | Steps: ${result.totalSteps}]\n`);
         } catch (err: any) {
           console.error(`\n[Error]: ${err.message}\n`);

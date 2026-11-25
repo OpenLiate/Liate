@@ -28,6 +28,9 @@ export interface LlmChatOptions {
   tools?: any[];
   toolChoice?: string | object;
   systemPrompt?: string;
+  stream?: boolean;
+  onToken?: (chunk: string) => void;
+  onReasoningToken?: (chunk: string) => void;
 }
 
 export type SarvamChatOptions = LlmChatOptions;

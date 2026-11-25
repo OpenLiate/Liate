@@ -3,7 +3,7 @@ OpenLiate Python Client
 Connects to OpenLiate Orchestration Module (OM) via standard Agent Protocol Interface / Liate API /run protocol.
 """
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterator, List, Optional
 import json
 import urllib.request
 import urllib.error
@@ -104,20 +104,15 @@ class LiateApiClient:
     def __init__(self, endpoint: str = "http://localhost:7071"):
         self.endpoint = endpoint.rstrip("/")
 
-    def run(self, module: Dict[str, Any], prompt: str, session_id: Optional[str] = None) -> AgentRunResult:
-        """
-        Synchronous run via standard urllib.
-        """
-        url = f"{self.endpoint}/run"
-        payload = {
+    def _build_payload(self, module: Dict[str, Any], prompt: str, session_id: Optional[str] = None) -> Dict[str, Any]:
+        payload: Dict[str, Any] = {
             "module": module,
             "prompt": prompt
         }
         if session_id:
             payload["sessionId"] = session_id
 
-        # Dynamically resolve BYOAI keys from environment
-        keys = {}
+        keys: Dict[str, Any] = {}
         for k, v in module.get("E", {}).items():
             if isinstance(v, str) and v.startswith("$"):
                 var_name = v[1:]
@@ -125,7 +120,14 @@ class LiateApiClient:
             else:
                 keys[k] = v
         payload["keys"] = keys
+        return payload
 
+    def run(self, module: Dict[str, Any], prompt: str, session_id: Optional[str] = None) -> AgentRunResult:
+        """
+        Synchronous run via standard urllib.
+        """
+        url = f"{self.endpoint}/run"
+        payload = self._build_payload(module, prompt, session_id)
         data = json.dumps(payload).encode("utf-8")
         req = urllib.request.Request(
             url,
@@ -175,6 +177,37 @@ class LiateApiClient:
             agent=body.get("agent", module.get("A", {}).get("name", "agent")),
             raw=body
         )
+
+    def stream(self, module: Dict[str, Any], prompt: str, session_id: Optional[str] = None) -> Iterator[Dict[str, Any]]:
+        """
+        Streams live SSE events (start, token, step, message, done) from /stream.
+        """
+        url = f"{self.endpoint}/stream"
+        data = json.dumps(self._build_payload(module, prompt, session_id)).encode("utf-8")
+        req = urllib.request.Request(
+            url,
+            data=data,
+            headers={
+                "Content-Type": "application/json",
+                "Accept": "text/event-stream"
+            }
+        )
+        current_event = "message"
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            for raw_line in resp:
+                line = raw_line.decode("utf-8", errors="ignore").rstrip("\r\n")
+                if not line:
+                    current_event = "message"
+                    continue
+                if line.startswith("event:"):
+                    current_event = line[6:].strip()
+                elif line.startswith("data:"):
+                    data_str = line[5:].strip()
+                    try:
+                        parsed = json.loads(data_str)
+                    except Exception:
+                        parsed = {"raw": data_str}
+                    yield {"event": current_event, "data": parsed}
 
     async def arun(self, module: Dict[str, Any], prompt: str, session_id: Optional[str] = None) -> AgentRunResult:
         """

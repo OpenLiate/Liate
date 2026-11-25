@@ -3,7 +3,7 @@ Core Engine: OM (Orchestration Module)
 Matches AUM (Agent Unified Module) specification across 5 sovereign layers:
 L[LM] · I[ntegration] · A[gent] · T[ools] · E[nvironment]
 """
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, Iterator, List, Optional, Union
 import os
 from .client import LiateApiClient, AgentRunResult
 
@@ -94,6 +94,13 @@ class liate:
         """
         module = self.to_module()
         return self._client.run(module=module, prompt=prompt, session_id=session_id)
+
+    def stream(self, prompt: str, session_id: Optional[str] = None) -> Iterator[Dict[str, Any]]:
+        """
+        Streams live SSE token and step events via OpenLiate /stream API.
+        """
+        module = self.to_module()
+        return self._client.stream(module=module, prompt=prompt, session_id=session_id)
 
     async def arun(self, prompt: str, session_id: Optional[str] = None) -> AgentRunResult:
         """

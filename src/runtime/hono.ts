@@ -30,9 +30,17 @@ const defaultSpecPath = resolve(process.cwd(), "agent.json");
 /**
  * Resolves or lazily loads the target agent
  */
-async function getOrLoadAgent(customSpec?: any, customPath?: string): Promise<liate> {
+async function getOrLoadAgent(
+  customSpec?: any,
+  customPath?: string,
+  resolvedKeys?: Record<string, string>
+): Promise<liate> {
   if (customSpec) {
-    return liate.from(customSpec);
+    const specCopy = typeof customSpec === "object" ? { ...customSpec } : customSpec;
+    if (resolvedKeys && typeof resolvedKeys === "object" && typeof specCopy === "object") {
+      specCopy.E = { ...(specCopy.E || {}), ...resolvedKeys };
+    }
+    return liate.from(specCopy);
   }
 
   const targetPath = customPath ? resolve(process.cwd(), customPath) : defaultSpecPath;
@@ -49,11 +57,17 @@ async function getOrLoadAgent(customSpec?: any, customPath?: string): Promise<li
     return loaded;
   }
 
-  // Ephemeral fallback agent if no agent.json is present
+  // Ephemeral agent using explicit LIATE_MODEL env var (never hardcoded)
+  const envModel = process.env.LIATE_MODEL?.trim();
+  if (!envModel) {
+    throw new Error(
+      "No agent.json found and LIATE_MODEL is not set. Pass 'spec'/'module' or 'path' in request body, or set LIATE_MODEL."
+    );
+  }
   return liate.from({
-    L: "sarvam/sarvam-105b-conversations",
-    A: { name: "liate-edge-agent", intent: "Sovereign Indic Edge Agent Runtime" },
-    E: { SARVAM_API_KEY: "$SARVAM_API_KEY" }
+    L: envModel,
+    A: { name: "liate-edge-agent", intent: "Sovereign Edge Agent Runtime" },
+    E: {}
   });
 }
 
@@ -155,7 +169,8 @@ app.post("/run", async (c) => {
   const start = Date.now();
   try {
     const body = await c.req.json();
-    const input = body.input;
+    const input = body.input || body.prompt;
+    const spec = body.spec || body.module;
 
     if (!input || typeof input !== "string") {
       return c.json({
@@ -164,7 +179,7 @@ app.post("/run", async (c) => {
       }, 400);
     }
 
-    const agent = await getOrLoadAgent(body.spec, body.path);
+    const agent = await getOrLoadAgent(spec, body.path, body.keys);
     const result = await agent.run(input, body.options);
 
     return c.json({
@@ -211,7 +226,7 @@ app.post("/chat", async (c) => {
       activeSessions.set(sessionId, memory);
     }
 
-    const agent = await getOrLoadAgent(body.spec, body.path);
+    const agent = await getOrLoadAgent(body.spec || body.module, body.path, body.keys);
     const runner = await agent.getRunner();
 
     // Attach session memory for multi-turn history
@@ -249,7 +264,7 @@ app.post("/stream", async (c) => {
     return c.json({ success: false, error: "Invalid JSON body" }, 400);
   }
 
-  const input = body.input || body.message;
+  const input = body.input || body.message || body.prompt;
   if (!input || typeof input !== "string") {
     return c.json({ success: false, error: "Missing 'input' parameter" }, 400);
   }
@@ -265,12 +280,36 @@ app.post("/stream", async (c) => {
         })
       });
 
-      const agent = await getOrLoadAgent(body.spec, body.path);
-      const result = await agent.run(input, body.options);
+      const agent = await getOrLoadAgent(body.spec || body.module, body.path, body.keys);
+      const streamedSteps = new Set<number>();
 
-      // Stream out intermediate ReAct reasoning steps
+      const result = await agent.run(input, {
+        ...(body.options || {}),
+        stream: true,
+        onToken: async (chunk: string) => {
+          await stream.writeSSE({
+            event: "token",
+            data: JSON.stringify({ text: chunk })
+          });
+        },
+        onStep: async (step) => {
+          streamedSteps.add(step.step);
+          await stream.writeSSE({
+            event: "step",
+            data: JSON.stringify({
+              step: step.step,
+              thought: step.thought,
+              toolCalls: step.toolCalls?.map(t => t.name),
+              toolResults: step.toolResults?.map(r => ({ tool: r.toolName, result: r.result }))
+            })
+          });
+        }
+      });
+
+      // Emit any steps not already streamed
       if (result.steps && result.steps.length > 0) {
         for (const step of result.steps) {
+          if (streamedSteps.has(step.step)) continue;
           await stream.writeSSE({
             event: "step",
             data: JSON.stringify({
