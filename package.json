@@ -22,7 +22,7 @@
     "hub"
   ],
   "scripts": {
-    "test": "echo \"Ready for tests\"",
+    "test": "bun test",
     "build": "bun run build:bin && bun run build:cli && bun run build:runtime && bun run build:hono && bun run build:sdk",
     "build:bin": "bun build ./src/cli/index.ts --target node --format esm --outfile dist/bin.js",
     "build:cli": "bun build ./src/cli/index.ts --compile --outfile dist/cli/liate",
@@ -43,7 +43,6 @@
     "@modelcontextprotocol/core": "2.4.0",
     "@modelcontextprotocol/server": "2.4.0",
     "hono": "^4.7.0",
-    "jszip": "3.10.2",
     "zod": "4.6.7"
   },
   "devDependencies": {
