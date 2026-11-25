@@ -15,7 +15,9 @@ export const AUMSchema = z.object({
   I: z.object({
     memory: z.string().optional(),
     knowledge: z.union([z.string(), z.array(z.string()), z.record(z.string(), z.any())]).optional(),
-    state: z.record(z.string(), z.any()).optional()
+    state: z.record(z.string(), z.any()).optional(),
+    agentId: z.string().optional(),
+    email: z.string().optional()
   }).passthrough().optional().default({}),
   A: z.object({
     name: z.string().min(1, "Agent name is required"),

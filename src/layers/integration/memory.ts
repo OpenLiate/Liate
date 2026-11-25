@@ -1,18 +1,21 @@
 import fs from "fs/promises";
 import path from "path";
-import type { AgentMessage, MemoryProvider, SessionData } from "@/layers/integration/types";
+import type { AgentMessage, MemoryProvider, RemoteSessionAdapter, SessionData } from "@/layers/integration/types";
 
 /**
  * Unified Session Manager for Layer [I]
- * Operates in-memory by default, or auto-persists to .liate/sessions/<name>.json if a path is specified.
+ * Operates in-memory by default, or auto-persists to .liate/sessions/<name>.json if a path is specified,
+ * or delegates to a pluggable RemoteSessionAdapter (e.g., Neon Postgres).
  */
 export class Session implements MemoryProvider {
   public readonly sessionId: string;
   public readonly filePath?: string;
+  private adapter?: RemoteSessionAdapter;
   private data: SessionData;
   private loaded: boolean = false;
 
-  constructor(target?: string, metadata?: Record<string, any>) {
+  constructor(target?: string, metadata?: Record<string, any>, adapter?: RemoteSessionAdapter) {
+    this.adapter = adapter;
     const isMemory = !target || target === ":memory:" || target === "memory" || target === "in-memory";
 
     if (isMemory) {
@@ -51,6 +54,15 @@ export class Session implements MemoryProvider {
   }
 
   public async load(): Promise<SessionData> {
+    if (this.adapter) {
+      const remote = await this.adapter.load(this.sessionId);
+      if (remote) {
+        this.data = remote;
+      }
+      this.loaded = true;
+      return this.data;
+    }
+
     if (!this.filePath) {
       return this.data;
     }
@@ -79,6 +91,10 @@ export class Session implements MemoryProvider {
 
   public async save(): Promise<void> {
     this.data.updatedAt = new Date().toISOString();
+    if (this.adapter) {
+      await this.adapter.save(this.data);
+      return;
+    }
     if (!this.filePath) {
       return;
     }
@@ -97,7 +113,7 @@ export class Session implements MemoryProvider {
   }
 
   public async append(message: AgentMessage | AgentMessage[]): Promise<void> {
-    if (!this.loaded && this.filePath) {
+    if (!this.loaded && (this.filePath || this.adapter)) {
       await this.load();
     }
     const list = Array.isArray(message) ? message : [message];

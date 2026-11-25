@@ -19,6 +19,11 @@ export interface SessionData {
   state: Record<string, any>;
 }
 
+export interface RemoteSessionAdapter {
+  load(sessionId: string): Promise<SessionData | null>;
+  save(data: SessionData): Promise<void>;
+}
+
 export interface MemoryProvider {
   readonly sessionId: string;
   load(): Promise<SessionData>;
@@ -55,6 +60,8 @@ export interface IntegrationConfig {
   memory?: string;
   knowledge?: string | string[] | Record<string, any>;
   state?: Record<string, any>;
+  agentId?: string;
+  email?: string;
   [key: string]: any;
 }
 

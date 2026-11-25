@@ -139,6 +139,38 @@ export class MCP {
   }
 
   /**
+   * Executes an HTTP MCP request with timeout and bounded retry on transient/5xx failures.
+   */
+  private static async fetchWithRetry(
+    url: string,
+    init: RequestInit,
+    timeoutMs: number = 15000,
+    retries: number = 2
+  ): Promise<Response> {
+    let lastError: unknown;
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        const res = await fetch(url, {
+          ...init,
+          signal: AbortSignal.timeout(timeoutMs)
+        });
+        if (res.status >= 500 && attempt < retries) {
+          await new Promise((r) => setTimeout(r, 250 * (attempt + 1)));
+          continue;
+        }
+        return res;
+      } catch (err) {
+        lastError = err;
+        if (attempt < retries) {
+          await new Promise((r) => setTimeout(r, 250 * (attempt + 1)));
+          continue;
+        }
+      }
+    }
+    throw lastError instanceof Error ? lastError : new Error(String(lastError));
+  }
+
+  /**
    * Discovers tools from a remote MCP HTTP/SSE endpoint using zero-dependency native fetch.
    * Sends JSON-RPC 2.0 tools/list and registers tools/call executors.
    */
@@ -171,7 +203,7 @@ export class MCP {
     }
 
     try {
-      const res = await fetch(url, {
+      const res = await this.fetchWithRetry(url, {
         method: "POST",
         headers,
         body: JSON.stringify({
@@ -202,7 +234,7 @@ export class MCP {
           parameters: t.inputSchema || { type: "object", properties: {} },
           execute: async (args: Record<string, any>) => {
             try {
-              const callRes = await fetch(url, {
+              const callRes = await this.fetchWithRetry(url, {
                 method: "POST",
                 headers,
                 body: JSON.stringify({

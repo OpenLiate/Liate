@@ -35,6 +35,8 @@ export interface LayerI {
   knowledge?: string | string[] | Record<string, unknown>;
   memory?: string;
   state?: Record<string, unknown>;
+  agentId?: string;
+  email?: string;
   [key: string]: unknown;
 }
 
