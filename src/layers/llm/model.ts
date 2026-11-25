@@ -252,6 +252,16 @@ export class HubResolver {
       ? process.env.GNANI_BASE_URL.trim().replace(/^["']|["']$/g, "").replace(/\/+$/, "")
       : "https://api.vachana.ai";
 
+    const rawOllama = (typeof process !== "undefined" && (process.env?.OLLAMA_BASE_URL || process.env?.OLLAMA_HOST))
+      ? (process.env.OLLAMA_BASE_URL || process.env.OLLAMA_HOST || "").trim().replace(/^["']|["']$/g, "").replace(/\/+$/, "")
+      : "http://localhost:11434/v1";
+    const ollamaBaseUrl = rawOllama.endsWith("/v1") ? rawOllama : `${rawOllama}/v1`;
+
+    const rawOpenRouter = (typeof process !== "undefined" && process.env?.OPENROUTER_BASE_URL)
+      ? process.env.OPENROUTER_BASE_URL.trim().replace(/^["']|["']$/g, "").replace(/\/+$/, "")
+      : "https://openrouter.ai/api/v1";
+    const openRouterBaseUrl = rawOpenRouter.endsWith("/v1") ? rawOpenRouter : `${rawOpenRouter}/v1`;
+
     return {
       sarvam: {
         name: "sarvam",
@@ -309,6 +319,42 @@ export class HubResolver {
           streaming: true,
           reasoning: false
         }
+      },
+      ollama: {
+        name: "ollama",
+        provider: "ollama",
+        version: "v1",
+        base_url: ollamaBaseUrl,
+        endpoint: `${ollamaBaseUrl}/chat/completions`,
+        models_endpoint: `${ollamaBaseUrl}/models`,
+        headers: {
+          "Content-Type": "application/json"
+        },
+        features: {
+          tool_calling: true,
+          streaming: true,
+          reasoning: true
+        }
+      },
+      openrouter: {
+        name: "openrouter",
+        provider: "openrouter",
+        version: "v1",
+        base_url: openRouterBaseUrl,
+        endpoint: `${openRouterBaseUrl}/chat/completions`,
+        models_endpoint: `${openRouterBaseUrl}/models`,
+        headers: {
+          "Authorization": "Bearer $OPENROUTER_API_KEY",
+          "HTTP-Referer": "https://liate.dev",
+          "X-Title": "Liate",
+          "X-OpenRouter-Title": "Liate",
+          "Content-Type": "application/json"
+        },
+        features: {
+          tool_calling: true,
+          streaming: true,
+          reasoning: true
+        }
       }
     };
   }
@@ -350,7 +396,7 @@ export class LiateLlmClient {
   constructor(private apiKey?: string, private options?: { endpoint?: string; baseUrl?: string; provider?: string }) {}
 
   public async chat(messages: LlmMessage[], options?: LlmChatOptions): Promise<LlmChatResponse> {
-    const normalized = normalizeModelConfig(options?.model || "sarvam/sarvam-105b");
+    const normalized = normalizeModelConfig(options?.model);
     const provider = (options?.provider || this.options?.provider || normalized.provider).toLowerCase();
     const model = normalized.model;
 
@@ -367,6 +413,10 @@ export class LiateLlmClient {
         key = process.env.GNANI_API_KEY;
       } else if (provider === "sarvam") {
         key = process.env.SARVAM_API_KEY;
+      } else if (provider === "openrouter") {
+        key = process.env.OPENROUTER_API_KEY;
+      } else if (provider === "ollama") {
+        key = process.env.OLLAMA_API_KEY;
       } else {
         key = process.env[`${provider.toUpperCase()}_API_KEY`] || process.env.OPENAI_API_KEY || process.env.SARVAM_API_KEY;
       }
@@ -406,6 +456,8 @@ export class LiateLlmClient {
 
     const lastUserText = [...payloadMessages].reverse().find((m) => m.role === "user")?.content || "";
 
+    const wantStream = Boolean(options?.stream || options?.onToken || options?.onReasoningToken);
+
     const payload: Record<string, any> = {
       text: lastUserText,
       messages: payloadMessages.map((m) => {
@@ -420,8 +472,15 @@ export class LiateLlmClient {
       }),
       max_tokens: options?.maxTokens ?? 4096,
       ...(options as any),
-      model: extractModelName(model)
+      model
     };
+
+    delete payload.onToken;
+    delete payload.onReasoningToken;
+    delete payload.onStep;
+    if (wantStream) {
+      payload.stream = true;
+    }
 
     if (options?.temperature !== undefined) {
       payload.temperature = options.temperature;
@@ -456,7 +515,13 @@ export class LiateLlmClient {
       }
     }
 
-    if (provider === "sarvam") {
+    if (provider === "openrouter") {
+      headers["HTTP-Referer"] = (typeof process !== "undefined" && process.env?.OPENROUTER_REFERER) || "https://liate.dev";
+      headers["X-Title"] = (typeof process !== "undefined" && process.env?.OPENROUTER_TITLE) || "Liate";
+      headers["X-OpenRouter-Title"] = headers["X-Title"];
+    }
+
+    if (provider === "sarvam" || provider === "openrouter" || provider === "ollama") {
       delete payload.text;
       delete payload.name;
       delete payload.intent;
@@ -502,6 +567,10 @@ export class LiateLlmClient {
       };
     }
 
+    if (wantStream && response.body && (contentType.includes("text/event-stream") || !contentType.includes("application/json"))) {
+      return this.parseSseStream(response, model, options?.onToken, options?.onReasoningToken);
+    }
+
     const data: any = await response.json();
     const choice = data.choices?.[0];
 
@@ -542,6 +611,13 @@ export class LiateLlmClient {
       extractedText = extractedReasoning;
     }
 
+    if (options?.onReasoningToken && extractedReasoning) {
+      options.onReasoningToken(extractedReasoning);
+    }
+    if (options?.onToken && extractedText) {
+      options.onToken(extractedText);
+    }
+
     return {
       text: extractedText,
       reasoningContent: extractedReasoning,
@@ -566,6 +642,105 @@ export class LiateLlmClient {
         completionTokens: data.usage.completion_tokens || data.usage.completionTokens || 0,
         totalTokens: data.usage.total_tokens || data.usage.totalTokens || 0
       } : undefined
+    };
+  }
+
+  /**
+   * Parses an OpenAI-compatible Server-Sent Events (SSE) chat completion stream,
+   * invoking token callbacks live while accumulating text, reasoning, and tool calls.
+   */
+  private async parseSseStream(
+    response: Response,
+    fallbackModel: string,
+    onToken?: (chunk: string) => void,
+    onReasoningToken?: (chunk: string) => void
+  ): Promise<LlmChatResponse> {
+    const reader = response.body!.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let text = "";
+    let reasoning = "";
+    let resolvedModel = fallbackModel;
+    let usage: LlmChatResponse["usage"] = undefined;
+    const toolCallAcc = new Map<number, { id: string; name: string; argsRaw: string }>();
+
+    const processLine = (line: string) => {
+      const trimmed = line.trim();
+      if (!trimmed || !trimmed.startsWith("data:")) return;
+      const dataStr = trimmed.slice(5).trim();
+      if (dataStr === "[DONE]") return;
+
+      try {
+        const parsed = JSON.parse(dataStr);
+        if (parsed.model) resolvedModel = parsed.model;
+        if (parsed.usage) {
+          usage = {
+            promptTokens: parsed.usage.prompt_tokens || parsed.usage.promptTokens || 0,
+            completionTokens: parsed.usage.completion_tokens || parsed.usage.completionTokens || 0,
+            totalTokens: parsed.usage.total_tokens || parsed.usage.totalTokens || 0
+          };
+        }
+        const delta = parsed.choices?.[0]?.delta;
+        if (!delta) return;
+
+        const rChunk = delta.reasoning_content || delta.reasoning;
+        if (typeof rChunk === "string" && rChunk.length > 0) {
+          reasoning += rChunk;
+          onReasoningToken?.(rChunk);
+        }
+
+        if (typeof delta.content === "string" && delta.content.length > 0) {
+          text += delta.content;
+          onToken?.(delta.content);
+        }
+
+        if (Array.isArray(delta.tool_calls)) {
+          for (const tc of delta.tool_calls) {
+            const idx = typeof tc.index === "number" ? tc.index : 0;
+            const prev = toolCallAcc.get(idx) || {
+              id: tc.id || `call_${Date.now()}_${idx}`,
+              name: "",
+              argsRaw: ""
+            };
+            if (tc.id) prev.id = tc.id;
+            if (tc.function?.name) prev.name += tc.function.name;
+            if (tc.function?.arguments) prev.argsRaw += tc.function.arguments;
+            toolCallAcc.set(idx, prev);
+          }
+        }
+      } catch {}
+    };
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split(/\r?\n/);
+      buffer = lines.pop() ?? "";
+      for (const line of lines) {
+        processLine(line);
+      }
+    }
+    if (buffer) processLine(buffer);
+
+    const toolCalls = toolCallAcc.size > 0
+      ? Array.from(toolCallAcc.values()).map((tc) => {
+          let args: Record<string, any> = {};
+          try {
+            args = tc.argsRaw ? JSON.parse(tc.argsRaw) : {};
+          } catch {
+            args = { raw: tc.argsRaw };
+          }
+          return { id: tc.id, name: tc.name, arguments: args };
+        })
+      : undefined;
+
+    return {
+      text: text || reasoning,
+      reasoningContent: reasoning || undefined,
+      toolCalls,
+      model: resolvedModel,
+      usage
     };
   }
 
@@ -797,6 +972,8 @@ export class LiateLlmClient {
       if (provider === "neon") key = process.env.NEON_AI_GATEWAY_TOKEN || process.env.NEON_API_KEY;
       else if (provider === "gnani") key = process.env.GNANI_API_KEY;
       else if (provider === "sarvam") key = process.env.SARVAM_API_KEY;
+      else if (provider === "openrouter") key = process.env.OPENROUTER_API_KEY;
+      else if (provider === "ollama") key = process.env.OLLAMA_API_KEY;
       else key = process.env[`${provider.toUpperCase()}_API_KEY`] || process.env.OPENAI_API_KEY;
     }
     if (key) {
@@ -831,7 +1008,7 @@ export class LiateLlmClient {
       return rawList.map((item: any) => {
         const id = typeof item === "string" ? item : (item.id || item.name || "");
         return {
-          id: id.includes("/") ? id : `${provider}/${id}`,
+          id: id.startsWith(`${provider}/`) ? id : `${provider}/${id}`,
           object: item.object || "model",
           created: item.created || Math.floor(Date.now() / 1000),
           owned_by: item.owned_by || provider,
@@ -904,7 +1081,7 @@ export class LLMRouter {
     }
 
     // Parallel fetch from all builtin providers
-    const providers = ["sarvam", "neon", "gnani"];
+    const providers = ["sarvam", "neon", "gnani", "openrouter", "ollama"];
     const results = await Promise.allSettled(
       providers.map((p) => LiateLlmClient.fetchModels(p))
     );

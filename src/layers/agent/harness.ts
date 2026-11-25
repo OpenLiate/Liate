@@ -32,9 +32,12 @@ export class Agent {
   private extraOptions: Record<string, any>;
 
   constructor(options: AgentOptions = { name: "agent" }) {
+    if (!options.model) {
+      throw new Error("[Liate Error]: Missing required Layer [L] model in Agent constructor. OpenLiate never hardcodes silent model defaults.");
+    }
     this.name = options.name || "agent";
     this.intent = options.intent || "Autonomous AI Agent";
-    this.model = options.model || "sarvam/sarvam-105b-conversations";
+    this.model = options.model;
     this.maxSteps = options.maxSteps ?? 10;
     this.skills = options.skills || [];
     this.apiKey = options.apiKey;

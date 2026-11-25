@@ -42,7 +42,7 @@ export function listLocalHubAgents(): HubAgentSummary[] {
           list.push({
             id: entry.name,
             name: raw.A?.name || entry.name,
-            model: typeof raw.L === "string" ? raw.L : (raw.L?.model || "sarvam/sarvam-105b"),
+            model: typeof raw.L === "string" ? raw.L : (raw.L?.model || "(unspecified)"),
             intent: raw.A?.intent || "Autonomous Sovereign Agent",
             path: agentJsonPath
           });
@@ -142,12 +142,19 @@ export async function resolveAgent(customTarget?: string): Promise<ResolvedAgent
     }
   }
 
-  // 3. Fallback: Ephemeral sovereign agent
-  const fallbackAgent = liate.from({
-    L: "sarvam/sarvam-105b-conversations",
+  // 3. Ephemeral agent using explicit LIATE_MODEL env var (never hardcoded)
+  const envModel = process.env.LIATE_MODEL?.trim();
+  if (!envModel) {
+    throw new Error(
+      "[Liate Error]: No agent.ts / agent.json found and LIATE_MODEL is not set. Pass an agent file, a hub agent name (e.g. 'ollama-agent', 'openrouter-agent', 'sarvam-agent'), or set LIATE_MODEL."
+    );
+  }
+
+  const ephemeralAgent = liate.from({
+    L: envModel,
     A: { name: "liate-agent", intent: "Autonomous Sovereign Agent" },
-    E: { SARVAM_API_KEY: "$SARVAM_API_KEY" }
+    E: {}
   });
 
-  return { agent: fallbackAgent, sourceType: "ephemeral" };
+  return { agent: ephemeralAgent, sourceType: "ephemeral" };
 }

@@ -1,0 +1,16 @@
+{
+  "L": "ollama/gemma4:e2b",
+  "I": {
+    "memory": ":memory:"
+  },
+  "A": {
+    "name": "ollama-agent",
+    "version": "0.2.1",
+    "intent": "Local Sovereign AI Agent running Gemma 4 E2B via Ollama with zero cloud dependencies.",
+    "maxSteps": 5
+  },
+  "T": [],
+  "E": {
+    "OLLAMA_BASE_URL": "http://localhost:11434/v1"
+  }
+}

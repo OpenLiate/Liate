@@ -56,7 +56,10 @@ export class liate {
       const agentIntent = typeof module.A === "object" ? module.A.intent : undefined;
       const maxSteps = typeof module.A === "object" ? module.A.maxSteps : 10;
       const skills = typeof module.A === "object" && Array.isArray(module.A.skills) ? module.A.skills : undefined;
-      const model = typeof module.L === "string" ? module.L : (module.L?.model || "sarvam/sarvam-105b-conversations");
+      const model = typeof module.L === "string" ? module.L : module.L?.model;
+      if (!model) {
+        throw new Error("[Liate Error]: Missing required Layer [L] model definition. OpenLiate never hardcodes silent model defaults.");
+      }
       const modelExtra = typeof module.L === "object" ? module.L : {};
 
       this._runner = new Agent({

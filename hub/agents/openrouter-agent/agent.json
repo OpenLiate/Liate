@@ -1,0 +1,16 @@
+{
+  "L": "openrouter/nvidia/nemotron-3.5-lightning:free",
+  "I": {
+    "memory": ":memory:"
+  },
+  "A": {
+    "name": "openrouter-agent",
+    "version": "0.2.1",
+    "intent": "OpenRouter Sovereign AI Agent running via OpenRouter Gateway and Liate.",
+    "maxSteps": 5
+  },
+  "T": [],
+  "E": {
+    "OPENROUTER_API_KEY": "$OPENROUTER_API_KEY"
+  }
+}
