@@ -1,41 +1,63 @@
 ---
 title: "[L] Large Models Layer"
-description: "Model abstraction, Sarvam AI sovereign inference, and dynamic LLM routing"
+description: "Zero-hardcode dynamic LLM routing across Sarvam AI, Ollama, OpenRouter, Neon AI Gateway & Gnani AI"
 icon: "brain"
 ---
 
 ## Overview
 
-Layer **`[L]`** abstracts foundational models behind a standardized client interface (`SarvamClient` in `src/llm/`). 
+Layer **`[L]`** routes reasoning, streaming, and multimodal inference through `LiateLlmClient` and `LLMRouter` in `src/layers/llm/model.ts`.
 
-It dynamically normalizes model identifiers and handles token limits, temperature, and multi-turn message formatting.
+OpenLiate **never hardcodes silent model defaults** — you explicitly declare your model string (e.g. `"ollama/gemma4:e2b"`, `"openrouter/nvidia/nemotron-3.5-lightning:free"`, `"sarvam/sarvam-105b"`) and Liate discovers live models dynamically from each provider's `/models` endpoint.
 
 ---
 
-## Supported Providers
+## Supported Providers (2026)
 
-### 1. Sarvam AI (Sovereign Primary)
-OpenLiate natively defaults to **Sarvam AI**, India's frontier sovereign AI models:
-* `sarvam/sarvam-105b` — High-capacity multi-step reasoning.
-* `sarvam/sarvam-2b` — Ultra-lightweight edge execution.
-* Direct integration via `hub/llm/sarvam.json`.
+### 1. Sarvam AI (Sovereign Indic Primary)
+* **Format:** `sarvam/<model>` (e.g. `sarvam/sarvam-105b`, `sarvam/sarvam-prism`)
+* **Env:** `SARVAM_API_KEY`
+* **Features:** Chat completions, reasoning, tool calling, SSE streaming, System-One decisions.
 
-### 2. Ollama & Local Silicon
-Run completely offline on local Apple Silicon or NVIDIA edge devices.
+### 2. Ollama (100% Local & Offline)
+* **Format:** `ollama/<model>` (e.g. `ollama/gemma4:e2b`, `ollama/llama3.2:latest`, `ollama/qwen3:8b`)
+* **Endpoint:** `http://localhost:11434/v1` (override via `OLLAMA_BASE_URL` or `OLLAMA_HOST`)
+* **Env:** Zero API key required locally (optional `OLLAMA_API_KEY` for proxied instances).
+* **Hub Agent:** `liate run ollama-agent "Hello!"`
 
-### 3. Cloud Frontier Models
-Anthropic (Claude 3.5 Sonnet) and OpenAI (GPT-4o).
+### 3. OpenRouter (469+ Cloud & Free Models)
+* **Format:** `openrouter/<vendor>/<model>` (e.g. `openrouter/nvidia/nemotron-3.5-lightning:free`, `openrouter/anthropic/claude-sonnet-5.5`)
+* **Endpoint:** `https://openrouter.ai/api/v1` (override via `OPENROUTER_BASE_URL`)
+* **Env:** `OPENROUTER_API_KEY` (automatically sends `HTTP-Referer`, `X-Title`, and `X-OpenRouter-Title` headers).
+* **Hub Agent:** `liate run openrouter-agent "Hello!"`
+
+### 4. Neon AI Gateway (65+ Branch-Scoped Models)
+* **Format:** `neon/<model>` (plus `typesafeai-jev-1-14-0` System-One decisions)
+* **Env:** `NEON_AI_GATEWAY_TOKEN` or `NEON_API_KEY`
+
+### 5. Gnani AI (Sovereign Indic Voice)
+* **Format:** `gnani/<model>` (`prisma-v3` STT, `timbre-v3` TTS)
+* **Env:** `GNANI_API_KEY`
 
 ---
 
 ## Configuration in `agent.json`
 
-Layer `[L]` can be declared as a clean string or a detailed object:
+Layer `[L]` can be declared as a clean string or a structured object:
 
 <CodeGroup>
-```json Shorthand String
+```json Ollama Local
 {
-  "L": "sarvam/sarvam-105b"
+  "L": "ollama/gemma4:e2b",
+  "A": { "name": "local-agent" }
+}
+```
+
+```json OpenRouter Free / Frontier
+{
+  "L": "openrouter/nvidia/nemotron-3.5-lightning:free",
+  "A": { "name": "cloud-agent" },
+  "E": { "OPENROUTER_API_KEY": "$OPENROUTER_API_KEY" }
 }
 ```
 
@@ -43,7 +65,7 @@ Layer `[L]` can be declared as a clean string or a detailed object:
 {
   "L": {
     "provider": "sarvam",
-    "model": "sarvam-2b",
+    "model": "sarvam-105b",
     "temperature": 0.2,
     "maxTokens": 4096
   }

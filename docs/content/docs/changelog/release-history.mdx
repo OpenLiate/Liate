@@ -4,6 +4,15 @@ description: "Changelog and version milestones for OpenLiate"
 icon: "history"
 ---
 
+## v0.2.5 (Nov 25, 2026) - Sprint 5: Global Gateways, Live Streaming, Sandbox Hardening & Automated Tests
+
+* **Dynamic Ollama & OpenRouter Gateways + Zero Hardcoded Defaults:** Added zero-hardcode support for local **Ollama** (`ollama/<model>` via `http://localhost:11434/v1`) and **OpenRouter** (`openrouter/<vendor>/<model>` via `https://openrouter.ai/api/v1` with 469+ live discoverable models and `HTTP-Referer` / `X-OpenRouter-Title` headers). Enforced strict zero silent model defaults across TypeScript and Python.
+* **End-to-End SSE Streaming & Python SDK Parity:** Added live `parseSseStream` token & reasoning streaming across `LiateLlmClient`, `ReActLoop`, CLI (`liate run`, `liate chat`), Hono `POST /stream`, and Python SDK (`agent.stream()`).
+* **Layer `[E]` Sandbox, Layer `[T]` MCP Retry & Layer `[I]` Remote Session:** Added `assertNetworkAllowed()` and `runWithTimeout()` in `EnvironmentResolver`, bounded HTTP MCP retry/timeout in `MCP`, and `RemoteSessionAdapter` + optional `agentId`/`email` in Layer `[I]`.
+* **Automated Test Suite:** Added 16-case `bun test` suite covering `AUM`, `OM`, and all 5 `L · I · A · T · E` layers.
+
+---
+
 ## v0.2.0 (Nov 22, 2026) - Sprint 4: Architecture Validation & Pure MDX Docs
 
 * **NVIDIA Keynote 2026 Architecture Parity:** Formal 1-to-1 indexed mapping of Liate's 5 mathematical layers ($L \circ I \circ A \circ T \circ E$) with Jensen Huang's 5 Elements of an Agent (Model, Knowledge, Harness, Tools, Sandbox). Enforced strict `#1`, `#2`, `#3` indexing doctrine across all READMEs and SDKs.

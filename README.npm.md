@@ -10,10 +10,11 @@
 <p align="center">
   <a href="https://liate.dev"><img src="https://img.shields.io/badge/docs-liate.dev-white?labelColor=black&style=flat-square" alt="Docs"></a>
   <a href="https://github.com/OpenLiate/Liate/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-white?labelColor=black&style=flat-square" alt="License: MIT"></a>
-  <a href="https://sarvam.ai"><img src="./assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
+  <a href="https://sarvam.ai"><img src="https://raw.githubusercontent.com/OpenLiate/Liate/main/assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
+  <a href="https://exa.ai"><img src="https://raw.githubusercontent.com/OpenLiate/Liate/main/assets/exa-badge.svg" alt="Powered by Exa.ai Startup Program"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
   <a href="https://www.npmjs.com/package/openliate"><img src="https://img.shields.io/badge/npm-v0.2.5-white?labelColor=black&style=flat-square" alt="npm: v0.2.5"></a>
-  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/badge/pypi-v0.2.0-white?logo=pypi&logoColor=FFD43B&labelColor=black&style=flat-square" alt="PyPI: v0.2.0"></a>
+  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/badge/pypi-v0.2.5-white?logo=pypi&logoColor=FFD43B&labelColor=black&style=flat-square" alt="PyPI: v0.2.5"></a>
   <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fvinodhatti%2F4e50442b9bc06000069dd0c1552ab66b%2Fraw%2Fdownloads.json&style=flat-square&labelColor=black" alt="Total Downloads">
   <img src="https://img.shields.io/badge/Bun-Supported-white?logo=bun&logoColor=white&labelColor=black&style=flat-square" alt="Bun">
   <img src="https://img.shields.io/badge/Node.js-Supported-white?logo=node.js&logoColor=5FA04E&labelColor=black&style=flat-square" alt="Node.js">
@@ -159,7 +160,7 @@ OpenLiate maps 1-to-1 to this 5-element architecture:
 
 | Layer | Name | Description |
 | :--- | :--- | :--- |
-| **`L`** | **Large Models** | Universal routing to Sarvam AI (`sarvam-105b`, `sarvam-30b`), Ollama local, or OpenRouter with fallback cascade. |
+| **`L`** | **Large Models** | Universal dynamic routing across Sarvam AI, Ollama local (`localhost:11434/v1`), OpenRouter (469+ live models), Neon AI Gateway & Gnani AI. |
 | **`I`** | **Integration** | Sovereign memory sessions, vector knowledge graphs, and local execution state. |
 | **`A`** | **Agent Harness** | Autonomous ReAct loop with max-steps safeguards and self-healing error recovery. |
 | **`T`** | **Tools & MCP** | Native Anthropic Model Context Protocol (MCP) clients over stdio and SSE protocols. |

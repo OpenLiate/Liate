@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="258" height="20" role="img" aria-label="Powered by: Exa.ai Startup Program">
+  <title>Powered by: Exa.ai Startup Program</title>
+  <g shape-rendering="crispEdges">
+    <rect width="88" height="20" fill="black"/>
+    <rect x="88" width="170" height="20" fill="white"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110">
+    <g transform="translate(6, 4) scale(0.5)">
+      <path fill="#ffffff" d="M2 2h16v3H6v5h10v3H6v5h12v3H2V2zm17 0h3.5l3.5 5.5L29.5 2H33l-5.2 8 5.4 8.5H29.6L26 12.8l-3.6 5.7H18.8l5.4-8.5L19 2z"/>
+    </g>
+    <text x="560" y="140" textLength="600" transform="scale(.1)">Powered by</text>
+    <text x="1730" y="140" textLength="1520" transform="scale(.1)" fill="#333">Exa.ai Startup Program</text>
+  </g>
+</svg>
