@@ -12,7 +12,7 @@
   <a href="https://github.com/OpenLiate/Liate/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-white?labelColor=black&style=flat-square" alt="License: MIT"></a>
   <a href="https://sarvam.ai"><img src="./assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
-  <a href="https://www.npmjs.com/package/openliate"><img src="https://img.shields.io/badge/npm-v0.2.1-white?labelColor=black&style=flat-square" alt="npm: v0.2.1"></a>
+  <a href="https://www.npmjs.com/package/openliate"><img src="https://img.shields.io/badge/npm-v0.2.5-white?labelColor=black&style=flat-square" alt="npm: v0.2.5"></a>
   <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/badge/pypi-v0.2.0-white?logo=pypi&logoColor=FFD43B&labelColor=black&style=flat-square" alt="PyPI: v0.2.0"></a>
   <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fvinodhatti%2F4e50442b9bc06000069dd0c1552ab66b%2Fraw%2Fdownloads.json&style=flat-square&labelColor=black" alt="Total Downloads">
   <img src="https://img.shields.io/badge/Bun-Supported-white?logo=bun&logoColor=white&labelColor=black&style=flat-square" alt="Bun">

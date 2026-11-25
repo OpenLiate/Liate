@@ -4,6 +4,16 @@ All notable changes to Liate: Open Source Backend Layer for AI Agents — From I
 
 ---
 
+## Sprint 5: Global Gateways, Live Streaming, Sandbox Hardening & Automated Tests (v0.2.1 → v0.2.5)
+
+### v0.2.5 (Sprint 5 Conclusion — Production Streaming, Global Gateways & Zero-Default Runtime)
+- **v0.2.4 — Dynamic Ollama & OpenRouter Gateways + Strict Layer `[L]`**: Added zero-hardcode support for local **Ollama** (`ollama/<model>` via `http://localhost:11434/v1`) and **OpenRouter** (`openrouter/<vendor>/<model>` via `https://openrouter.ai/api/v1` with `HTTP-Referer`, `X-Title`, and `X-OpenRouter-Title` headers and 469+ live discoverable models). Fixed double-stripping of `vendor/model` and `model:tag` slugs in `src/layers/llm/model.ts`. Removed silent hardcoded model fallbacks across `om.ts`, `harness.ts`, `model.ts`, `resolver.ts`, and `hono.ts` (`LIATE_MODEL` env support for ephemeral runs). Added `hub/agents/ollama-agent/agent.json` and `hub/agents/openrouter-agent/agent.json`.
+- **v0.2.3 — Layer `[E]` Sandbox, Layer `[T]` MCP Retry & Layer `[I]` Remote Session**: Added active `EnvironmentResolver.assertNetworkAllowed()` (`denyNetwork` + `allowedDomains`) and `runWithTimeout()` in `src/layers/environment/sandbox.ts`; wired opt-in `sandboxTimeoutMs` into `ReActLoop`. Added 15s timeout + bounded retry (`fetchWithRetry`) for remote HTTP/SSE MCP servers in `src/layers/tools/mcp.ts`. Added `RemoteSessionAdapter` injection to `Session` and optional `agentId`/`email` fields in `LayerI` / `AUMSchema`.
+- **v0.2.2 — End-to-End SSE Streaming & Python SDK Parity**: Added `parseSseStream` (`stream`, `onToken`, `onReasoningToken`) in `LiateLlmClient`, wired live token/step callbacks through `ReActLoop`, CLI (`liate run`, `liate chat`), and Hono `POST /stream`. Aligned Hono `/run`, `/chat`, and `/stream` with Python SDK `{ module, prompt, keys }` payloads and added `agent.stream()` to `sdk/python`.
+- **Automated Test Suite & Cleanup**: Added 16-case `bun test` suite (`tests/core.test.ts`, `tests/layers.test.ts`) covering AUM, OM, and all 5 `L · I · A · T · E` layers, and removed unused `jszip` dependency.
+
+---
+
 ## Sprint 4: Architecture Validation & Pure MDX Docs (v0.2.0)
 
 ### v0.2.0 (NVIDIA Keynote 2026 Architecture Parity, Standalone Docs Package & Runtime Benchmarks)
