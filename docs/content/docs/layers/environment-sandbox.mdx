@@ -6,28 +6,30 @@ icon: "lock"
 
 ## Overview
 
-Layer **`[E]`** manages secret injection, credential resolution, and runtime sandboxing. Implemented in `src/environment/environment.ts` as `EnvironmentResolver`.
+Layer **`[E]`** (`src/layers/environment/`) is modularized into:
+- `env/loader.ts` — `.env` / `.env.local` / `~/.liate` loading, `$VAR` expansion, and secret masking
+- `sandbox/guard.ts` — `assertSandboxNetworkAllowed()` and `runWithSandboxTimeout()`
+- `resolver.ts` — `EnvironmentResolver` facade
 
 ---
 
 ## Capabilities
 
 ### 1. Safe `$VAR` Resolution
-Variables prefixed with `$` are dynamically resolved from `process.env` or `.env` files without crashing if missing:
+Variables prefixed with `$` are dynamically resolved from `process.env` or `.env` files without hardcoding secrets:
 
 ```json agent.json
 {
   "E": {
     "SARVAM_API_KEY": "$SARVAM_API_KEY",
-    "CUSTOM_TOKEN": "$MY_SECRET"
+    "GROQ_API_KEY": "$GROQ_API_KEY"
   }
 }
 ```
 
 ### 2. Secret Masking
-When logging or returning traces, OpenLiate automatically masks sensitive credentials:
-* Formats like `sk-...`, `Bearer ...`, or keys matching `SARVAM_API_KEY` are redacted into `sk-***`.
+`EnvironmentResolver.maskSecret()` redacts credentials (`sk_live_abcdef1234` → `sk_l***1234`) so secrets never leak in logs or snapshots.
 
 ### 3. Sandboxing & Guardrails
-* **Domain Whitelisting:** Outbound tool requests can be restricted to authorized domains.
-* **Execution Timeouts:** Long-running tool operations are aborted cleanly if they exceed execution timeouts.
+* **Domain Allowlisting & Network Lock**: `EnvironmentResolver.assertNetworkAllowed()` enforces `denyNetwork` and `allowedDomains`.
+* **Execution Timeouts**: `EnvironmentResolver.runWithTimeout()` and `sandboxTimeoutMs` in `ReActLoop` abort slow tool calls cleanly.

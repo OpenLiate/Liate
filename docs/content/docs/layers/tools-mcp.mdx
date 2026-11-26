@@ -1,66 +1,59 @@
 ---
 title: "[T] Tools & MCP v2 Layer"
-description: "Sovereign identity verification (Aadhaar/PAN) and Model Context Protocol (MCP)"
+description: "Built-in local tools, direct API-based tools, inline MCP v2 servers, and external Stdio/HTTP MCP"
 icon: "wrench"
 ---
 
 ## Overview
 
-Layer **`[T]`** manages tools, external APIs, and MCP servers. Implemented in `src/tools/`, it registers both native TypeScript functions and dynamic MCP clients.
+Layer **`[T]`** (`src/layers/tools/`) resolves four tool types through `ToolRegistry` (`src/layers/tools/registry/resolver.ts`):
+1. **Built-in Local Tools (`builtin/`)** — `"builtin:datetime"`, `"builtin:math"`, `"builtin:*"`
+2. **Direct API-Based Tools (`api/`)** — `{ type: "api", name, method, url, headers }` (`createApiTool()`)
+3. **Inline In-Process MCP v2 (`mcp/inline.ts`)** — `{ type: "mcp-inline", name, tools: [...] }` using `@modelcontextprotocol/server` v2
+4. **External MCP v2 Servers (`mcp/stdio.ts`, `mcp/http.ts`, `mcp/server.ts`)** — Stdio (`uvx`, `npx`) & Remote HTTP/SSE with retry/timeout
 
 ---
 
-## 1. Native Identity Verifier (`verify_identity`)
+## Example Mixing All 4 Tool Types in `T`
 
-OpenLiate includes built-in sovereign Indian identity verification (`src/tools/builtin/identity.ts`):
+```ts
+import { liate } from "@openliate/liate";
 
-### Aadhaar Validation
-* **Rule:** Must be exactly 12 numeric digits (cannot start with 0 or 1).
-* **Checksum:** Mathematical validation using the **Verhoeff algorithm** (dihedral group $D_5$ permutation and multiplication tables).
-* **Privacy:** Automatically masked as `XXXX-XXXX-1234`.
-
-### PAN Card Validation
-* **Rule:** 10-character alphanumeric regex: `^[A-Z]{5}[0-9]{4}[A-Z]{1}$`.
-* **Taxpayer Classification:** The 4th character determines entity classification (`P` = Individual, `C` = Company, `F` = Firm, `H` = HUF, `T` = Trust, `G` = Government).
-* **Privacy:** Automatically masked as `XXXXX1234X`.
-
----
-
-## 2. Model Context Protocol (MCP)
-
-OpenLiate natively consumes MCP configs declared directly inline in Layer `[T]` or through the local workspace cache `.openliate/mcp.json`:
-
-* **Inline HTTP / SSE MCP:** Pass remote URL and headers directly.
-* **Inline CLI / Stdio MCP:** Pass `command` (e.g. `npx`, `uvx`) and `args`.
-* **Built-in `fetch`:** Safe HTTP fetcher tool.
-* **Official Sarvam AI MCP (`sarvam-mcp`):** Connects sovereign voice synthesis (**Bulbul v4-Flash** TTS), speech recognition (**Saaras v4** STT), translation (**Mayura**), and document vision directly as first-class tools.
-
-```json agent.json
-{
-  "T": {
-    "sarvam": {
-      "command": "uvx",
-      "args": ["sarvam-mcp"],
-      "tools": ["*"]
-    }
-  }
-}
-```
-
-Or in OOP TypeScript:
-
-```typescript agent.ts
-import { liate } from "openliate";
-
-export class SarvamVoiceAgent extends liate {
-  L = "sarvam/sarvam-105b";
-  T = {
-    sarvam: {
+export class ToolsAgent extends liate {
+  L = "groq/qwen/qwen3.8-27b";
+  A = { name: "ToolsAgent", intent: "Use tools to answer accurately." };
+  T = [
+    "builtin:datetime",
+    "builtin:math",
+    {
+      type: "api",
+      name: "github_repo",
+      description: "Fetch GitHub repository metadata",
+      method: "GET",
+      url: "https://api.github.com/repos/{owner}/{repo}",
+      headers: { "User-Agent": "Liate-Agent-Runtime" }
+    },
+    {
+      type: "mcp-inline",
+      name: "local-mcp",
+      tools: [
+        {
+          name: "format_badge",
+          description: "Format a release badge",
+          parameters: {
+            type: "object",
+            properties: { project: { type: "string" }, version: { type: "string" } },
+            required: ["project", "version"]
+          },
+          execute: async (a) => `[${a.project} ${a.version}]`
+        }
+      ]
+    },
+    {
       command: "uvx",
-      args: ["sarvam-mcp"],
-      tools: ["tts_speak", "sarvam_stt_transcribe", "translate"]
+      args: ["mcp-server-time"],
+      tools: ["get_current_time"]
     }
-  };
-  E = { SARVAM_API_KEY: process.env.SARVAM_API_KEY };
+  ];
 }
 ```

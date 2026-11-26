@@ -1,51 +1,62 @@
 ---
-title: "[A] Agent Harness & Loop Layer"
-description: "The autonomous ReAct loop, step dispatching, and loop limits"
+title: "[A] Agent Harness, Skills, Sub-Agents & Versioning"
+description: "Autonomous ReAct loop, skills.sh integration, A.subAgents, and AI Agent Version Control"
 icon: "repeat"
 ---
 
 ## Overview
 
-Layer **`[A]`** defines the agent's identity, role, and autonomous reasoning loop. It is implemented in `src/agent/loop.ts` as `ReActLoop`.
+Layer **`[A]`** (`src/layers/agent/`) defines the agent's identity, reasoning loop, skills, sub-agent orchestration, and version control:
+- `harness/agent.ts` — `Agent` / `Harness` / `AgentHarness`
+- `loop/react.ts` — `ReActLoop` (Thought → Action → Observation → Final Answer + live SSE streaming)
+- `skills/` — `SkillResolver` + `sources/` (`local.ts`, `https.ts`, `skills-sh.ts`, `github.ts`)
+- `orchestration/subagent.ts` — `SubAgentRunner` (`A.subAgents`)
+- `versioning/` — `AgentVersionControl` (`commit`, `log`, `diff`, `checkout`)
 
 ---
 
-## The ReAct Execution Cycle
+## Sub-Agents Under `A` (`A.subAgents`)
 
-When an agent runs, it steps through an autonomous cycle:
+Sub-agents live cleanly under **`A`** and reference models in **`L`** via `modelTag` (never duplicating `L` inside `A`):
 
-```
-User Prompt
-    │
-    ▼
-[ Thought ] ──► Model analyzes context and plans next action
-    │
-    ▼
-[ Action ] ──► Runtime dispatches tool call with parameters
-    │
-    ▼
-[ Observation ] ──► Tool output captured and fed back to context
-    │
-    ▼
-[ Final Answer ] ──► Structured conclusion returned to caller
-```
-
----
-
-## Configuration in `agent.json`
-
-```json
-{
-  "A": {
-    "name": "identity_agent",
-    "version": "1.0.0",
-    "intent": "Verify and validate Indian identity credentials including Aadhaar and PAN.",
-    "maxSteps": 5
-  }
+```ts
+export class Coordinator extends liate {
+  L = { default: "sarvam/sarvam-105b", fast: "groq/qwen/qwen3.8-27b" };
+  A = {
+    name: "Coordinator",
+    version: "0.3.0",
+    intent: "Delegate research to subagent_researcher and write the final answer.",
+    subAgents: [
+      { name: "researcher", intent: "Gather verified facts.", modelTag: "fast", maxSteps: 3 },
+      { name: "writer", intent: "Summarize clearly.", maxSteps: 2 }
+    ]
+  };
 }
 ```
 
-* **`name`** *(required)*: Unique identifier for the agent class.
-* **`version`**: Semantic version string (defaults to `1.0.0`).
-* **`intent`**: System directive and behavioral purpose.
-* **`maxSteps`**: Maximum number of tool iterations before returning (default: `10`), preventing infinite loop runaway.
+Sub-agents run in isolated `:memory:` sessions — either autonomously as `subagent_<name>` tools inside `ReActLoop` or directly via `agent.run(prompt, { subAgent: "researcher" })`.
+
+---
+
+## Skills (`A.skills` & `skills.sh`)
+
+Resolve, install, and inject `SKILL.md` instructions from local files, HTTPS URLs, GitHub, or the `skills.sh` ecosystem:
+
+```bash
+liate skills find react-best-practices
+liate skills add vercel-labs/skills/find-skills
+liate skills update
+```
+
+---
+
+## AI Agent Version Control (`AgentVersionControl`)
+
+Track immutable SHA-256 snapshots of an agent's `L · I · A · T` spec (never storing `E` secrets):
+
+```ts
+const vc = new AgentVersionControl();
+const v1 = vc.commit(agent.toModule(), { version: "0.1.0", message: "Initial" });
+const diff = vc.diff("Coordinator", "0.1.0", "0.2.0");
+const restored = vc.checkout("Coordinator", "0.1.0");
+```

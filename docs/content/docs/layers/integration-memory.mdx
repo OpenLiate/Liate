@@ -1,42 +1,74 @@
 ---
-title: "[I] Integration & Memory Layer"
-description: "Multi-turn session persistence, monotonic UUIDv7 keys, and vector retention"
+title: "[I] Integration Layer"
+description: "Universal integration: JSON, SQLite/Turso & Postgres/Neon/Supabase memory, 2026 pgvector/Pinecone RAG, context, libs, repos, APIs & webhooks"
 icon: "database"
 ---
 
 ## Overview
 
-Layer **`[I]`** manages conversation history and agent memory across runs. 
-
-It is implemented in `src/layers/integration/memory.ts` and resolved dynamically by `IntegrationResolver`.
+Layer **`[I]`** (`src/layers/integration/`) handles all external and persistent integrations via dedicated subfolders:
+- `memory/` + `memory/adapters/` — Session & state persistence
+- `knowledge/` + `knowledge/sources/` + `embeddings.ts` — Local docs & 2026 Vector RAG
+- `context/context.ts` — `ContextManager` (`I.context`)
+- `lib/loader.ts` — Dynamic `npm`, local, and builtin module loading as `AgentTool`s
+- `repo/` — Local Git & remote GitHub repository context
+- `connectors/` — Direct REST/HTTP APIs (`I.apis`) and outbound Webhooks (`I.webhooks`)
 
 ---
 
-## Memory Providers
+## 1. Memory Backends (`I.memory`)
 
-### 1. In-Memory (`InMemorySession`)
-Stores messages in RAM. Ideal for ephemeral tasks, microservices, and unit tests:
+| Backend | Target Example | Storage Engine |
+|---|---|---|
+| **In-Memory** | `":memory:"` or `"memory"` | RAM (`in-memory.ts`) |
+| **Local JSON** | `"sessions/my-agent"` | `.liate/sessions/*.json` (`file-json.ts`) |
+| **Local SQLite** | `"sqlite://.liate/chat.db#user_1"` | `bun:sqlite` (`sqlite.ts`) |
+| **Cloud Turso libSQL** | `"libsql://my-db.turso.io#user_1"` | Turso HTTPS `/v2/pipeline` + `TURSO_AUTH_TOKEN` |
+| **Local / Cloud Postgres** | `"postgresql://..."`, `"neon://s1"`, `"supabase://s1"` | Native `Bun.SQL` (`postgres.ts`) |
 
-```json
-{
-  "I": {
-    "memory": "memory"
+---
+
+## 2. Knowledge & 2026 Vector RAG (`I.knowledge`)
+
+Supports local `.md`/`.txt`/`.json` files **and** semantic vector search via `search_knowledge`:
+
+```ts
+// Local / Cloud pgvector (Docker pgvector 0.8+, Neon, Supabase) — HNSW cosine <=>
+I = {
+  knowledge: {
+    vector: "neon", // or "supabase" or "postgresql://..."
+    embedModel: "sarvam/embeddinggemma-2",
+    table: "liate_knowledge",
+    topK: 5
   }
-}
+};
+
+// Cloud Pinecone (2026-07 REST API with X-Pinecone-Api-Version)
+I = {
+  knowledge: {
+    vector: "pinecone",
+    indexHost: "$PINECONE_INDEX_HOST",
+    embedModel: "ollama/nomic-embed-text",
+    topK: 5
+  }
+};
 ```
 
-### 2. File-Based Persistence (`FileSessionMemory`)
-Persists conversations to a local JSON file under `.liate/sessions/` across server restarts:
+---
 
-```json
-{
-  "I": {
-    "memory": ".liate/sessions/my-agent"
+## 3. Runtime Context (`I.context`), Direct APIs (`I.apis`) & Webhooks (`I.webhooks`)
+
+```ts
+I = {
+  memory: "sqlite://.liate/ops.db#main",
+  context: { org: "OpenLiate", region: "India" },
+  apis: {
+    github: { baseUrl: "https://api.github.com", description: "GitHub REST API" }
+  },
+  webhooks: {
+    alerts: { url: "$SLACK_WEBHOOK_URL", secretEnvVar: "$WEBHOOK_SECRET" }
   }
-}
+};
 ```
 
-Each session is identified by an RFC 9562 time-ordered **UUIDv7** string, ensuring strictly monotonic ordering.
-
-### 3. Serverless Postgres Vector Memory (Neon)
-Configured via standard `DATABASE_URL` to store session state and vector embeddings with zero vendor lock-in.
+`ContextManager` merges `I.context` with per-run `options.context` into `<context>...</context>` and `AgentContext.state.context`, while `connectors/registry.ts` exposes `api_<name>` and `webhook_<name>` tools automatically.
