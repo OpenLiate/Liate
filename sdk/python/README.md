@@ -13,15 +13,15 @@
   <a href="https://sarvam.ai"><img src="https://raw.githubusercontent.com/OpenLiate/Liate/main/assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
   <a href="https://exa.ai"><img src="https://raw.githubusercontent.com/OpenLiate/Liate/main/assets/exa-badge.svg" alt="Powered by Exa.ai Startup Program"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
-  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/badge/pypi-v0.2.5-white?logo=pypi&logoColor=FFD43B&labelColor=black&style=flat-square" alt="PyPI: v0.2.5"></a>
+  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/badge/pypi-v0.3.0-white?logo=pypi&logoColor=FFD43B&labelColor=black&style=flat-square" alt="PyPI: v0.3.0"></a>
   <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fvinodhatti%2F4e50442b9bc06000069dd0c1552ab66b%2Fraw%2Fdownloads.json&style=flat-square&labelColor=black" alt="Total Downloads">
   <img src="https://img.shields.io/badge/Python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14%20%7C%203.15-white?logo=python&logoColor=white&labelColor=black&style=flat-square" alt="Python 3.9+">
 </p>
 
 <p align="center">
-  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/badge/liate-v0.2.5-white?logo=pypi&logoColor=FFD43B&label=liate&labelColor=black&color=white&style=flat-square" alt="PyPI liate"></a>
+  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/badge/liate-v0.3.0-white?logo=pypi&logoColor=FFD43B&label=liate&labelColor=black&color=white&style=flat-square" alt="PyPI liate"></a>
   &nbsp;
-  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/badge/openliate-v0.2.5-white?logo=pypi&logoColor=FFD43B&label=openliate&labelColor=black&color=white&style=flat-square" alt="PyPI openliate"></a>
+  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/badge/openliate-v0.3.0-white?logo=pypi&logoColor=FFD43B&label=openliate&labelColor=black&color=white&style=flat-square" alt="PyPI openliate"></a>
 </p>
 
 <p align="center">

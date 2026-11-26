@@ -4,6 +4,18 @@ All notable changes to Liate: Open Source Backend Layer for AI Agents — From I
 
 ---
 
+## Sprint 6: Full L·I·A·T·E Modularization, Multi-Model L, Sub-Agents, Vector RAG & Open Source Governance (v0.3.0)
+
+### v0.3.0 (Sprint 6 — Modular 5-Layer Architecture & Contributor-Ready Ecosystem)
+- **Layer `[L]` Modularization & Multi-Model Map**: Split `src/layers/llm/` into `providers/`, `transport/`, `normalize.ts`, `client.ts`, `router.ts`, and `model.ts`. Added `MultiModelMap` (`L: { default, fast, reason }`) + `modelTag` routing, and added the **Groq** provider (`src/layers/llm/providers/groq.ts`).
+- **Layer `[I]` Universal Integration, 3 Memory Backends & 2026 Vector RAG**: Organized `src/layers/integration/` into `memory/adapters/` (Local JSON, SQLite/Turso `libsql://`, PostgreSQL/Neon/Supabase via `Bun.SQL`), `knowledge/sources/` (local files + 2026 `pgvector` HNSW cosine `<=>` + Pinecone `2026-07` REST API) with dynamic `embeddings.ts`, `context/` (`ContextManager` for `I.context`), `lib/`, `repo/`, and `connectors/` (`http-api` for `I.apis`, `webhook` for `I.webhooks`).
+- **Layer `[A]` Sub-Agents, Versioning & Modular Skills**: Organized `src/layers/agent/` into `harness/`, `loop/`, `skills/sources/`, `orchestration/subagent.ts` (`A.subAgents` with `modelTag` pointers to `L`), and `versioning/` (`AgentVersionControl` SHA-256 snapshots, diffs, and rollbacks with zero `E` secrets stored).
+- **Layer `[T]` & `[E]` Modularization**: Split `src/layers/tools/` into `mcp/` (`client`, `stdio`, `http`, `inline` MCP v2, `server`), `builtin/` (`datetime`, `math`), `api/` (`createApiTool`), and `registry/resolver.ts`. Split `src/layers/environment/` into `env/loader.ts`, `sandbox/guard.ts`, and `resolver.ts`.
+- **Open-Source Governance**: Added `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, `.github/PULL_REQUEST_TEMPLATE.md`, and `.github/ISSUE_TEMPLATE/*`.
+- **Automated Verification**: Expanded `bun test` to 38 passing tests (154 assertions) across `tests/core.test.ts`, `tests/layers.test.ts`, and `tests/sprint6.test.ts`.
+
+---
+
 ## Sprint 5: Global Gateways, Live Streaming, Sandbox Hardening & Automated Tests (v0.2.1 → v0.2.5)
 
 ### v0.2.5 (Sprint 5 Conclusion — Production Streaming, Global Gateways & Zero-Default Runtime)

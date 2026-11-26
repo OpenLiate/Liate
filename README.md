@@ -13,7 +13,7 @@
   <a href="https://sarvam.ai"><img src="https://raw.githubusercontent.com/OpenLiate/Liate/main/assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
   <a href="https://exa.ai"><img src="https://raw.githubusercontent.com/OpenLiate/Liate/main/assets/exa-badge.svg" alt="Powered by Exa.ai Startup Program"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
-  <a href="https://github.com/OpenLiate/Liate/releases"><img src="https://img.shields.io/badge/version-v0.2.5-white?labelColor=black&style=flat-square" alt="v0.2.5"></a>
+  <a href="https://github.com/OpenLiate/Liate/releases"><img src="https://img.shields.io/badge/version-v0.3.0-white?labelColor=black&style=flat-square" alt="v0.3.0"></a>
   <img src="https://img.shields.io/badge/Bun-Supported-white?logo=bun&logoColor=white&labelColor=black&style=flat-square" alt="Bun">
   <img src="https://img.shields.io/badge/Node.js-Supported-white?logo=node.js&logoColor=5FA04E&labelColor=black&style=flat-square" alt="Node.js">
 </p>
@@ -23,9 +23,9 @@
   &nbsp;
   <a href="https://www.npmjs.com/package/@openliate/liate"><img src="https://img.shields.io/npm/dw/@openliate/liate?logo=npm&logoColor=CB3837&label=%40openliate%2Fliate&labelColor=black&color=white&style=flat-square" alt="npm @openliate/liate"></a>
   &nbsp;&bull;&nbsp;
-  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/badge/liate-v0.2.5-white?logo=pypi&logoColor=FFD43B&label=liate&labelColor=black&color=white&style=flat-square" alt="PyPI liate"></a>
+  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/badge/liate-v0.3.0-white?logo=pypi&logoColor=FFD43B&label=liate&labelColor=black&color=white&style=flat-square" alt="PyPI liate"></a>
   &nbsp;
-  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/badge/openliate-v0.2.5-white?logo=pypi&logoColor=FFD43B&label=openliate&labelColor=black&color=white&style=flat-square" alt="PyPI openliate"></a>
+  <a href="https://pypi.org/project/openliate/"><img src="https://img.shields.io/badge/openliate-v0.3.0-white?logo=pypi&logoColor=FFD43B&label=openliate&labelColor=black&color=white&style=flat-square" alt="PyPI openliate"></a>
   &nbsp;&bull;&nbsp;
   <a href="#traction"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fvinodhatti%2F4e50442b9bc06000069dd0c1552ab66b%2Fraw%2Fdownloads.json&style=flat-square&labelColor=black" alt="Total Downloads"></a>
 </p>
@@ -109,7 +109,7 @@ liate serve --port 7071
   },
   "A": { 
     "name": "agentyaan", 
-    "version": "0.2.5",                                                               // [A] Agent: Identity, Version & ReAct Reasoning Loop
+    "version": "0.3.0",                                                               // [A] Agent: Identity, Version & ReAct Reasoning Loop
     "intent": "Frontier Sovereign AI Agent · Built on Liate · Selected for Sarvam AI Startup Program 2026 · Exa.ai Startup Program (YC S21)", 
     "maxSteps": 5 
   },
@@ -235,7 +235,7 @@ export class FrontierAgent extends liate {
   // [A] Agent Harness: Identity, ReAct Reasoning Loop & Intent
   A = { 
     name: "agentyaan", 
-    version: "0.2.5", 
+    version: "0.3.0", 
     intent: "Frontier Sovereign AI Agent · Built on Liate · Selected for Sarvam AI Startup Program 2026 · Exa.ai Startup Program (YC S21)", 
     maxSteps: 5 
   };
@@ -308,7 +308,7 @@ class FrontierAgent(liate):
     # [A] Agent Harness: Identity, ReAct Reasoning Loop & Intent
     A = {
         "name": "agentyaan",
-        "version": "0.2.5",
+        "version": "0.3.0",
         "intent": "Frontier Sovereign AI Agent · Built on Liate · Selected for Sarvam AI Startup Program 2026 · Exa.ai Startup Program (YC S21)",
         "maxSteps": 5
     }

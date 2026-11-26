@@ -4,6 +4,16 @@ description: "Changelog and version milestones for OpenLiate"
 icon: "history"
 ---
 
+## v0.3.0 (Nov 26, 2026) - Sprint 6: Full L·I·A·T·E Modularization, Multi-Model L, Sub-Agents, Vector RAG & Open Source Governance
+
+* **Layer `[L]` Modularization & Multi-Model Map:** Modularized `src/layers/llm/` into `providers/`, `transport/`, `normalize.ts`, `client.ts`, `router.ts`, and `model.ts`. Added `MultiModelMap` (`L: { default, fast, reason }`) + `modelTag` routing, plus the **Groq** provider.
+* **Layer `[I]` Universal Integration, 3 Memory Backends & 2026 Vector RAG:** Modularized `src/layers/integration/` into `memory/adapters/` (Local JSON, SQLite/Turso, PostgreSQL/Neon/Supabase), `knowledge/sources/` (local files, 2026 `pgvector` HNSW cosine `<=>`, Pinecone `2026-07` REST API) + `embeddings.ts`, `context/`, `lib/`, `repo/`, and `connectors/` (`http-api`, `webhook`).
+* **Layer `[A]` Sub-Agents, Versioning & Modular Skills:** Modularized `src/layers/agent/` into `harness/`, `loop/`, `skills/sources/`, `orchestration/subagent.ts` (`A.subAgents` with `modelTag` pointers to `L`), and `versioning/` (`AgentVersionControl` SHA-256 snapshots, diffs, and rollbacks with zero `E` secrets).
+* **Layer `[T]` & `[E]` Modularization:** Modularized `src/layers/tools/` into `mcp/` (`client`, `stdio`, `http`, `inline` MCP v2, `server`), `builtin/` (`datetime`, `math`), `api/` (`createApiTool`), and `registry/resolver.ts`; and `src/layers/environment/` into `env/loader.ts`, `sandbox/guard.ts`, and `resolver.ts`.
+* **Open-Source Governance:** Added `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, `.github/PULL_REQUEST_TEMPLATE.md`, and `.github/ISSUE_TEMPLATE/*`.
+
+---
+
 ## v0.2.5 (Nov 25, 2026) - Sprint 5: Global Gateways, Live Streaming, Sandbox Hardening & Automated Tests
 
 * **Dynamic Ollama & OpenRouter Gateways + Zero Hardcoded Defaults:** Added zero-hardcode support for local **Ollama** (`ollama/<model>` via `http://localhost:11434/v1`) and **OpenRouter** (`openrouter/<vendor>/<model>` via `https://openrouter.ai/api/v1` with 469+ live discoverable models and `HTTP-Referer` / `X-OpenRouter-Title` headers). Enforced strict zero silent model defaults across TypeScript and Python.

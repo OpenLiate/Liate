@@ -4,14 +4,14 @@ build-backend = "hatchling.build"
 
 [project]
 name = "openliate"
-version = "0.2.5"
+version = "0.3.0"
 description = "OpenLiate — Open Source Backend Layer for AI Agents · From India, For India, Beyond India"
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
 authors = [
     { name = "OpenLiate", email = "vinod@openliate.tech" },
-    { name = "Vinod Hatti", email = "gitdevinod@gmail.com" }
+    { name = "Vinod Hatti", email = "vinod@openliate.tech" }
 ]
 keywords = ["openliate", "liate", "agent", "autonomous-agents", "sovereign-ai", "mcp", "sarvamai", "aum", "om"]
 classifiers = [
