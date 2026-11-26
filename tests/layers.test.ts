@@ -3,7 +3,19 @@ import {
   EnvironmentResolver,
   Session,
   Lib,
+  Knowledge,
+  IntegrationResolver,
+  resolveSessionAdapter,
+  resolvePgVectorUrl,
+  PineconeSource,
+  ToolRegistry,
+  listBuiltinTools,
+  listConnectors,
   ReActLoop,
+  AgentVersionControl,
+  SubAgentRunner,
+  AUM,
+  Agent,
   LiateLlmClient,
   HubResolver,
   normalizeModelConfig,
@@ -234,5 +246,323 @@ describe("Layers: E, I, A, L", () => {
     const olHub = HubResolver.loadLLM("ollama");
     expect(olHub.endpoint).toBe("http://localhost:11434/v1/chat/completions");
     expect(olHub.models_endpoint).toBe("http://localhost:11434/v1/models");
+  });
+
+  test("Layer [I] modular adapters, knowledge, and API/webhook connectors resolve cleanly", async () => {
+    expect(resolveSessionAdapter(":memory:").id).toBe("in-memory");
+    expect(resolveSessionAdapter("sessions/demo").id).toBe("file-json");
+
+    const connectorIds = listConnectors().map((c) => c.id);
+    expect(connectorIds).toContain("http-api");
+    expect(connectorIds).toContain("webhook");
+
+    const ctx = await Knowledge.resolve("OpenLiate uses 5 layers L I A T E.");
+    expect(ctx.documents.length).toBe(1);
+
+    const tools = await IntegrationResolver.resolveIntegrationTools({
+      knowledge: "OpenLiate L I A T E spec",
+      apis: {
+        weather: { baseUrl: "https://api.example.com", description: "Weather API" }
+      },
+      webhooks: {
+        alerts: { url: "https://hooks.example.com/123", description: "Alerts webhook" }
+      }
+    });
+
+    const toolNames = tools.map((t) => t.name);
+    expect(toolNames).toContain("search_knowledge");
+    expect(toolNames).toContain("api_weather");
+    expect(toolNames).toContain("webhook_alerts");
+  });
+
+  test("Layer [A] AgentVersionControl snapshots, hashes, diffs, and rolls back without E secrets", () => {
+    const vc = new AgentVersionControl(":memory:");
+
+    const v1 = vc.commit(
+      {
+        L: "sarvam/sarvam-105b",
+        I: { memory: ":memory:" },
+        A: { name: "SupportBot", intent: "Help customers politely", maxSteps: 5 },
+        T: ["time"]
+      },
+      { version: "0.1.0", message: "Initial Sarvam release" }
+    );
+
+    const v2 = vc.commit(
+      {
+        L: { default: "sarvam/sarvam-105b", fast: "groq/qwen/qwen3.8-27b" },
+        I: { memory: ":memory:" },
+        A: { name: "SupportBot", intent: "Help customers concisely", maxSteps: 8 },
+        T: ["time", "search"]
+      },
+      { version: "0.2.0", message: "Upgrade to Multi-Model L" }
+    );
+
+    expect(v1.hash).toHaveLength(12);
+    expect(v2.parentHash).toBe(v1.hash);
+    expect((v1.spec as any).E).toBeUndefined();
+
+    const history = vc.log("SupportBot");
+    expect(history.map((h) => h.version)).toEqual(["0.1.0", "0.2.0"]);
+
+    const diff = vc.diff("SupportBot", "0.1.0", "0.2.0");
+    expect(diff.changed).toBe(true);
+    expect(diff.changes.some((c) => c.layer === "L")).toBe(true);
+    expect(diff.changes.some((c) => c.layer === "A" && c.field === "intent")).toBe(true);
+    expect(diff.changes.some((c) => c.layer === "T")).toBe(true);
+
+    const rolledBack = vc.checkout("SupportBot", "0.1.0");
+    expect(rolledBack.spec.L).toBe("sarvam/sarvam-105b");
+    expect(rolledBack.spec.A.maxSteps).toBe(5);
+  });
+
+  test("Layer [A] subAgents resolve modelTag from L cleanly without L inside A", async () => {
+    const mod = AUM.parse({
+      L: { default: "sarvam/sarvam-105b", fast: "groq/qwen/qwen3.8-27b" },
+      A: {
+        name: "Coordinator",
+        intent: "Coordinate work",
+        subAgents: [
+          { name: "researcher", intent: "Find facts", modelTag: "fast", maxSteps: 3 },
+          { name: "writer", intent: "Write prose" }
+        ]
+      }
+    });
+
+    expect((mod.A as any).subAgents).toHaveLength(2);
+    expect((mod.A as any).subAgents[0].L).toBeUndefined();
+
+    const agent = new Agent({
+      name: "Coordinator",
+      layerL: mod.L,
+      subAgents: (mod.A as any).subAgents
+    });
+    expect(agent.getSubAgents()).toEqual(["researcher", "writer"]);
+
+    const usedModels: string[] = [];
+    const origExecute = ReActLoop.execute;
+    (ReActLoop as any).execute = async (_p: any, _llm: any, _mem: any, tools: any, ctx: any, opts: any) => {
+      usedModels.push(`${ctx.agentName}:${opts.model}`);
+      return { text: `sub-result:${ctx.agentName}`, steps: [], totalSteps: 1, model: opts.model, durationMs: 0, finishReason: "stop" };
+    };
+
+    try {
+      const rDirect = await agent.run("Research Liate", { subAgent: "researcher" });
+      expect(rDirect.text).toBe("sub-result:researcher");
+      expect(usedModels[0]).toBe("researcher:groq/qwen/qwen3.8-27b");
+
+      const rWriter = await agent.run("Write summary", { subAgent: "writer" });
+      expect(rWriter.text).toBe("sub-result:writer");
+      expect(usedModels[1]).toBe("writer:sarvam/sarvam-105b");
+
+      const tools = SubAgentRunner.buildTools((mod.A as any).subAgents, {
+        parentName: "Coordinator",
+        parentIntent: "Coordinate",
+        parentVersion: "0.0.1",
+        defaultMaxSteps: 5,
+        tools: [],
+        resolveModel: (tag?: string) => (tag === "fast" ? "groq/qwen/qwen3.8-27b" : "sarvam/sarvam-105b")
+      });
+      expect(tools.map((t) => t.name)).toEqual(["subagent_researcher", "subagent_writer"]);
+    } finally {
+      (ReActLoop as any).execute = origExecute;
+    }
+  });
+
+  test("Layer [I].context flows through AUM, IntegrationResolver, and AgentContext into ReActLoop", async () => {
+    const mod = AUM.parse({
+      L: "groq/qwen/qwen3.8-27b",
+      I: {
+        memory: ":memory:",
+        context: { org: "OpenLiate", region: "India" }
+      },
+      A: { name: "ContextAgent", intent: "Answer using org context." }
+    });
+
+    expect(mod.I?.context).toEqual({ org: "OpenLiate", region: "India" });
+    const block = IntegrationResolver.formatContextBlock(mod.I?.context as any);
+    expect(block).toContain("<context>");
+    expect(block).toContain('"org": "OpenLiate"');
+
+    let capturedCtx: any = null;
+    const origExecute = ReActLoop.execute;
+    (ReActLoop as any).execute = async (_p: any, _llm: any, _mem: any, _tools: any, ctx: any, opts: any) => {
+      capturedCtx = ctx;
+      return { text: "ok", steps: [], totalSteps: 1, model: opts.model, durationMs: 0, finishReason: "stop" };
+    };
+
+    try {
+      const agent = new Agent({
+        name: "ContextAgent",
+        model: "groq/qwen/qwen3.8-27b",
+        intent: "Answer using org context.",
+        context: mod.I?.context as any
+      });
+      await agent.run("Hello", { context: { tier: "enterprise" } });
+      expect(capturedCtx.intent).toContain("<context>");
+      expect(capturedCtx.state.context).toEqual({
+        org: "OpenLiate",
+        region: "India",
+        tier: "enterprise"
+      });
+    } finally {
+      (ReActLoop as any).execute = origExecute;
+    }
+  });
+
+  test("Layer [I] SQLite & Postgres adapters match URIs and persist real bun:sqlite sessions", async () => {
+    expect(resolveSessionAdapter("sqlite://.liate/test.db").id).toBe("sqlite");
+    expect(resolveSessionAdapter("libsql://demo.turso.io#u1").id).toBe("sqlite");
+    expect(resolveSessionAdapter("postgresql://localhost:5432/liate#s1").id).toBe("postgres");
+    expect(resolveSessionAdapter("neon://session_abc").id).toBe("postgres");
+    expect(resolveSessionAdapter("supabase://session_xyz").id).toBe("postgres");
+
+    const fs = await import("node:fs");
+    const dbFile = "temp/test-memory-suite.db";
+    if (fs.existsSync(dbFile)) fs.unlinkSync(dbFile);
+
+    const s1 = new Session(`sqlite://${dbFile}#user_42`);
+    await s1.append({ role: "user", content: "hello sqlite", timestamp: 1 });
+    await s1.setState("plan", "pro");
+
+    const s2 = new Session(`sqlite://${dbFile}#user_42`);
+    const loaded = await s2.load();
+    expect(loaded.sessionId).toBe("user_42");
+    expect(loaded.messages.length).toBe(1);
+    expect(loaded.messages[0].content).toBe("hello sqlite");
+    expect(loaded.state.plan).toBe("pro");
+
+    await s1.close();
+    await s2.close();
+    if (fs.existsSync(dbFile)) fs.unlinkSync(dbFile);
+  });
+
+  test("Layer [I] 2026 pgvector URL resolution and Pinecone REST 2026-07 upsert/query work cleanly", async () => {
+    process.env.NEON_DATABASE_URL = "postgresql://neon-host/neondb";
+    process.env.SUPABASE_DB_URL = "postgresql://supabase-host/postgres";
+    expect(resolvePgVectorUrl("neon")).toBe("postgresql://neon-host/neondb");
+    expect(resolvePgVectorUrl("supabase")).toBe("postgresql://supabase-host/postgres");
+    expect(resolvePgVectorUrl("postgresql://127.0.0.1:5432/liate")).toBe("postgresql://127.0.0.1:5432/liate");
+
+    const tool = await IntegrationResolver.resolveKnowledgeTool({
+      knowledge: { vector: "neon", embedModel: "sarvam/embeddinggemma-2", topK: 3 }
+    });
+    expect(tool?.name).toBe("search_knowledge");
+
+    const seenHeaders: any[] = [];
+    const srv = Bun.serve({
+      port: 0,
+      async fetch(req) {
+        const url = new URL(req.url);
+        seenHeaders.push({
+          path: url.pathname,
+          apiKey: req.headers.get("api-key"),
+          apiVersion: req.headers.get("x-pinecone-api-version")
+        });
+        if (url.pathname === "/vectors/upsert") {
+          return Response.json({ upsertedCount: 1 });
+        }
+        return Response.json({
+          matches: [
+            { id: "doc1", score: 0.96, metadata: { source: "docs/rag.md", content: "LIATE 2026 RAG" } }
+          ]
+        });
+      }
+    });
+
+    try {
+      // Override https->http via custom fetch test or verify PineconeSource headers on local HTTP
+      const origFetch = globalThis.fetch;
+      globalThis.fetch = ((input: any, init: any) => {
+        const target = String(input).replace("https://", "http://");
+        return origFetch(target, init);
+      }) as any;
+
+      try {
+        const pc = new PineconeSource({
+          vector: "pinecone",
+          embedModel: "sarvam/embeddinggemma-2",
+          indexHost: `127.0.0.1:${srv.port}`,
+          apiKey: "pcsk_test_2026",
+          namespace: "prod"
+        });
+        const count = await pc.upsert(
+          [{ id: "doc1", source: "docs/rag.md", content: "LIATE 2026 RAG" }],
+          [[0.1, 0.2, 0.3]]
+        );
+        expect(count).toBe(1);
+
+        const hits = await pc.query("LIATE RAG", [0.1, 0.2, 0.3]);
+        expect(hits).toHaveLength(1);
+        expect(hits[0].score).toBe(0.96);
+        expect(seenHeaders[0].apiVersion).toBe("2026-07");
+        expect(seenHeaders[0].apiKey).toBe("pcsk_test_2026");
+      } finally {
+        globalThis.fetch = origFetch;
+      }
+    } finally {
+      srv.stop();
+    }
+  });
+
+  test("Layer [T] resolves builtin tools, API tools, and inline MCP v2 tools together", async () => {
+    expect(listBuiltinTools()).toContain("datetime");
+    expect(listBuiltinTools()).toContain("math");
+
+    const srv = Bun.serve({
+      port: 0,
+      fetch(req) {
+        const url = new URL(req.url);
+        return Response.json({ path: url.pathname, auth: req.headers.get("authorization") });
+      }
+    });
+
+    try {
+      const tools = await ToolRegistry.resolveTools(
+        [
+          "builtin:datetime",
+          "builtin:math",
+          {
+            type: "api",
+            name: "user_lookup",
+            description: "Lookup user by ID",
+            method: "GET",
+            url: `http://127.0.0.1:${srv.port}/users/{userId}`,
+            headers: { Authorization: "Bearer $DEMO_KEY" }
+          },
+          {
+            type: "mcp-inline",
+            name: "local-mcp",
+            tools: [
+              {
+                name: "greet",
+                description: "Greet someone",
+                parameters: {
+                  type: "object",
+                  properties: { name: { type: "string" } },
+                  required: ["name"]
+                },
+                execute: async (a: any) => `Namaste, ${a.name}!`
+              }
+            ]
+          }
+        ],
+        { DEMO_KEY: "tok_abc" }
+      );
+
+      expect(tools.map((t) => t.name)).toEqual(["datetime", "math", "user_lookup", "greet"]);
+
+      const mathOut = JSON.parse(String(await tools[1].execute({ expression: "(10 + 5) * 2" })));
+      expect(mathOut.result).toBe(30);
+
+      const apiOut = JSON.parse(String(await tools[2].execute({ userId: "u_99" })));
+      expect(apiOut.path).toBe("/users/u_99");
+      expect(apiOut.auth).toBe("Bearer tok_abc");
+
+      const mcpOut = await tools[3].execute({ name: "Vinod" });
+      expect(mcpOut).toBe("Namaste, Vinod!");
+    } finally {
+      srv.stop();
+    }
   });
 });
