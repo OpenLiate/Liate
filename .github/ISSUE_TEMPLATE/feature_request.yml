@@ -1,0 +1,31 @@
+name: Feature Request
+description: Propose a new capability across L · I · A · T · E, CLI, Runtime, or Python SDK
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Target Layer / Area
+      options:
+        - "L — Large Models / Gateways"
+        - "I — Integration / Memory / Adapters"
+        - "A — Agent / ReAct Loop / Harness"
+        - "T — Tools / MCP v2"
+        - "E — Environment / Sandbox"
+        - "CLI / Hono Runtime / Python SDK"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / Use Case
+      description: What problem does this solve when building AI agents with Liate?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed OOP / agent.json API
+      description: How should developers declare or use this cleanly in L·I·A·T·E?
+      render: typescript

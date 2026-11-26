@@ -1,0 +1,46 @@
+name: New Layer [L] Provider Request
+description: Request or propose a new LLM / Voice / Reasoning provider under src/layers/llm/providers/
+title: "[Provider]: "
+labels: ["enhancement", "layer-L"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Want to add it yourself? See [CONTRIBUTING.md](https://github.com/OpenLiate/Liate/blob/main/CONTRIBUTING.md) — adding an OpenAI-compatible provider takes **1 file** in `src/layers/llm/providers/` + **1 line** in `registry.ts`.
+  - type: input
+    id: provider_name
+    attributes:
+      label: Provider Name & Slug
+      placeholder: "e.g. Groq (groq), Cerebras (cerebras), Together (together)"
+    validations:
+      required: true
+  - type: input
+    id: base_url
+    attributes:
+      label: Base URL / OpenAI-Compatible Endpoint
+      placeholder: "https://api.groq.com/openai/v1"
+    validations:
+      required: true
+  - type: input
+    id: env_key
+    attributes:
+      label: Environment Variable Name(s)
+      placeholder: "GROQ_API_KEY"
+    validations:
+      required: true
+  - type: dropdown
+    id: openai_compat
+    attributes:
+      label: Is it OpenAI-compatible (/chat/completions & /models)?
+      options:
+        - "Yes — standard OpenAI-compatible"
+        - "Mostly — needs custom auth headers"
+        - "No — custom protocol"
+    validations:
+      required: true
+  - type: checkboxes
+    id: willing
+    attributes:
+      label: Contribution
+      options:
+        - label: I would like to open a PR for this provider

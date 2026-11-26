@@ -1,0 +1,49 @@
+name: Bug Report
+description: Report a bug in Liate CLI, Runtime, OOP SDK, or any L·I·A·T·E layer
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting an issue! Please strip any API keys or secrets before posting.
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Affected Layer / Component
+      options:
+        - "L — Large Models / Providers"
+        - "I — Integration / Memory / Knowledge"
+        - "A — Agent / ReAct Loop / Harness"
+        - "T — Tools / MCP v2"
+        - "E — Environment / Sandbox"
+        - "CLI / Hono Runtime"
+        - "Python SDK"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Clear description of the bug and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal Reproduction (agent.ts / agent.json / command)
+      render: typescript
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Output / Logs (remove any API keys)
+      render: shell
+  - type: input
+    id: env
+    attributes:
+      label: Environment (OS, Bun / Node / Python version, Liate version)
+      placeholder: "Windows 11 / macOS / Linux, Bun 1.4.4, @openliate/liate v0.2.5"
+    validations:
+      required: true
