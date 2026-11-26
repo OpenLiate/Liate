@@ -5,7 +5,7 @@
 
 import { resolveAgent } from "@/cli/resolver";
 import { VERSION } from "@/core/version";
-import { EnvironmentResolver } from "@/layers/environment/sandbox";
+import { EnvironmentResolver } from "@/layers/environment/resolver";
 import * as readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
@@ -235,7 +235,7 @@ async function main(): Promise<void> {
   if (command === "skills") {
     const sub = args[1];
     const arg = args.slice(2).join(" ").trim();
-    const { SkillResolver } = await import("@/layers/agent/skills");
+    const { SkillResolver } = await import("@/layers/agent/skills/resolver");
 
     if (sub === "find" || sub === "search") {
       if (!arg) {

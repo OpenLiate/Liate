@@ -1,6 +1,3 @@
-// src/layers/integration/lib.ts
-// Layer [I] Dynamic Library & Module Resolver (exposes npm/local/builtin exports as AgentTools)
-
 import path from "node:path";
 import type { AgentTool } from "@/layers/agent/types";
 
@@ -11,12 +8,13 @@ export interface LoadedLib {
   type: "npm" | "local" | "builtin";
 }
 
+/**
+ * Layer [I] Dynamic Library & Module Resolver
+ * Exposes npm, local, and builtin exports as native AgentTools.
+ */
 export class Lib {
   private static cache = new Map<string, LoadedLib>();
 
-  /**
-   * Dynamically imports any npm library, local file, or Node.js/Bun builtin module.
-   */
   public static async import(nameOrPath: string): Promise<LoadedLib> {
     if (this.cache.has(nameOrPath)) {
       return this.cache.get(nameOrPath)!;
@@ -58,16 +56,13 @@ export class Lib {
       name: nameOrPath,
       module: mod,
       exports,
-      type,
+      type
     };
 
     this.cache.set(nameOrPath, loaded);
     return loaded;
   }
 
-  /**
-   * Resolves multiple libraries declared in Layer [I]
-   */
   public static async resolveLibs(
     libs: string[] | Record<string, string>
   ): Promise<Map<string, LoadedLib>> {
@@ -98,9 +93,6 @@ export class Lib {
     return results;
   }
 
-  /**
-   * Exposes callable functions from loaded libraries as native AgentTools.
-   */
   public static asTools(loadedMap: Map<string, LoadedLib>): AgentTool[] {
     const tools: AgentTool[] = [];
 
@@ -118,9 +110,9 @@ export class Lib {
             properties: {
               input: {
                 type: "string",
-                description: "Input parameter or JSON payload for the library function.",
-              },
-            },
+                description: "Input parameter or JSON payload for the library function."
+              }
+            }
           },
           execute: async (args: any) => {
             let parsed = args.input;
@@ -128,7 +120,7 @@ export class Lib {
               parsed = JSON.parse(args.input);
             } catch {}
             return await mod(parsed);
-          },
+          }
         });
       } else if (typeof mod === "object") {
         for (const [fnName, fnVal] of Object.entries(mod)) {
@@ -143,14 +135,14 @@ export class Lib {
                   args: {
                     type: "array",
                     description: "Arguments array to pass to the function.",
-                    items: { type: "string" },
-                  },
-                },
+                    items: { type: "string" }
+                  }
+                }
               },
               execute: async (args: any) => {
                 const callArgs = Array.isArray(args.args) ? args.args : [args.args];
                 return await (fnVal as any)(...callArgs);
-              },
+              }
             });
           }
         }
@@ -164,4 +156,3 @@ export class Lib {
     this.cache.clear();
   }
 }
-

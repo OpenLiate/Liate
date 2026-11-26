@@ -11,22 +11,36 @@
 
 // 1. The 5 Layers (L · I · A · T · E)
 export * from "@/layers/llm/model";
-export * from "@/layers/integration/memory";
-export * from "@/layers/integration/knowledge";
-export * from "@/layers/integration/repo";
-export * from "@/layers/integration/lib";
-export * from "@/layers/agent/harness";
-export * from "@/layers/agent/loop";
-export * from "@/layers/agent/skills";
+export * from "@/layers/integration/memory/session";
+export * from "@/layers/integration/memory/adapters/registry";
+export * from "@/layers/integration/knowledge/manager";
+export * from "@/layers/integration/knowledge/embeddings";
+export * from "@/layers/integration/knowledge/sources/pgvector";
+export * from "@/layers/integration/knowledge/sources/pinecone";
+export * from "@/layers/integration/resolver";
+export * from "@/layers/integration/context/context";
+export * from "@/layers/integration/repo/resolver";
+export * from "@/layers/integration/lib/loader";
+export * from "@/layers/integration/connectors/registry";
+export * from "@/layers/agent/harness/agent";
+export * from "@/layers/agent/loop/react";
+export * from "@/layers/agent/skills/resolver";
+export * from "@/layers/agent/orchestration/subagent";
+export * from "@/layers/agent/versioning/store";
+export * from "@/layers/agent/versioning/diff";
 export * from "@/layers/agent/types";
-export * from "@/layers/tools/mcp";
-export * from "@/layers/tools/server";
-export * from "@/layers/tools/registry";
-export * from "@/layers/environment/sandbox";
+export * from "@/layers/tools/mcp/client";
+export * from "@/layers/tools/mcp/server";
+export * from "@/layers/tools/mcp/inline";
+export * from "@/layers/tools/builtin/registry";
+export * from "@/layers/tools/api/builder";
+export * from "@/layers/tools/api/registry";
+export * from "@/layers/tools/registry/resolver";
+export * from "@/layers/environment/resolver";
 export * from "@/layers/environment/types";
 
 // Canonical exports to resolve cross-layer duplicates
-export type { AgentTool, ToolCall } from "@/layers/agent/types";
+export type { AgentTool, ToolCall, SubAgentSpec } from "@/layers/agent/types";
 
 // 2. Core Specification, AUM & OM Engine + Scaffolder
 export * from "@/core/spec";

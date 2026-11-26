@@ -42,7 +42,17 @@ export function listLocalHubAgents(): HubAgentSummary[] {
           list.push({
             id: entry.name,
             name: raw.A?.name || entry.name,
-            model: typeof raw.L === "string" ? raw.L : (raw.L?.model || "(unspecified)"),
+            model: (() => {
+              if (!raw.L) return "(unspecified)";
+              if (typeof raw.L === "string") return raw.L;
+              // MultiModelMap: show all tags
+              if (typeof raw.L === "object" && !("model" in raw.L)) {
+                return Object.entries(raw.L)
+                  .map(([tag, m]) => `${tag}:${typeof m === "string" ? m : (m as any).model}`)
+                  .join(" | ");
+              }
+              return raw.L?.model || "(unspecified)";
+            })(),
             intent: raw.A?.intent || "Autonomous Sovereign Agent",
             path: agentJsonPath
           });

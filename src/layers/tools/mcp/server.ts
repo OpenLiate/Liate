@@ -19,7 +19,6 @@ export function createAgentMcpServer(agent: McpAgentLike): McpServer {
     version: agentVersion
   });
 
-  // Tool 1: Run Agent
   (server as any).registerTool(
     `${agentName.toLowerCase()}_run`,
     {
@@ -36,7 +35,6 @@ export function createAgentMcpServer(agent: McpAgentLike): McpServer {
     }
   );
 
-  // Tool 2: Agent Health & Status
   (server as any).registerTool(
     `${agentName.toLowerCase()}_health`,
     {
@@ -66,4 +64,3 @@ export function createAgentMcpServer(agent: McpAgentLike): McpServer {
 
   return server;
 }
-

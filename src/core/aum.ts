@@ -10,11 +10,17 @@ export const AUMSchema = z.object({
       temperature: z.number().optional(),
       maxTokens: z.number().optional(),
       endpoint: z.string().optional()
-    }).passthrough()
+    }).passthrough(),
+    // Named multi-model map: { default: "sarvam/sarvam-m", fast: "ollama/gemma4:e2b" }
+    z.record(z.string(), z.union([
+      z.string(),
+      z.object({ provider: z.string().optional(), model: z.string() }).passthrough()
+    ]))
   ]),
   I: z.object({
     memory: z.string().optional(),
     knowledge: z.union([z.string(), z.array(z.string()), z.record(z.string(), z.any())]).optional(),
+    context: z.union([z.string(), z.record(z.string(), z.any())]).optional(),
     state: z.record(z.string(), z.any()).optional(),
     agentId: z.string().optional(),
     email: z.string().optional()
@@ -24,7 +30,14 @@ export const AUMSchema = z.object({
     version: z.string().optional().default("0.0.1"),
     intent: z.string().optional(),
     maxSteps: z.number().optional().default(10),
-    skills: z.array(z.string()).optional()
+    skills: z.array(z.string()).optional(),
+    subAgents: z.array(z.object({
+      name: z.string().min(1),
+      intent: z.string().optional(),
+      modelTag: z.string().optional(),
+      maxSteps: z.number().optional(),
+      skills: z.array(z.string()).optional()
+    }).passthrough()).optional()
   }).passthrough(),
   T: z.union([
     z.array(z.union([z.string(), z.record(z.string(), z.any())])),

@@ -1,10 +1,11 @@
-import { Agent } from "@/layers/agent/harness";
+import { Agent } from "@/layers/agent/harness/agent";
 import type { AgentRunResult, AgentExecutionOptions } from "@/layers/agent/types";
 import type { AgentModule } from "@/core/spec";
+import { isMultiModelMap } from "@/core/spec";
 import { AUM } from "@/core/aum";
-import { ToolRegistry } from "@/layers/tools/registry";
-import { EnvironmentResolver } from "@/layers/environment/sandbox";
-import { Session } from "@/layers/integration/memory";
+import { ToolRegistry } from "@/layers/tools/registry/resolver";
+import { EnvironmentResolver } from "@/layers/environment/resolver";
+import { IntegrationResolver } from "@/layers/integration/resolver";
 
 export * from "@/core/spec";
 export * from "@/core/aum";
@@ -49,27 +50,50 @@ export class liate {
       EnvironmentResolver.loadEnv();
       const resolvedEnv = EnvironmentResolver.resolve(module.E || {});
 
-      const memory = new Session(module.I?.memory || "ephemeral");
-      const tools = await ToolRegistry.resolveTools(module.T || [], resolvedEnv);
+      const memory = IntegrationResolver.resolveMemory(module.I as any);
+      const integrationTools = await IntegrationResolver.resolveIntegrationTools(module.I as any, resolvedEnv);
+      const mcpTools = await ToolRegistry.resolveTools(module.T || [], resolvedEnv);
+      const tools = [...integrationTools, ...mcpTools];
 
       const agentName = typeof module.A === "object" ? module.A.name : (module.A || this.constructor.name);
+      const agentVersion = typeof module.A === "object" ? (module.A.version || "0.0.1") : "0.0.1";
       const agentIntent = typeof module.A === "object" ? module.A.intent : undefined;
       const maxSteps = typeof module.A === "object" ? module.A.maxSteps : 10;
       const skills = typeof module.A === "object" && Array.isArray(module.A.skills) ? module.A.skills : undefined;
-      const model = typeof module.L === "string" ? module.L : module.L?.model;
-      if (!model) {
+      const subAgents = typeof module.A === "object" && Array.isArray(module.A.subAgents) ? module.A.subAgents : undefined;
+
+      // MultiModelMap — no model extraction needed; pass raw layerL
+      const rawL = module.L;
+      if (!rawL) {
         throw new Error("[Liate Error]: Missing required Layer [L] model definition. OpenLiate never hardcodes silent model defaults.");
       }
-      const modelExtra = typeof module.L === "object" ? module.L : {};
+
+      // For single-model: extract model string; for multi-model: pass layerL through
+      const isMM = isMultiModelMap(rawL as any);
+      const modelStr = isMM
+        ? undefined
+        : (typeof rawL === "string" ? rawL : rawL?.model);
+
+      if (!isMM && !modelStr) {
+        throw new Error("[Liate Error]: Missing required Layer [L] model definition. OpenLiate never hardcodes silent model defaults.");
+      }
+
+      const modelExtra = typeof rawL === "object" && !isMM
+        ? (({ model: _m, ...rest }) => rest)(rawL as any)
+        : {};
 
       this._runner = new Agent({
         name: agentName,
+        version: agentVersion,
         intent: agentIntent,
-        model,
+        model: modelStr,
+        layerL: rawL,
         maxSteps,
         skills,
         memory,
         tools,
+        subAgents,
+        context: module.I?.context,
         ...modelExtra
       } as any);
     }
@@ -88,7 +112,7 @@ export class liate {
    * Gracefully closes all background transports, child processes, and MCP connections
    */
   public async close(): Promise<void> {
-    const { MCP } = await import("@/layers/tools/mcp");
+    const { MCP } = await import("@/layers/tools/mcp/client");
     await MCP.closeAll();
   }
 

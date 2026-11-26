@@ -1,11 +1,12 @@
 import fs from "fs/promises";
 import path from "path";
 import type { AgentMessage, MemoryProvider, RemoteSessionAdapter, SessionData } from "@/layers/integration/types";
+import { resolveSessionAdapter } from "@/layers/integration/memory/adapters/registry";
 
 /**
  * Unified Session Manager for Layer [I]
- * Operates in-memory by default, or auto-persists to .liate/sessions/<name>.json if a path is specified,
- * or delegates to a pluggable RemoteSessionAdapter (e.g., Neon Postgres).
+ * Operates in-memory by default, auto-persists to .liate/sessions/<name>.json,
+ * or delegates to a pluggable RemoteSessionAdapter / registered adapter.
  */
 export class Session implements MemoryProvider {
   public readonly sessionId: string;
@@ -16,26 +17,12 @@ export class Session implements MemoryProvider {
 
   constructor(target?: string, metadata?: Record<string, any>, adapter?: RemoteSessionAdapter) {
     this.adapter = adapter;
-    const isMemory = !target || target === ":memory:" || target === "memory" || target === "in-memory";
 
-    if (isMemory) {
-      this.sessionId = (target && target !== ":memory:" && target !== "memory" && target !== "in-memory")
-        ? target
-        : "ephemeral";
-      this.filePath = undefined;
-    } else {
-      let normalized = target.endsWith(".json") ? target : `${target}.json`;
-      if (!path.isAbsolute(normalized)) {
-        if (normalized.startsWith("sessions/") || normalized.startsWith("sessions\\")) {
-          normalized = path.join(".liate", normalized);
-        } else if (!normalized.startsWith(".liate")) {
-          normalized = path.join(".liate", "sessions", normalized);
-        }
-        this.filePath = path.resolve(process.cwd(), normalized);
-      } else {
-        this.filePath = normalized;
-      }
-      this.sessionId = path.basename(this.filePath, ".json");
+    const resolved = resolveSessionAdapter(target).create(target);
+    this.sessionId = resolved.sessionId;
+    this.filePath = resolved.filePath;
+    if (!this.adapter && resolved.adapter) {
+      this.adapter = resolved.adapter;
     }
 
     const now = new Date().toISOString();
@@ -48,7 +35,7 @@ export class Session implements MemoryProvider {
       state: {}
     };
 
-    if (isMemory) {
+    if (resolved.isInMemory && !this.adapter) {
       this.loaded = true;
     }
   }
@@ -131,7 +118,7 @@ export class Session implements MemoryProvider {
   }
 
   public async setState(key: string, value: any): Promise<void> {
-    if (!this.loaded && this.filePath) {
+    if (!this.loaded && (this.filePath || this.adapter)) {
       await this.load();
     }
     this.data.state[key] = value;
@@ -143,9 +130,12 @@ export class Session implements MemoryProvider {
     this.data.state = {};
     await this.save();
   }
+
+  public async close(): Promise<void> {
+    await this.adapter?.close?.();
+  }
 }
 
 // Clean Aliases
 export const InMemorySession = Session;
 export const FileSessionMemory = Session;
-

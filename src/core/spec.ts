@@ -13,8 +13,14 @@
 /**
  * [L] LLM Layer
  * Sovereign Language Models: Sarvam AI 105B & OpenAI-compatible providers.
+ *
+ * Supports 3 forms:
+ * 1. Single model string:   L: "sarvam/sarvam-m"
+ * 2. Single model object:   L: { provider: "ollama", model: "gemma4:e2b" }
+ * 3. Named multi-model map: L: { default: "sarvam/sarvam-m", fast: "ollama/gemma4:e2b", reason: "openrouter/..." }
+ *    — Agent selects the right model by tag: run(prompt, { modelTag: "fast" })
  */
-export type LayerL = 
+export type SingleModelConfig = 
   | string
   | {
       provider?: string;
@@ -25,7 +31,28 @@ export type LayerL =
       maxTokens?: number;
     };
 
+/** Named multi-model map — developer declares their own tags (fast, reason, voice, …) */
+export type MultiModelMap = Record<string, SingleModelConfig>;
+
+export type LayerL = SingleModelConfig | MultiModelMap;
+
 export type ModelConfig = LayerL;
+
+/** Utility: returns true if LayerL is a named multi-model map */
+export function isMultiModelMap(L: LayerL): L is MultiModelMap {
+  if (!L || typeof L !== "object") return false;
+  // A SingleModelConfig object must have a "model" key; a MultiModelMap doesn't
+  return !("model" in (L as object));
+}
+
+/** Resolves a model tag from a MultiModelMap (falls back to "default" or first entry) */
+export function resolveModelTag(L: MultiModelMap, tag?: string): SingleModelConfig {
+  if (tag && tag in L) return L[tag];
+  if ("default" in L) return L["default"];
+  const first = Object.values(L)[0];
+  if (!first) throw new Error("[Liate Error]: MultiModelMap has no model entries in Layer [L].");
+  return first;
+}
 
 /**
  * [I] Integration Layer
@@ -33,6 +60,7 @@ export type ModelConfig = LayerL;
  */
 export interface LayerI {
   knowledge?: string | string[] | Record<string, unknown>;
+  context?: string | Record<string, unknown>;
   memory?: string;
   state?: Record<string, unknown>;
   agentId?: string;
@@ -41,8 +69,20 @@ export interface LayerI {
 }
 
 /**
+ * Sub-agent specification declared under Layer [A].subAgents.
+ * Never duplicates Layer [L] — uses optional modelTag to select from the parent's Layer [L].
+ */
+export interface SubAgentSpec {
+  name: string;
+  intent?: string;
+  modelTag?: string;
+  maxSteps?: number;
+  skills?: string[];
+}
+
+/**
  * [A] Agent Layer
- * Identity: Name, Intent, Version, maxSteps.
+ * Identity: Name, Intent, Version, maxSteps, subAgents.
  */
 export interface LayerA {
   name: string;
@@ -51,6 +91,7 @@ export interface LayerA {
   system?: string;
   maxSteps?: number;
   skills?: string[];
+  subAgents?: SubAgentSpec[];
   [key: string]: unknown;
 }
 

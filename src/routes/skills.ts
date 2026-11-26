@@ -2,7 +2,7 @@
 // HTTP endpoints for skills.sh search, listing cached skills, and resolving SKILL.md
 
 import { Hono } from "hono";
-import { SkillResolver } from "@/layers/agent/skills";
+import { SkillResolver } from "@/layers/agent/skills/resolver";
 
 export const skillsRouter = new Hono();
 

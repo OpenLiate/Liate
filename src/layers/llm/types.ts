@@ -48,6 +48,8 @@ export interface LlmChatResponse {
   audioBase64?: string;
 }
 
+export type SarvamChatResponse = LlmChatResponse;
+
 export interface LlmTtsOptions {
   text: string;
   model?: string;
@@ -64,4 +66,95 @@ export interface LlmTtsResponse {
   byteLength: number;
 }
 
+export interface LLMExecutionResult {
+  text: string;
+  reasoningContent?: string;
+  provider: string;
+  model: string;
+  durationMs: number;
+  usage?: {
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
+    tokensSaved?: number;
+  };
+}
 
+export interface HubLLMDefinition {
+  name: string;
+  provider: string;
+  version: string;
+  base_url: string;
+  endpoint: string;
+  tts_endpoint?: string;
+  stt_endpoint?: string;
+  models_endpoint?: string;
+  systemone_endpoint?: string;
+  headers: Record<string, string>;
+  features: {
+    tool_calling: boolean;
+    streaming: boolean;
+    reasoning: boolean;
+    system_one_decisions?: boolean;
+  };
+}
+
+export interface DiscoveredModel {
+  id: string;
+  object?: string;
+  created?: number;
+  owned_by?: string;
+  provider: string;
+  description?: string;
+}
+
+export interface NormalizedModel {
+  provider: string;
+  model: string;
+  baseUrl?: string;
+  endpoint?: string;
+  apiKey?: string;
+  temperature?: number;
+  maxTokens?: number;
+}
+
+/**
+ * Declarative Provider Definition for Layer [L].
+ * Contributors add new OpenAI-compatible providers by creating a single file
+ * implementing this interface under src/layers/llm/providers/.
+ */
+export interface ProviderDefinition {
+  /** Unique lowercase provider slug (e.g. "sarvam", "groq", "ollama") */
+  id: string;
+  /** Human-readable provider name */
+  name: string;
+  /** API version tag */
+  version: string;
+  /** Resolves the base URL (can read env overrides dynamically) */
+  baseUrl: () => string;
+  /** Optional explicit chat endpoint override (defaults to `${baseUrl()}/chat/completions`) */
+  endpoint?: () => string;
+  /** Optional models discovery endpoint (defaults to `${baseUrl()}/models`) */
+  modelsEndpoint?: () => string;
+  /** Optional TTS endpoint */
+  ttsEndpoint?: () => string;
+  /** Optional STT endpoint */
+  sttEndpoint?: () => string;
+  /** Optional System-One decision endpoint */
+  systemOneEndpoint?: () => string;
+  /** Ordered environment variable names checked for this provider's API key */
+  envKeys: string[];
+  /** Builds static/placeholder headers for HubLLMDefinition inspection */
+  defaultHeaders?: () => Record<string, string>;
+  /** Builds live HTTP request headers given an optional resolved API key */
+  authHeaders?: (apiKey?: string) => Record<string, string>;
+  /** Optional model name prefixes used to auto-detect this provider when no prefix is given */
+  modelPrefixes?: string[];
+  /** Supported gateway capabilities */
+  features: {
+    tool_calling: boolean;
+    streaming: boolean;
+    reasoning: boolean;
+    system_one_decisions?: boolean;
+  };
+}

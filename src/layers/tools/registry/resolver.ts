@@ -2,8 +2,15 @@ import fs from "fs";
 import path from "path";
 import type { AgentTool } from "@/layers/agent/types";
 import type { McpServerConfig, ParsedToolSpec } from "@/layers/tools/types";
-import { MCP } from "@/layers/tools/mcp";
+import { MCP } from "@/layers/tools/mcp/client";
+import { createInlineMcpTools } from "@/layers/tools/mcp/inline";
+import { resolveBuiltinTool } from "@/layers/tools/builtin/registry";
+import { createApiTool } from "@/layers/tools/api/builder";
+import { resolveApiToolPreset } from "@/layers/tools/api/registry";
 
+/**
+ * Layer [T] Tool & MCP Registry
+ */
 export class ToolRegistry {
   public static parseSpec(spec: string): ParsedToolSpec {
     const trimmed = spec.trim();
@@ -17,11 +24,10 @@ export class ToolRegistry {
     }
 
     if (trimmed.startsWith("mcp:")) {
-      const remainder = trimmed.slice(4); // Remove "mcp:"
+      const remainder = trimmed.slice(4);
       const colonIndex = remainder.indexOf(":");
 
       if (colonIndex === -1) {
-        // e.g. "mcp:agentmail" -> all tools
         return {
           raw: trimmed,
           isMcp: true,
@@ -31,10 +37,9 @@ export class ToolRegistry {
         };
       }
 
-      // e.g. "mcp:agentmail:send_email,read_inbox"
       const serverName = remainder.slice(0, colonIndex).trim();
       const toolsPart = remainder.slice(colonIndex + 1).trim();
-      const selectedTools = toolsPart ? toolsPart.split(",").map(s => s.trim()).filter(Boolean) : undefined;
+      const selectedTools = toolsPart ? toolsPart.split(",").map((s) => s.trim()).filter(Boolean) : undefined;
 
       return {
         raw: trimmed,
@@ -45,10 +50,9 @@ export class ToolRegistry {
       };
     }
 
-    // Check if it's "serverName:tool1,tool2"
     if (trimmed.includes(":")) {
       const [serverName, toolsPart] = trimmed.split(":");
-      const selectedTools = toolsPart ? toolsPart.split(",").map(s => s.trim()).filter(Boolean) : undefined;
+      const selectedTools = toolsPart ? toolsPart.split(",").map((s) => s.trim()).filter(Boolean) : undefined;
       return {
         raw: trimmed,
         isMcp: true,
@@ -58,7 +62,6 @@ export class ToolRegistry {
       };
     }
 
-    // Default to an MCP server name (e.g. "agentmail")
     return {
       raw: trimmed,
       isMcp: true,
@@ -68,9 +71,6 @@ export class ToolRegistry {
     };
   }
 
-  /**
-   * Resolve local workspace .liate/mcp.json path
-   */
   public static getMcpJsonPath(): string {
     const candidates = [
       path.resolve(process.cwd(), ".liate", "mcp.json"),
@@ -82,9 +82,6 @@ export class ToolRegistry {
     return path.resolve(process.cwd(), ".liate", "mcp.json");
   }
 
-  /**
-   * Reads .liate/mcp.json if available
-   */
   public static readWorkspaceMcpServers(): Record<string, any> {
     const mcpJsonPath = ToolRegistry.getMcpJsonPath();
     if (fs.existsSync(mcpJsonPath)) {
@@ -97,9 +94,6 @@ export class ToolRegistry {
     return {};
   }
 
-  /**
-   * Caches/writes an MCP server definition into .liate/mcp.json
-   */
   public static cacheMcpServer(serverName: string, config: McpServerConfig): void {
     try {
       const mcpJsonPath = ToolRegistry.getMcpJsonPath();
@@ -134,7 +128,6 @@ export class ToolRegistry {
   public static loadMcpConfig(serverName: string, customEnv: Record<string, string | undefined> = process.env): McpServerConfig {
     let parsed: McpServerConfig | null = null;
 
-    // Check workspace .liate/mcp.json (local cache & user-registered servers)
     const workspaceServers = ToolRegistry.readWorkspaceMcpServers();
     if (workspaceServers && workspaceServers[serverName]) {
       const s = workspaceServers[serverName];
@@ -155,7 +148,6 @@ export class ToolRegistry {
       throw new Error(`MCP server '${serverName}' not found. Define it directly inline in Layer [T] (e.g. { url: "...", transport: "http" }) or register it in .liate/mcp.json.`);
     }
 
-    // Resolve environment variables in headers and URL
     const resolvedHeaders: Record<string, string> = {};
     for (const [k, v] of Object.entries(parsed.headers || {})) {
       if (typeof v === "string" && v.startsWith("$")) {
@@ -204,17 +196,26 @@ export class ToolRegistry {
 
     for (const item of rawList) {
       if (typeof item === "object" && item !== null) {
-        // Direct AgentTool object (has name & execute function)
         if ("name" in item && "execute" in item && typeof (item as any).execute === "function") {
           resolved.push(item as AgentTool);
           continue;
         }
 
-        // Inline MCP Config Object (e.g. { command: "uvx", args: ["mcp-server-time"], tools: ["*"] })
+        if ((item as any).type === "mcp-inline" && Array.isArray((item as any).tools)) {
+          const { tools } = createInlineMcpTools(item as any);
+          resolved.push(...tools);
+          continue;
+        }
+
+        if ((item as any).type === "api" && (item as any).url && (item as any).name) {
+          resolved.push(createApiTool(item as any, customEnv));
+          continue;
+        }
+
         if ("command" in item || "url" in item) {
           const rawArgs = (item as any).args;
           const resolvedArgs = Array.isArray(rawArgs)
-            ? rawArgs.map(arg => typeof arg === "string" ? arg.replace(/\$([A-Z0-9_]+)/g, (_, name) => customEnv[name] || process.env[name] || "") : arg)
+            ? rawArgs.map((arg) => typeof arg === "string" ? arg.replace(/\$([A-Z0-9_]+)/g, (_, name) => customEnv[name] || process.env[name] || "") : arg)
             : undefined;
 
           const rawEnv = (item as any).env;
@@ -272,6 +273,22 @@ export class ToolRegistry {
 
       if (typeof item === "string") {
         const trimmed = item.trim();
+
+        // Built-in local tools: "builtin:datetime", "builtin:math", "builtin:*"
+        if (trimmed.toLowerCase().startsWith("builtin:")) {
+          resolved.push(...resolveBuiltinTool(trimmed));
+          continue;
+        }
+
+        // Preset API tools: "api:<name>"
+        if (trimmed.toLowerCase().startsWith("api:")) {
+          const preset = resolveApiToolPreset(trimmed);
+          if (preset) {
+            resolved.push(createApiTool(preset, customEnv));
+          }
+          continue;
+        }
+
         const parsed = this.parseSpec(trimmed);
 
         if (trimmed.toLowerCase() === "fetch" || trimmed.toLowerCase() === "mcp:fetch" || trimmed.toLowerCase() === "mcp/fetch") {

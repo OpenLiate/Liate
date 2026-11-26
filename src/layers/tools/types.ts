@@ -36,3 +36,27 @@ export interface ParsedToolSpec {
   selectedTools?: string[];
 }
 
+export interface ApiToolSpec {
+  type?: "api";
+  name: string;
+  description?: string;
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  url: string;
+  headers?: Record<string, string>;
+  parameters?: Record<string, any>;
+}
+
+export interface InlineMcpToolSpec {
+  name: string;
+  description: string;
+  parameters?: Record<string, any>;
+  execute: (args: Record<string, any>) => Promise<unknown> | unknown;
+}
+
+export interface InlineMcpSpec {
+  type?: "mcp-inline";
+  name: string;
+  version?: string;
+  tools: InlineMcpToolSpec[];
+}
+

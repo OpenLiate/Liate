@@ -9,7 +9,7 @@ import type {
 } from "@/layers/agent/types";
 import type { MemoryProvider } from "@/layers/integration/types";
 import type { LlmMessage, LlmChatResponse } from "@/layers/llm/model";
-import { EnvironmentResolver } from "@/layers/environment/sandbox";
+import { EnvironmentResolver } from "@/layers/environment/resolver";
 
 export interface LLMFunctionCaller {
   chat(messages: LlmMessage[], options?: any): Promise<LlmChatResponse & { toolCalls?: ToolCall[] }>;
@@ -214,4 +214,3 @@ Follow the ReAct methodology: Reason carefully, invoke tools when needed, observ
     };
   }
 }
-

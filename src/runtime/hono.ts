@@ -8,7 +8,7 @@ import { logger } from "hono/logger";
 import { streamSSE } from "hono/streaming";
 import { liate } from "@/core/om";
 import { VERSION } from "@/core/version";
-import { Session } from "@/layers/integration/memory";
+import { Session } from "@/layers/integration/memory/session";
 import { LLMRouter } from "@/layers/llm/model";
 import { skillsRouter } from "@/routes/skills";
 import { listLocalHubAgents } from "@/cli/resolver";
