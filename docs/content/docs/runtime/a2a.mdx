@@ -1,0 +1,54 @@
+---
+title: "A2A v1.0 Protocol"
+description: "Agent-to-Agent (A2A v1.0) discovery cards, JSON-RPC server, and peer orchestration"
+icon: "network"
+---
+
+## Overview
+
+Liate implements the **Agent-to-Agent (A2A) v1.0** protocol natively inside Layer `[A]` (`src/layers/agent/a2a/`), allowing any `class extends liate` or `agent.json` to advertise capabilities and collaborate with remote peer agents.
+
+---
+
+## Discovery & JSON-RPC Endpoints
+
+Exposed automatically by the Hono Edge Runtime (`src/runtime/hono.ts`):
+
+- `GET /.well-known/agent-card.json` — A2A v1.0 Agent Card (`supportedInterfaces`, `skills`, `capabilities`)
+- `GET /.well-known/agent.json` — Legacy discovery alias
+- `POST /a2a` — JSON-RPC 2.0 endpoint supporting `message/send` and `tasks/get`
+
+---
+
+## Calling a Remote A2A Peer
+
+### 1. Declaratively via `A.subAgents[].a2aUrl`
+
+```typescript
+import { liate } from "@openliate/liate";
+
+class CoordinatorAgent extends liate {
+  L = "sarvam/sarvam-105b";
+  A = {
+    name: "coordinator",
+    intent: "Delegate specialized tasks to remote A2A peer agents.",
+    subAgents: [
+      {
+        name: "cold_chain_peer",
+        intent: "Cold-chain IoT incident controller",
+        a2aUrl: "https://cold-chain.openliate.tech"
+      }
+    ]
+  };
+}
+```
+
+### 2. Directly via `A2AClient`
+
+```typescript
+import { A2AClient } from "@openliate/liate";
+
+const client = new A2AClient("http://localhost:7071");
+const card = await client.getAgentCard();
+const task = await client.sendMessage("Check cold-chain telemetry for TRK-101");
+```

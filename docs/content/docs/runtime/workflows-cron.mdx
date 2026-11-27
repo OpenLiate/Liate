@@ -1,0 +1,87 @@
+---
+title: "Workflows, Cron & Durable Execution"
+description: "Crash-safe durable workflows, SQLite step replay, and zero-dependency cron scheduling inside L·I·A·T·E"
+icon: "workflow"
+---
+
+## Overview
+
+In Liate (`v0.3.5+`), **Durable Execution**, **Workflows**, and **Cron Scheduling** live directly inside your 5-layer `class extends liate` specification — no external orchestrator or separate YAML DSL required:
+
+- **`A.durable` + `DurableRunStore`:** SQLite-backed (`bun:sqlite`) step journal for crash-safe, idempotent `agent.resumeWorkflow(runId)`.
+- **`A.workflow` + `WorkflowRunner`:** Deterministic `sequence`, `parallel`, `branch`, `sleep`, `tool`, `subagent`, and `agent` steps with `{{input}}`, `{{prev}}`, and `{{steps.<id>.text}}` interpolation.
+- **`A.schedule` + `CronScheduler`:** Zero-dependency 5-field cron, aliases (`@hourly`, `@daily`, `@weekly`), and intervals (`@every 30s`, `@every 5m`) with Layer `[E]` concurrency guards and SQLite persistence.
+
+---
+
+## 1. Durable Workflows (`A.durable` + `A.workflow`)
+
+```typescript
+import { liate, BUILTIN_TOOLS } from "@openliate/liate";
+
+class OrderAuditAgent extends liate {
+  L = "sarvam/sarvam-105b";
+  I = { memory: "sqlite://.liate/sessions.db" };
+  A = {
+    name: "order-audit-agent",
+    durable: ".liate/durable.db",
+    workflow: [
+      { id: "time", type: "tool", tool: "datetime", args: { action: "now" } },
+      {
+        id: "checks",
+        type: "parallel",
+        steps: [
+          { id: "calc", type: "tool", tool: "math", args: { expression: "21 * 2" } },
+          { id: "note", type: "agent", prompt: "Summarize {{input}} at {{steps.time.text}}" }
+        ]
+      }
+    ]
+  };
+  T = [BUILTIN_TOOLS.datetime, BUILTIN_TOOLS.math];
+}
+
+const agent = new OrderAuditAgent();
+const res = await agent.runWorkflow("audit-batch-42", { durable: true, runId: "run_42" });
+
+// If a step crashes or pauses, resume idempotently without re-running completed steps:
+const resumed = await agent.resumeWorkflow("run_42");
+```
+
+---
+
+## 2. Cron Scheduling (`A.schedule` + `CronScheduler`)
+
+```typescript
+import { liate } from "@openliate/liate";
+
+class DailyBriefingAgent extends liate {
+  L = "sarvam/sarvam-105b";
+  A = {
+    name: "daily-briefing",
+    durable: ".liate/durable.db",
+    schedule: {
+      id: "morning_brief",
+      cron: "0 9 * * 1-5",
+      prompt: "Generate the weekday operations summary.",
+      maxConcurrentRuns: 1
+    }
+  };
+}
+
+const scheduler = await new DailyBriefingAgent().createScheduler(".liate/durable.db");
+scheduler.start(1000); // Polls & executes due jobs with overlap protection
+```
+
+### Supported Cron Formats
+- Standard 5-field UTC cron (`*/5 * * * *`, `0 9 * * 1-5`, lists `1,15`, ranges `1-5`)
+- Aliases: `@hourly`, `@daily`, `@midnight`, `@weekly`, `@monthly`, `@yearly`
+- Intervals: `@every 100ms`, `@every 30s`, `@every 5m`, `@every 1h`
+
+---
+
+## 3. Hono Runtime Endpoints
+
+When running `src/runtime/hono.ts`:
+- `GET /cron` — lists registered cron jobs, `lastRunAt`, `nextRunAt`, `lastStatus`, and `runCount`.
+- `POST /workflow/resume` — resumes a paused or failed durable workflow by `{ runId }`.
+- `POST /resume` — resumes a HITL tool-approval checkpoint by `{ checkpointId, approved }`.

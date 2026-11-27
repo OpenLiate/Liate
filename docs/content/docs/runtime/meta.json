@@ -2,6 +2,8 @@
   "title": "Runtime & Engine",
   "pages": [
     "module",
+    "workflows-cron",
+    "a2a",
     "hub",
     "api",
     "docker"

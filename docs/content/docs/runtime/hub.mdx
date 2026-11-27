@@ -1,39 +1,73 @@
 ---
-title: "The Liate Hub"
-description: "Pre-configured agents, LLM definitions, and MCP servers in the local registry"
+title: "The Liate Hub (21 Agents)"
+description: "21 live-verified Physical AI, FDE, Sovereign Indic, OOP SDK, and Multi-Model agents in hub/agents"
 icon: "shapes"
 ---
 
 ## Overview
 
-The **Liate Hub** (`hub/`) acts as OpenLiate's local package registry. It allows you to run pre-configured agents, load model definitions, and configure MCP servers by name without specifying manual file paths.
+The **Liate Hub** (`hub/agents/`) is OpenLiate's local registry of **21 production & device agents**. Every hub agent follows the 5-layer `L · I · A · T · E` specification (`agent.json` and/or OOP `class extends liate` in `agent.ts`) and uses real tools, databases, APIs, and hardware — zero simulated mocks.
 
 ---
 
-## Directory Structure
+## 1. Physical AI & Local Device Agents (5)
 
-```
-hub/
-└── agents/
-    ├── sarvam-agent/agent.json   # Indic AI agent powered by Sarvam AI 105B
-    ├── neon-agent/agent.json     # Serverless agent routing via Neon AI Gateway
-    └── prism-agent/agent.json    # Agent leveraging Vercel Labs open skills (skills.sh)
-```
+| Agent | Runtime / MCP | What It Controls |
+| :--- | :--- | :--- |
+| `phoneyaan-agent` | `./mcp_android.py` (ADB) | Physical Android device: live PNG screenshot, UI XML hierarchy (`uiautomator`), tap, type, keys, launch apps |
+| `photographer-agent` | `uv run --with opencv-python ./camera_mcp.py` | Physical laptop webcam capture to JPEG |
+| `screen-agent` | `./screen_mcp.py` (PowerShell GDI) | Desktop PNG screen capture |
+| `system-agent` | `./system_mcp.py` | Local OS app launch, sleep, and system control |
+| `scheduler-agent` | `./scheduler_tool.py` + `./daemon.py` | SQLite-backed cron job management |
 
 ---
 
-## Running Hub Agents by Name
+## 2. FDE & Enterprise OOP Agents (`class extends liate`) (6)
 
-The CLI automatically searches `hub/agents/<name>/agent.json`:
+| Agent | OOP Class (`agent.ts`) | Backend / Capability |
+| :--- | :--- | :--- |
+| `cold-chain-agent` | `ColdChainAgent` | **Cold-Chain FDE Incident Controller** — live SQLite IoT telemetry (`server.py`) + SOP enforcement (`sop.md`) |
+| `supabase-dba-agent` | `SupabaseLibAgent` | Live PostgreSQL (`DATABASE_URL`) & Supabase REST/Auth/Storage administration |
+| `welcome-sms-agent` | `WelcomeSmsAgent` | Live PostgreSQL onboarding + Sarvam `mayura:v1` Indic translation + Twilio REST SMS |
+| `zod-guard-agent` | `ZodLibAgent` | Strict Zod payload, email, and payment validation |
+| `docgyan-agent` | `DocGyanAgent` | OpenLiate docs & code intelligence via `uvx mcp-server-fetch` |
+| `langchain-agent` | `LangChainLibAgent` | Pure-TS recursive text splitting, prompt templates, and RAG document indexing |
+
+---
+
+## 3. Sovereign Indic & Domain Agents (6)
+
+| Agent | Provider / MCP | Purpose |
+| :--- | :--- | :--- |
+| `sarvam-agent` | `sarvam/sarvam-105b` + `uvx sarvam-mcp` | Sovereign Indic AI assistant |
+| `gnani-agent` | `gnani/timbre-v3.0` (`client.tts()`) | Indic Voice & Text-to-Speech synthesis |
+| `prism-agent` | `sarvam/sarvam-prism` (`/v2/systemone`) | High-speed System-1 security & anomaly decisioning |
+| `railyaan-agent` | `mcp-remote` + `skills.md` | Indian Railways (IRCTC) intelligence |
+| `agentyaan-agent` | `mcp-remote` + `skills.md` | Sovereign satellite & space tracking |
+| `raksha-agent` | `sarvam/sarvam-105b` + `skills.md` | Disaster response & safety assistant |
+
+---
+
+## 4. Multi-Model & Gateway Starters (4)
+
+| Agent | Model / Gateway | Purpose |
+| :--- | :--- | :--- |
+| `multi-model-agent` | `MultiModelMap` (`default`, `fast`) | Named model-tag routing inside Layer `[L]` |
+| `neon-agent` | `neon/gpt-5-4-nano` | Neon AI Gateway routing with SSE support |
+| `openrouter-agent` | `openrouter/nvidia/nemotron-3.5-lightning:free` | OpenRouter 469+ model gateway |
+| `ollama-agent` | `ollama/gemma4:e2b` | Local GPU inference via Ollama |
+
+---
+
+## Running Hub Agents
 
 ```bash
-# Execute the Sarvam Indic Agent
-liate run sarvam-agent "Namaste, who are you?"
+# Run any hub agent by folder directory
+cd hub/agents/cold-chain-agent
+bun --env-file=../../../.env run ../../../src/cli/index.ts run ./agent.json "Check telemetry for TRK-101"
 
-# Execute the Neon AI Gateway Agent
-liate run neon-agent "Hello from Neon AI Gateway"
-
-# Execute the Prism Skills Agent
-liate run prism-agent "Find best skills for research"
+# Or via liate.load() in TypeScript
+import { liate } from "@openliate/liate";
+const agent = await liate.load("hub/agents/multi-model-agent");
+const result = await agent.run("Hello from Liate!");
 ```
-
