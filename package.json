@@ -1,7 +1,7 @@
 {
   "name": "@openliate/liate",
   "version": "0.3.5",
-  "description": "LIATE — Open Source OOP Framework for AI Agents · From India, For India, Beyond India",
+  "description": "LIATE — Open Source OOP Framework for AI Agents · A Class is an Agent",
   "type": "module",
   "main": "./dist/liate.js",
   "types": "./src/liate.ts",
@@ -51,13 +51,17 @@
     "typescript": "^5.7.0"
   },
   "keywords": [
-    "liate",
-    "agent",
+    "open-source-framework-for-ai-agents",
+    "open-source",
+    "framework",
+    "ai-agents",
+    "oop-framework",
     "autonomous-agents",
     "sovereign-ai",
     "agent-platform",
     "runtime",
-    "mcp"
+    "mcp",
+    "liate"
   ],
   "author": "OpenLiate (https://github.com/OpenLiate)",
   "license": "MIT",

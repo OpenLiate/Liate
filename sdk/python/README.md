@@ -1,7 +1,8 @@
 <div align="center">
 
-# LIATE — Open Source OOP Framework for AI Agents
-### Where Classes Are AI Agents · From India, For India, Beyond India
+# Let's Try Liate
+## Open Source OOP Framework for AI Agents
+### A Class is an Agent
 
 `L[LM] · I[ntegration] · A[gent] · T[ools] · E[nvironment]`
 
@@ -175,3 +176,15 @@ OpenLiate maps 1-to-1 to this 5-element architecture:
 ## [5] License
 
 [MIT License](https://github.com/OpenLiate/Liate/blob/main/LICENSE) © 2026 OpenLiate.
+
+<br>
+
+<div align="center">
+
+**LIATE — Open Source OOP Framework for AI Agents · A Class is an Agent**
+
+<br>
+
+*From India, For India, Beyond India 🇮🇳 🌍*
+
+</div>

@@ -1,6 +1,6 @@
 """
-OpenLiate — Open Source Backend Layer for AI Agents
-Where Classes Are AI Agents · From India, For India, Beyond India 🇮🇳 🌍
+OpenLiate Python SDK — Open Source OOP Framework for AI Agents
+A Class is an Agent · From India, For India, Beyond India 🇮🇳 🌍
 """
 from liate import liate, Liate, LiateApiClient, AgentRunResult, __version__
 

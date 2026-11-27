@@ -1,7 +1,8 @@
 <div align="center">
 
-# LIATE — Open Source OOP Framework for AI Agents
-### Where Classes Are AI Agents · From India, For India, Beyond India 
+# Let's Try Liate
+## Open Source OOP Framework for AI Agents
+### A Class is an Agent
 
 `L[LM] · I[ntegration] · A[gent] · T[ools] · E[nvironment]`
 
@@ -466,10 +467,10 @@ Every agent implements the **Agent Unified Module (AUM)** across 5 sovereign lay
 
 <div align="center">
 
-**LIATE — Open Source OOP Framework for AI Agents**
+**LIATE — Open Source OOP Framework for AI Agents · A Class is an Agent**
 
 <br>
 
-Built from India to the World
+*From India, For India, Beyond India 🇮🇳 🌍*
 
 </div>
