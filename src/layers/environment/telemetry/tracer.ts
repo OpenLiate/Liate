@@ -219,7 +219,7 @@ export class Tracer {
           },
           scopeSpans: [
             {
-              scope: { name: "@openliate/liate", version: "0.3.0" },
+              scope: { name: "@openliate/liate", version: "0.3.5" },
               spans: this.spans.map((s) => ({
                 traceId: s.traceId,
                 spanId: s.spanId,

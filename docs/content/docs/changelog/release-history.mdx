@@ -4,6 +4,17 @@ description: "Changelog and version milestones for OpenLiate"
 icon: "history"
 ---
 
+## v0.3.5 (Nov 27, 2026) - Sprint 7: A Class IS an Agent — Durable Workflows, Cron, A2A v1.0, FDE & Physical AI Agents
+
+* **A2A v1.0 Protocol:** Added compliant Agent Card discovery (`/.well-known/agent-card.json`, `/.well-known/agent.json`), JSON-RPC `POST /a2a` server, and `A2AClient` peer orchestration.
+* **Durable Execution & HITL Checkpointing:** Added `CheckpointStore` for HITL approval pause/resume (`POST /resume`) and SQLite-backed `DurableRunStore` for crash-safe step replay (`agent.resumeWorkflow(runId)`).
+* **Workflows & Cron Scheduling:** Added `WorkflowRunner` (`sequence`, `parallel`, `branch`, `sleep`, retries) and zero-dependency `CronScheduler` (`A.schedule`, `GET /cron`, `POST /workflow/resume`).
+* **Typed Structured Outputs, Evals & Telemetry:** Added `StructuredOutputResolver` with 1-step self-repair, `EvalRunner`, and `TelemetryTracer` (`p50`/`p95`/`p99`, TTFT, TTFC).
+* **FDE & Physical AI Agents (`21/21` Hub Agents):** Verified live FDE (`cold-chain-agent`), physical device control (`phoneyaan-agent` ADB, `photographer-agent`, `screen-agent`, `system-agent`, `scheduler-agent`), and live Neon Postgres / Sarvam / OpenRouter / Gnani / Ollama agents.
+* **Automated Test Suite:** Expanded `bun test` to **56 passing tests (234 assertions across 6 test files)**.
+
+---
+
 ## v0.3.0 (Nov 26, 2026) - Sprint 6: Full L·I·A·T·E Modularization, Multi-Model L, Sub-Agents, Vector RAG & Open Source Governance
 
 * **Layer `[L]` Modularization & Multi-Model Map:** Modularized `src/layers/llm/` into `providers/`, `transport/`, `normalize.ts`, `client.ts`, `router.ts`, and `model.ts`. Added `MultiModelMap` (`L: { default, fast, reason }`) + `modelTag` routing, plus the **Groq** provider.

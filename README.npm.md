@@ -13,8 +13,8 @@
   <a href="https://sarvam.ai"><img src="https://raw.githubusercontent.com/OpenLiate/Liate/main/assets/sarvam-badge.svg" alt="Powered by Sarvam AI Startup Program"></a>
   <a href="https://exa.ai"><img src="https://raw.githubusercontent.com/OpenLiate/Liate/main/assets/exa-badge.svg" alt="Powered by Exa.ai Startup Program"></a>
   <a href="https://codespaces.new/OpenLiate/Liate"><img src="https://img.shields.io/badge/Codespaces-1--Click_Run-white?logo=github&logoColor=white&labelColor=black&style=flat-square" alt="Open in GitHub Codespaces"></a>
-  <a href="https://www.npmjs.com/package/openliate"><img src="https://img.shields.io/badge/npm-v0.3.0-white?labelColor=black&style=flat-square" alt="npm: v0.3.0"></a>
-  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/badge/pypi-v0.3.0-white?logo=pypi&logoColor=FFD43B&labelColor=black&style=flat-square" alt="PyPI: v0.3.0"></a>
+  <a href="https://www.npmjs.com/package/openliate"><img src="https://img.shields.io/badge/npm-v0.3.5-white?labelColor=black&style=flat-square" alt="npm: v0.3.5"></a>
+  <a href="https://pypi.org/project/liate/"><img src="https://img.shields.io/badge/pypi-v0.3.5-white?logo=pypi&logoColor=FFD43B&labelColor=black&style=flat-square" alt="PyPI: v0.3.5"></a>
   <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fvinodhatti%2F4e50442b9bc06000069dd0c1552ab66b%2Fraw%2Fdownloads.json&style=flat-square&labelColor=black" alt="Total Downloads">
   <img src="https://img.shields.io/badge/Bun-Supported-white?logo=bun&logoColor=white&labelColor=black&style=flat-square" alt="Bun">
   <img src="https://img.shields.io/badge/Node.js-Supported-white?logo=node.js&logoColor=5FA04E&labelColor=black&style=flat-square" alt="Node.js">

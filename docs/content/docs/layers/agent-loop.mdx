@@ -24,7 +24,7 @@ export class Coordinator extends liate {
   L = { default: "sarvam/sarvam-105b", fast: "groq/qwen/qwen3.8-27b" };
   A = {
     name: "Coordinator",
-    version: "0.3.0",
+    version: "0.3.5",
     intent: "Delegate research to subagent_researcher and write the final answer.",
     subAgents: [
       { name: "researcher", intent: "Gather verified facts.", modelTag: "fast", maxSteps: 3 },

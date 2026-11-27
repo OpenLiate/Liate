@@ -4,6 +4,18 @@ All notable changes to Liate: Open Source Backend Layer for AI Agents — From I
 
 ---
 
+## Sprint 7: A Class IS an Agent — Durable Workflows, Cron, A2A v1.0, FDE & Physical AI Agents (v0.3.5)
+
+### v0.3.5 (Sprint 7 — Frontier Durable Runtime, FDE & Physical AI Agents)
+- **A2A v1.0 Protocol (`src/layers/agent/a2a/`)**: Compliant `/.well-known/agent-card.json` & `/.well-known/agent.json` discovery, JSON-RPC `POST /a2a` server, and `A2AClient` peer invocation.
+- **Durable Execution & HITL Checkpointing (`src/layers/agent/checkpoint/`)**: Added `CheckpointStore` for HITL pause/resume (`POST /resume`) and `DurableRunStore` (`bun:sqlite`) for crash-safe step replay (`agent.resumeWorkflow(runId)`).
+- **Workflows & Cron (`src/layers/agent/orchestration/workflow.ts`, `src/runtime/cron.ts`)**: Added `WorkflowRunner` (`sequence`, `parallel`, `branch`, `sleep`, `retries`, `{{steps.<id>.text}}`) and zero-dependency `CronScheduler` (`A.schedule`, `GET /cron`, `POST /workflow/resume`).
+- **Typed Structured Outputs, Evals & Telemetry**: Added `StructuredOutputResolver` (Zod/JSON Schema + 1-step self-repair), `EvalRunner` + built-in scorers, and `TelemetryTracer` (`p50`/`p95`/`p99`, TTFT, TTFC).
+- **FDE & Physical AI Hub (`21/21` Verified Live Agents)**: Added & aligned `cold-chain-agent` (FDE SQLite IoT + SOP), `phoneyaan-agent` (live Android ADB), `photographer-agent` (webcam), `screen-agent` (desktop PNG), `system-agent` (OS control), `scheduler-agent` (SQLite cron), `supabase-dba-agent` (live Neon Postgres), `welcome-sms-agent` (live Postgres + Sarvam `mayura:v1` + Twilio), `zod-guard-agent`, `langchain-agent`, `railyaan-agent`, `agentyaan-agent`, and `raksha-agent`.
+- **Automated Verification**: Expanded `bun test` to **56 passing tests (234 assertions across 6 files)** with `tsc --noEmit` exit 0.
+
+---
+
 ## Sprint 6: Full L·I·A·T·E Modularization, Multi-Model L, Sub-Agents, Vector RAG & Open Source Governance (v0.3.0)
 
 ### v0.3.0 (Sprint 6 — Modular 5-Layer Architecture & Contributor-Ready Ecosystem)
