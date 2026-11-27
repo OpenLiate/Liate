@@ -1,0 +1,17 @@
+{
+  "L": "sarvam/sarvam-105b",
+  "I": {
+    "memory": "sessions/welcome-sms-session"
+  },
+  "A": {
+    "name": "welcome-sms-agent",
+    "version": "1.0.0",
+    "intent": "Autonomous Multilingual User Onboarding Agent. Chains Database query, Indic translation, and Telecom SMS delivery.",
+    "maxSteps": 10
+  },
+  "T": {},
+  "E": {
+    "SARVAM_API_KEY": "$SARVAM_API_KEY",
+    "MAX_TURNS": "10"
+  }
+}

@@ -33,16 +33,23 @@ export interface AgentStep {
   timestamp: number;
 }
 
-export interface AgentRunResult {
+export interface AgentRunResult<TData = any> {
   text: string;
+  data?: TData;
   thought?: string;
   steps: AgentStep[];
   totalSteps: number;
   model: string;
   agentVersion?: string;
   durationMs: number;
-  finishReason: "stop" | "max_steps_reached" | "error";
+  finishReason: "stop" | "max_steps_reached" | "error" | "paused_for_approval";
   audioBase64?: string;
+  checkpointId?: string;
+  pendingApproval?: {
+    checkpointId: string;
+    step: number;
+    toolCalls: ToolCall[];
+  };
 }
 
 export interface AgentExecutionOptions {
@@ -65,6 +72,18 @@ export interface AgentExecutionOptions {
   subAgent?: string;
   /** Per-run context merged with Layer [I].context */
   context?: string | Record<string, any>;
+  /** Require human approval before executing all tools (true) or listed tool names */
+  requireApproval?: boolean | string[];
+  /** Custom checkpoint store instance for HITL pause/resume */
+  checkpointStore?: any;
+  /** Optional Zod or JSON Schema enforced on the final output */
+  outputSchema?: any;
+  /** Enable durable step checkpointing for this run */
+  durable?: boolean;
+  /** Explicit durable run ID for resuming or idempotent replay */
+  runId?: string;
+  /** Skip declarative Layer [A].workflow and execute a direct ReAct loop */
+  bypassWorkflow?: boolean;
 }
 
 export interface SubAgentSpec {
@@ -73,6 +92,8 @@ export interface SubAgentSpec {
   modelTag?: string;
   maxSteps?: number;
   skills?: string[];
+  /** Remote A2A v1.0 peer URL (e.g. https://agent.example.com) */
+  a2aUrl?: string;
 }
 
 export interface AgentConfig {
@@ -85,6 +106,11 @@ export interface AgentConfig {
   skills?: string[];
   subAgents?: SubAgentSpec[];
   context?: string | Record<string, any>;
+  requireApproval?: boolean | string[];
+  outputSchema?: any;
+  durable?: boolean | string;
+  workflow?: any[];
+  schedule?: any;
 }
 
 export interface AgentVersionSnapshot {

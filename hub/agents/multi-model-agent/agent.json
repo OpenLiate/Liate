@@ -1,16 +1,16 @@
 {
   "L": {
     "default": "sarvam/sarvam-105b",
-    "fast":    "ollama/gemma4:e2b",
-    "reason":  "openrouter/nvidia/nemotron-3.5-lightning:free"
+    "fast": "ollama/gemma4:e2b",
+    "reason": "openrouter/nvidia/nemotron-3.5-lightning:free"
   },
   "A": {
-    "name": "MultiModelAgent",
+    "name": "multi-model-agent",
     "intent": "An agent that selects the right model for the task — fast for quick answers, reasoning for complex thought, and default for balanced work.",
     "maxSteps": 8
   },
   "E": {
-    "SARVAM_API_KEY":    "$SARVAM_API_KEY",
+    "SARVAM_API_KEY": "$SARVAM_API_KEY",
     "OPENROUTER_API_KEY": "$OPENROUTER_API_KEY"
   }
 }

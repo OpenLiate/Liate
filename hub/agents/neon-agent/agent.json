@@ -4,7 +4,7 @@
     "memory": "sessions/neon-agent"
   },
   "A": {
-    "name": "neon_agent",
+    "name": "neon-agent",
     "version": "0.1.1",
     "intent": "Agent powered by Neon AI Gateway & Cloud Compute",
     "maxSteps": 5

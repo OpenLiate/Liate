@@ -1,6 +1,10 @@
 import { ReActLoop } from "@/layers/agent/loop/react";
 import { SkillResolver } from "@/layers/agent/skills/resolver";
 import { SubAgentRunner } from "@/layers/agent/orchestration/subagent";
+import { WorkflowRunner, type WorkflowRunResult } from "@/layers/agent/orchestration/workflow";
+import { DurableRunStore } from "@/layers/agent/checkpoint/durable";
+import type { ApprovalDecision } from "@/layers/agent/checkpoint/store";
+import type { ScheduleSpec, WorkflowStepSpec } from "@/core/spec";
 import type {
   AgentTool,
   AgentContext,
@@ -48,6 +52,12 @@ export class Agent {
   private subAgents: Map<string, SubAgentSpec> = new Map();
   /** Layer [I].context carried into runtime AgentContext */
   private baseContext?: string | Record<string, any>;
+  private requireApproval?: boolean | string[];
+  private outputSchema?: any;
+  private durable?: boolean | string;
+  private workflow?: WorkflowStepSpec[];
+  private schedule?: string | ScheduleSpec | ScheduleSpec[];
+  private durableStore?: DurableRunStore;
 
   constructor(options: AgentOptions = { name: "agent" }) {
     const rawL = options.layerL ?? options.model;
@@ -74,10 +84,23 @@ export class Agent {
       maxSteps: _maxSteps,
       subAgents: _subAgents,
       context: _context,
+      requireApproval: _requireApproval,
+      outputSchema: _outputSchema,
+      durable: _durable,
+      workflow: _workflow,
+      schedule: _schedule,
       ...restOptions
     } = options as any;
     this.extraOptions = restOptions;
     this.baseContext = options.context;
+    this.requireApproval = options.requireApproval;
+    this.outputSchema = options.outputSchema;
+    this.durable = options.durable;
+    this.workflow = options.workflow;
+    this.schedule = options.schedule;
+    if (this.durable) {
+      this.durableStore = new DurableRunStore(this.durable);
+    }
 
     // Resolve the "default" model string for display / single-model paths
     if (isMultiModelMap(rawL)) {
@@ -170,6 +193,10 @@ export class Agent {
       return SubAgentRunner.execute(spec, prompt, subExecCtx, options);
     }
 
+    if (this.workflow && this.workflow.length > 0 && !options?.bypassWorkflow) {
+      return this.runWorkflow(prompt, options);
+    }
+
     const skillSlugs = [...new Set([...this.skills, ...(options?.skills || [])])];
     const resolvedSkills = skillSlugs.length > 0 ? await SkillResolver.resolveAll(skillSlugs) : [];
     const skillPromptBlock = SkillResolver.formatSystemPrompt(resolvedSkills);
@@ -207,9 +234,55 @@ export class Agent {
         model: activeModel,
         maxSteps: options?.maxSteps ?? this.maxSteps,
         temperature: options?.temperature,
+        requireApproval: options?.requireApproval ?? this.requireApproval,
+        outputSchema: options?.outputSchema ?? this.outputSchema,
         systemPrompt: options?.systemPrompt
           ? options.systemPrompt + contextPromptBlock + skillPromptBlock
           : undefined,
+        apiKey: options?.apiKey || this.apiKey,
+        ...(options as any)
+      }
+    );
+
+    return {
+      ...result,
+      agentVersion: this.version
+    };
+  }
+
+  /**
+   * Resumes a paused HITL checkpoint after human approval or rejection.
+   */
+  public async resume(
+    checkpointId: string,
+    decision: ApprovalDecision,
+    options?: AgentExecutionOptions
+  ): Promise<AgentRunResult> {
+    const baseTools = [
+      ...Array.from(this.tools.values()),
+      ...(options?.tools || [])
+    ];
+    const context: AgentContext = {
+      agentName: this.name,
+      intent: this.intent,
+      sessionId: this.memory.sessionId,
+      state: { version: this.version }
+    };
+    const activeModel = options?.model || this.resolveModel(options?.modelTag);
+
+    const result = await ReActLoop.resume(
+      checkpointId,
+      decision,
+      LLMRouter,
+      this.memory,
+      baseTools,
+      context,
+      {
+        ...this.extraOptions,
+        model: activeModel,
+        maxSteps: options?.maxSteps ?? this.maxSteps,
+        requireApproval: options?.requireApproval ?? this.requireApproval,
+        outputSchema: options?.outputSchema ?? this.outputSchema,
         apiKey: options?.apiKey || this.apiKey,
         ...(options as any)
       }
@@ -234,6 +307,62 @@ export class Agent {
 
   public getSubAgents(): string[] {
     return Array.from(this.subAgents.keys());
+  }
+
+  public getSchedule(): string | ScheduleSpec | ScheduleSpec[] | undefined {
+    return this.schedule;
+  }
+
+  public getDurableStore(): DurableRunStore | undefined {
+    return this.durableStore;
+  }
+
+  /**
+   * Executes Layer [A].workflow steps sequentially/in parallel with optional SQLite durability.
+   */
+  public async runWorkflow(
+    input: string,
+    options?: AgentExecutionOptions,
+    stepsOverride?: WorkflowStepSpec[]
+  ): Promise<WorkflowRunResult> {
+    const steps = stepsOverride || this.workflow;
+    if (!steps || steps.length === 0) {
+      throw new Error(`[Liate Workflow Error]: Agent '${this.name}' has no workflow steps defined in Layer [A].workflow.`);
+    }
+    const baseTools = [
+      ...Array.from(this.tools.values()),
+      ...(options?.tools || [])
+    ];
+    const store = options?.durable && !this.durableStore
+      ? new DurableRunStore()
+      : this.durableStore;
+
+    return WorkflowRunner.execute(
+      steps,
+      input,
+      {
+        agentName: this.name,
+        agentVersion: this.version,
+        tools: baseTools,
+        runAgent: (p, opts) => this.run(p, { ...opts, bypassWorkflow: true }),
+        runSubAgent: (name, p, opts) => this.run(p, { ...opts, subAgent: name }),
+        durableStore: store
+      },
+      {
+        ...options,
+        durable: Boolean(options?.durable ?? this.durable)
+      }
+    );
+  }
+
+  /**
+   * Resumes a durable workflow run from its last persisted step in DurableRunStore.
+   */
+  public async resumeWorkflow(
+    runId: string,
+    options?: AgentExecutionOptions
+  ): Promise<WorkflowRunResult> {
+    return this.runWorkflow("", { ...options, durable: true, runId });
   }
 
   public getMemory(): MemoryProvider {

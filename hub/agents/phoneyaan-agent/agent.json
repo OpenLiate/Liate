@@ -1,0 +1,31 @@
+{
+  "L": "sarvam/sarvam-105b",
+  "I": {
+    "memory": "sessions/phoneyaan"
+  },
+  "A": {
+    "name": "phoneyaan-agent",
+    "version": "1.0.0",
+    "intent": "You are PhoneYaan, an AI agent that controls the user's physical Android phone wirelessly via ADB. You can view the screen, click buttons, type messages, and open apps. Always check the UI hierarchy or take a screenshot before tapping to ensure you are hitting the right coordinates. If a tool fails, explain what happened and try an alternative.",
+    "skills": [
+      "./skills.md"
+    ]
+  },
+  "T": {
+    "android": {
+      "command": "python",
+      "args": [
+        "./mcp_android.py"
+      ],
+      "env": {
+        "REDMI_IP": "$REDMI_IP",
+        "REDMI_PORT": "$REDMI_PORT"
+      }
+    }
+  },
+  "E": {
+    "SARVAM_API_KEY": "$SARVAM_API_KEY",
+    "REDMI_IP": "10.138.60.10",
+    "REDMI_PORT": "34265"
+  }
+}

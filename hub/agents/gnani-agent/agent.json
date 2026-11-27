@@ -4,7 +4,7 @@
     "memory": "sessions/gnani-agent"
   },
   "A": {
-    "name": "gnani_agent",
+    "name": "gnani-agent",
     "version": "0.0.1",
     "intent": "Sovereign Indic Voice & Language Agent powered by Gnani AI & Liate",
     "maxSteps": 5

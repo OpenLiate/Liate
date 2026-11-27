@@ -11,7 +11,10 @@ import { VERSION } from "@/core/version";
 import { Session } from "@/layers/integration/memory/session";
 import { LLMRouter } from "@/layers/llm/model";
 import { skillsRouter } from "@/routes/skills";
+import { createA2ARouter } from "@/layers/agent/a2a/server";
 import { listLocalHubAgents } from "@/cli/resolver";
+import { CronScheduler } from "@/runtime/cron";
+import { DurableRunStore } from "@/layers/agent/checkpoint/durable";
 import { existsSync, readFileSync } from "node:fs";
 import { resolve, join } from "node:path";
 
@@ -21,6 +24,7 @@ export const app = new Hono();
 app.use("*", cors());
 app.use("*", logger());
 app.route("/skills", skillsRouter);
+app.route("/", createA2ARouter({ getAgent: (spec) => getOrLoadAgent(spec) }));
 
 // Active agent and session cache
 let activeAgent: liate | null = null;
@@ -347,6 +351,57 @@ app.post("/stream", async (c) => {
       });
     }
   });
+});
+
+/**
+ * POST /resume
+ * Resumes a paused HITL checkpoint after human approval or rejection.
+ */
+app.post("/resume", async (c) => {
+  try {
+    const body = await c.req.json();
+    const { checkpointId, approved, reason, updatedArgs, spec, path, keys } = body;
+    if (!checkpointId || typeof approved !== "boolean") {
+      return c.json({ error: "Missing required fields: checkpointId (string) and approved (boolean)" }, 400);
+    }
+
+    const agent = await getOrLoadAgent(spec, path, keys);
+    const result = await agent.resume(checkpointId, { approved, reason, updatedArgs });
+    return c.json(result);
+  } catch (err: any) {
+    return c.json({ error: err?.message || "Resume failed" }, 500);
+  }
+});
+
+const sharedDurableStore = new DurableRunStore(":memory:");
+const sharedScheduler = new CronScheduler(sharedDurableStore);
+
+/**
+ * GET /cron
+ * Lists registered cron jobs and their last/next run state.
+ */
+app.get("/cron", async (c) => {
+  const jobs = await sharedScheduler.listJobs();
+  return c.json({ success: true, count: jobs.length, jobs });
+});
+
+/**
+ * POST /workflow/resume
+ * Resumes a durable workflow run by runId.
+ */
+app.post("/workflow/resume", async (c) => {
+  try {
+    const body = await c.req.json();
+    const { runId, spec, path, keys } = body;
+    if (!runId || typeof runId !== "string") {
+      return c.json({ error: "Missing required field: runId (string)" }, 400);
+    }
+    const agent = await getOrLoadAgent(spec, path, keys);
+    const result = await agent.resumeWorkflow(runId);
+    return c.json(result);
+  } catch (err: any) {
+    return c.json({ error: err?.message || "Workflow resume failed" }, 500);
+  }
 });
 
 // Port configuration

@@ -1,0 +1,24 @@
+{
+  "L": "sarvam/sarvam-105b",
+  "I": {
+    "memory": "sessions/system-agent"
+  },
+  "A": {
+    "name": "system-agent",
+    "version": "1.0.0",
+    "intent": "You are a system control assistant. You help manage OS power states, launch desktop applications, and perform searches on the local PC.",
+    "skills": ["./skills.md"]
+  },
+  "T": {
+    "system_controller": {
+      "command": "python",
+      "args": [
+        "./system_mcp.py"
+      ]
+    }
+  },
+  "E": {
+    "SARVAM_API_KEY": "$SARVAM_API_KEY",
+    "MAX_TURNS": "5"
+  }
+}

@@ -88,12 +88,38 @@ class liate:
             "E": e_val or {}
         }
 
-    def run(self, prompt: str, session_id: Optional[str] = None) -> AgentRunResult:
+    def run(
+        self,
+        prompt: str,
+        session_id: Optional[str] = None,
+        output_schema: Optional[Any] = None,
+    ) -> AgentRunResult:
         """
         Executes the agent via OpenLiate Liate API.
+        Supports optional output_schema (dict JSON Schema or Pydantic model class) for typed parity.
         """
+        import json as _json
+
         module = self.to_module()
-        return self._client.run(module=module, prompt=prompt, session_id=session_id)
+        effective_prompt = prompt
+        if output_schema is not None:
+            if hasattr(output_schema, "model_json_schema"):
+                schema_dict = output_schema.model_json_schema()
+            elif isinstance(output_schema, dict):
+                schema_dict = output_schema
+            else:
+                schema_dict = {"type": "object"}
+            module["A"]["outputSchema"] = schema_dict
+            effective_prompt = (
+                f"{prompt}\n\n[STRUCTURED OUTPUT CONTRACT]: Respond ONLY with raw valid JSON matching:\n"
+                f"{_json.dumps(schema_dict)}"
+            )
+
+        res = self._client.run(module=module, prompt=effective_prompt, session_id=session_id)
+        if output_schema is not None and hasattr(output_schema, "model_validate_json"):
+            cleaned = res.text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+            res.data = output_schema.model_validate_json(cleaned)  # type: ignore[attr-defined]
+        return res
 
     def stream(self, prompt: str, session_id: Optional[str] = None) -> Iterator[Dict[str, Any]]:
         """

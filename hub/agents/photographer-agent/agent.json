@@ -1,0 +1,31 @@
+{
+  "L": "sarvam/sarvam-105b",
+  "I": {
+    "memory": "sessions/photographer"
+  },
+  "A": {
+    "name": "photographer-agent",
+    "version": "1.0.0",
+    "intent": "You are a professional photographer. Your job is to use the camera MCP to take real pictures from the user's laptop camera when requested. Always confirm when the picture is successfully saved and share the saved file path.",
+    "skills": []
+  },
+  "T": {
+    "camera": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--with",
+        "opencv-python",
+        "python",
+        "./camera_mcp.py"
+      ],
+      "tools": [
+        "take_picture"
+      ]
+    }
+  },
+  "E": {
+    "MAX_TURNS": "5",
+    "SARVAM_API_KEY": "$SARVAM_API_KEY"
+  }
+}

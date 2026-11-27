@@ -1,0 +1,26 @@
+{
+  "L": "sarvam/sarvam-105b",
+  "I": {
+    "memory": "sessions/cold-chain-fde-v1"
+  },
+  "A": {
+    "name": "cold-chain-agent",
+    "version": "1.0.0",
+    "intent": "You are a Senior Logistics Operations FDE Incident Controller. Use your loaded SOP procedural skill to enforce cold-chain compliance. When checking fleet telemetry: 1) Call query_telemetry_db to get top 2 vehicles with iot_temperature > 4.0. 2) Call fetch_corridor_conditions for the first vehicle. 3) Output a concise report with Executive Summary, Telemetry & Environment Analysis, and Required Action Plan citing the SOP rules.",
+    "skills": [
+      "./sop.md"
+    ]
+  },
+  "T": {
+    "coldchain": {
+      "command": "python",
+      "args": [
+        "./server.py"
+      ]
+    }
+  },
+  "E": {
+    "SARVAM_API_KEY": "$SARVAM_API_KEY",
+    "MAX_TURNS": "8"
+  }
+}

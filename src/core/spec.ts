@@ -78,11 +78,38 @@ export interface SubAgentSpec {
   modelTag?: string;
   maxSteps?: number;
   skills?: string[];
+  a2aUrl?: string;
+}
+
+export interface ScheduleSpec {
+  id?: string;
+  cron: string;
+  prompt?: string;
+  timezone?: string;
+  enabled?: boolean;
+  maxConcurrentRuns?: number;
+  timeoutMs?: number;
+}
+
+export interface WorkflowStepSpec {
+  id?: string;
+  type?: "agent" | "subagent" | "tool" | "parallel" | "branch" | "sleep";
+  prompt?: string;
+  subAgent?: string;
+  modelTag?: string;
+  tool?: string;
+  args?: Record<string, unknown>;
+  steps?: WorkflowStepSpec[];
+  cases?: Record<string, WorkflowStepSpec[]>;
+  defaultCase?: WorkflowStepSpec[];
+  condition?: string | ((ctx: { input: string; prev: string; steps: Record<string, any> }) => string | boolean | Promise<string | boolean>);
+  sleepMs?: number;
+  retries?: number;
 }
 
 /**
  * [A] Agent Layer
- * Identity: Name, Intent, Version, maxSteps, subAgents.
+ * Identity: Name, Intent, Version, maxSteps, subAgents, workflow, schedule, durable.
  */
 export interface LayerA {
   name: string;
@@ -92,6 +119,11 @@ export interface LayerA {
   maxSteps?: number;
   skills?: string[];
   subAgents?: SubAgentSpec[];
+  requireApproval?: boolean | string[];
+  outputSchema?: unknown;
+  durable?: boolean | string;
+  workflow?: WorkflowStepSpec[];
+  schedule?: string | ScheduleSpec | ScheduleSpec[];
   [key: string]: unknown;
 }
 

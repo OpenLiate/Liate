@@ -8,7 +8,7 @@ import type {
 } from "@/layers/llm/types";
 import { extractModelName, normalizeModelConfig } from "@/layers/llm/normalize";
 import { resilientFetch } from "@/layers/llm/transport/fetch";
-import { parseSseStream } from "@/layers/llm/transport/sse";
+import { parseSseStream, parseSseText } from "@/layers/llm/transport/sse";
 import { HubResolver, getProvider } from "@/layers/llm/providers/registry";
 import { resolveProviderApiKey, buildProviderHeaders } from "@/layers/llm/providers/openai-compat";
 
@@ -54,7 +54,7 @@ export class LiateLlmClient {
     }
 
     // High-speed System-1 Decision routing for Sarvam Prism & TypeSafe Jev
-    if (provider === "sarvam" && model.toLowerCase().includes("prism") && (options as any)?.decide) {
+    if (provider === "sarvam" && model.toLowerCase().includes("prism")) {
       return this.decidePrism(messages, options, key, model);
     }
     if ((provider === "neon" || provider === "typesafe") && (model.toLowerCase().includes("jev") || model.toLowerCase().includes("openjev"))) {
@@ -108,6 +108,14 @@ export class LiateLlmClient {
     delete payload.intent;
     delete payload.memory;
     delete payload.maxSteps;
+    delete payload.durable;
+    delete payload.runId;
+    delete payload.bypassWorkflow;
+    delete payload.workflow;
+    delete payload.schedule;
+    delete payload.checkpointStore;
+    delete payload.requireApproval;
+    delete payload.outputSchema;
 
     if (wantStream) {
       payload.stream = true;
@@ -165,11 +173,15 @@ export class LiateLlmClient {
       };
     }
 
-    if (wantStream && response.body && (contentType.includes("text/event-stream") || !contentType.includes("application/json"))) {
+    if (response.body && (contentType.includes("text/event-stream") || (wantStream && !contentType.includes("application/json")))) {
       return this.parseSseStream(response, model, options?.onToken, options?.onReasoningToken);
     }
 
-    const data: any = await response.json();
+    const rawText = await response.text();
+    if (rawText.trimStart().startsWith("data:")) {
+      return parseSseText(rawText, model, options?.onToken, options?.onReasoningToken);
+    }
+    const data: any = JSON.parse(rawText);
     const choice = data.choices?.[0];
 
     let extractedText = "";
@@ -264,8 +276,9 @@ export class LiateLlmClient {
         ...(key ? { "api-subscription-key": key, Authorization: `Bearer ${key}` } : {})
       },
       body: JSON.stringify({
-        input: lastUserMsg,
-        options: {
+        model: model || "sarvam-prism",
+        state: lastUserMsg,
+        questions: {
           decision: {
             type: "choice",
             instructions: systemMsg || "Evaluate the input state and select the appropriate decision.",

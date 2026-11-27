@@ -26,9 +26,17 @@ export * from "@/layers/agent/harness/agent";
 export * from "@/layers/agent/loop/react";
 export * from "@/layers/agent/skills/resolver";
 export * from "@/layers/agent/orchestration/subagent";
+export * from "@/layers/agent/orchestration/workflow";
 export * from "@/layers/agent/versioning/store";
 export * from "@/layers/agent/versioning/diff";
+export * from "@/layers/agent/a2a/a2a";
+export * from "@/layers/agent/checkpoint/store";
+export * from "@/layers/agent/checkpoint/durable";
+export * from "@/layers/agent/schema/structured";
+export * from "@/layers/agent/eval/scorers";
+export * from "@/layers/agent/eval/runner";
 export * from "@/layers/agent/types";
+export * from "@/runtime/cron";
 export * from "@/layers/tools/mcp/client";
 export * from "@/layers/tools/mcp/server";
 export * from "@/layers/tools/mcp/inline";
@@ -37,6 +45,7 @@ export * from "@/layers/tools/api/builder";
 export * from "@/layers/tools/api/registry";
 export * from "@/layers/tools/registry/resolver";
 export * from "@/layers/environment/resolver";
+export * from "@/layers/environment/telemetry/tracer";
 export * from "@/layers/environment/types";
 
 // Canonical exports to resolve cross-layer duplicates

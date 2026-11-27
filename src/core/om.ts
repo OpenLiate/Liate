@@ -94,6 +94,11 @@ export class liate {
         tools,
         subAgents,
         context: module.I?.context,
+        requireApproval: (module.A as any)?.requireApproval,
+        outputSchema: (module.A as any)?.outputSchema,
+        durable: (module.A as any)?.durable,
+        workflow: (module.A as any)?.workflow,
+        schedule: (module.A as any)?.schedule,
         ...modelExtra
       } as any);
     }
@@ -106,6 +111,51 @@ export class liate {
   public async run(input: string, options?: AgentExecutionOptions): Promise<AgentRunResult> {
     const runner = await this.getRunner();
     return runner.run(input, options);
+  }
+
+  /**
+   * Resumes a paused HITL checkpoint after human approval or rejection
+   */
+  public async resume(
+    checkpointId: string,
+    decision: { approved: boolean; reason?: string; updatedArgs?: Record<string, Record<string, any>> },
+    options?: AgentExecutionOptions
+  ): Promise<AgentRunResult> {
+    const runner = await this.getRunner();
+    return runner.resume(checkpointId, decision, options);
+  }
+
+  /**
+   * Executes Layer [A].workflow steps with optional SQLite durability
+   */
+  public async runWorkflow(input: string, options?: AgentExecutionOptions) {
+    const runner = await this.getRunner();
+    return runner.runWorkflow(input, options);
+  }
+
+  /**
+   * Resumes a durable workflow run from its last persisted step
+   */
+  public async resumeWorkflow(runId: string, options?: AgentExecutionOptions) {
+    const runner = await this.getRunner();
+    return runner.resumeWorkflow(runId, options);
+  }
+
+  /**
+   * Registers Layer [A].schedule on a CronScheduler backed by DurableRunStore
+   */
+  public async createScheduler(storePath?: string | boolean) {
+    const runner = await this.getRunner();
+    const schedule = runner.getSchedule();
+    if (!schedule) {
+      throw new Error(`[Liate Cron Error]: Agent '${runner.name}' has no Layer [A].schedule defined.`);
+    }
+    const { CronScheduler } = await import("@/runtime/cron");
+    const { DurableRunStore } = await import("@/layers/agent/checkpoint/durable");
+    const store = storePath ? new DurableRunStore(storePath) : (runner.getDurableStore() || new DurableRunStore());
+    const scheduler = new CronScheduler(store);
+    await scheduler.register(runner.name, schedule, (prompt) => runner.run(prompt));
+    return scheduler;
   }
 
   /**

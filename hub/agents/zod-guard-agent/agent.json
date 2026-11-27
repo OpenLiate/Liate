@@ -1,0 +1,17 @@
+{
+  "L": "sarvam/sarvam-105b",
+  "I": {
+    "memory": "sessions/zod-validation-session"
+  },
+  "A": {
+    "name": "zod-guard-agent",
+    "version": "1.0.0",
+    "intent": "Autonomous Schema Integrity & Data Validation Guard Agent powered by Zod via OpenLiate.",
+    "maxSteps": 5
+  },
+  "T": {},
+  "E": {
+    "SARVAM_API_KEY": "$SARVAM_API_KEY",
+    "MAX_TURNS": "5"
+  }
+}

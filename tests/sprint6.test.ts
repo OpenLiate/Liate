@@ -181,7 +181,7 @@ describe("Sprint 6: liate OOP class & Hub agents", () => {
     expect(isMultiModelMap(mod.L as any)).toBe(true);
     expect((mod.L as any).default).toBe("sarvam/sarvam-105b");
     expect((mod.L as any).fast).toBe("ollama/gemma4:e2b");
-    expect((mod.A as any).name).toBe("MultiModelAgent");
+    expect((mod.A as any).name).toBe("multi-model-agent");
   });
 
   test("14. Regression: single-model L (string) still parses & runs without change", () => {

@@ -1,0 +1,24 @@
+{
+  "L": "sarvam/sarvam-105b",
+  "I": {
+    "memory": "sessions/screen-agent"
+  },
+  "A": {
+    "name": "screen-agent",
+    "version": "1.0.0",
+    "intent": "You are a screen recording assistant. You MUST call the 'record_screen' tool to take screenshots or record user screen requests.",
+    "skills": ["./skills.md"]
+  },
+  "T": {
+    "screen_recorder": {
+      "command": "python",
+      "args": [
+        "./screen_mcp.py"
+      ]
+    }
+  },
+  "E": {
+    "SARVAM_API_KEY": "$SARVAM_API_KEY",
+    "MAX_TURNS": "5"
+  }
+}

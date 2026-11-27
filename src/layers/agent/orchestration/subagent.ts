@@ -7,6 +7,7 @@ import type {
 } from "@/layers/agent/types";
 import { ReActLoop } from "@/layers/agent/loop/react";
 import { SkillResolver } from "@/layers/agent/skills/resolver";
+import { A2AClient } from "@/layers/agent/a2a/client";
 import { Session } from "@/layers/integration/memory/session";
 import { LLMRouter } from "@/layers/llm/model";
 
@@ -33,6 +34,31 @@ export class SubAgentRunner {
     ctx: SubAgentExecutionContext,
     options?: AgentExecutionOptions
   ): Promise<AgentRunResult> {
+    if (spec.a2aUrl) {
+      const start = Date.now();
+      const client = new A2AClient(spec.a2aUrl);
+      const taskResult = await client.sendMessage(task, { sessionId: `a2a_${ctx.parentName}_${spec.name}` });
+      const textParts = taskResult.status?.message?.parts
+        ?.filter((p) => p.kind === "text")
+        .map((p) => p.text)
+        .join("\n") ||
+        taskResult.artifacts?.[0]?.parts
+          ?.filter((p): p is { kind: "text"; text: string } => p.kind === "text")
+          .map((p) => p.text)
+          .join("\n") ||
+        "";
+
+      return {
+        text: textParts,
+        steps: [{ step: 1, output: textParts, timestamp: Date.now() }],
+        totalSteps: 1,
+        model: `a2a:${spec.a2aUrl}`,
+        agentVersion: ctx.parentVersion,
+        durationMs: Date.now() - start,
+        finishReason: taskResult.status?.state === "input-required" ? "paused_for_approval" : "stop"
+      };
+    }
+
     const skillSlugs = spec.skills && spec.skills.length > 0 ? spec.skills : [];
     const resolvedSkills = skillSlugs.length > 0 ? await SkillResolver.resolveAll(skillSlugs) : [];
     const skillPromptBlock = SkillResolver.formatSystemPrompt(resolvedSkills);

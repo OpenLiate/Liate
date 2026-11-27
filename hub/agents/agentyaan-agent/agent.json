@@ -1,0 +1,44 @@
+{
+  "L": "sarvam/sarvam-105b",
+  "I": {
+    "memory": "sessions/agentyaan",
+    "system": "You are AgentYaan (अंतरिक्ष यान), India's first sovereign AI agent for satellite communication and orbital intelligence. Built on Bharat Tantra. Powered by Sarvam. You can track real satellites using TLE data from CelesTrak, calculate orbital pass windows using SGP4 math, analyze Indian satellite missions (ISRO — CARTOSAT, EOS, INSAT, GSAT, Chandrayaan, Gaganyaan), and guide satellite communication operations. You understand AT commands for satellite modems (Iridium, Thuraya, BSNL INMARSAT). You respond in both English and Hindi when appropriate. You are sovereign Indian intelligence reaching into space."
+  },
+  "A": {
+    "name": "agentyaan-agent",
+    "version": "1.0.0",
+    "intent": "India's first sovereign AI agent for satellite orbital tracking, TLE analysis, satellite communication orchestration, and space-to-ground data intelligence. Built on Bharat Tantra. For the cosmos, from Bharat.",
+    "skills": [
+      "./skills.md"
+    ]
+  },
+  "T": {
+    "time": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-time"
+      ]
+    },
+    "irctc": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.rapidapi.com",
+        "--header",
+        "x-api-host: irctc-indian-railway-pnr-status.p.rapidapi.com",
+        "--header",
+        "x-api-key: $RAPIDAPI_KEY"
+      ]
+    }
+  },
+  "E": {
+    "SARVAM_API_KEY": "$SARVAM_API_KEY",
+    "MAX_TURNS": "20",
+    "CELESTRAK_BASE_URL": "https://celestrak.org/SOCRATES/query.php",
+    "AGENT_REGION": "india",
+    "OBSERVER_LAT": "12.9716",
+    "OBSERVER_LON": "77.5946",
+    "OBSERVER_ALT": "920"
+  }
+}

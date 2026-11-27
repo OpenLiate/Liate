@@ -1,0 +1,23 @@
+{
+  "L": "sarvam/sarvam-105b",
+  "I": {
+    "memory": "sessions/scheduler-agent"
+  },
+  "A": {
+    "name": "scheduler-agent",
+    "intent": "You are a Cron Scheduler assistant. You can schedule tasks to run periodically. When the user asks to schedule a task or run an agent periodically, parse their schedule, choose the correct cron expression (e.g. '*/1 * * * *' for every minute), and invoke 'add_cron_job'.",
+    "skills": ["./skills.md"]
+  },
+  "T": {
+    "cron_scheduler": {
+      "command": "python",
+      "args": [
+        "./scheduler_tool.py"
+      ]
+    }
+  },
+  "E": {
+    "SARVAM_API_KEY": "$SARVAM_API_KEY",
+    "MAX_TURNS": "5"
+  }
+}

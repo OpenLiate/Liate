@@ -1,0 +1,19 @@
+{
+  "L": "sarvam/sarvam-105b",
+  "I": {
+    "memory": "sessions/supabase-admin-session"
+  },
+  "A": {
+    "name": "supabase-dba-agent",
+    "version": "1.0.0",
+    "intent": "Autonomous Supabase Database Administrator, Auth Controller, Vector Searcher & Storage Manager.",
+    "maxSteps": 10
+  },
+  "T": {},
+  "E": {
+    "SARVAM_API_KEY": "$SARVAM_API_KEY",
+    "SUPABASE_URL": "$SUPABASE_URL",
+    "SUPABASE_SECRET_KEY": "$SUPABASE_SECRET_KEY",
+    "MAX_TURNS": "10"
+  }
+}

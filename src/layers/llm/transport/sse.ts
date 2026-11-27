@@ -1,18 +1,10 @@
 import type { LlmChatResponse } from "@/layers/llm/types";
 
-/**
- * Parses an OpenAI-compatible Server-Sent Events (SSE) chat completion stream,
- * invoking token callbacks live while accumulating text, reasoning, and tool calls.
- */
-export async function parseSseStream(
-  response: Response,
+function createSseAccumulator(
   fallbackModel: string,
   onToken?: (chunk: string) => void,
   onReasoningToken?: (chunk: string) => void
-): Promise<LlmChatResponse> {
-  const reader = response.body!.getReader();
-  const decoder = new TextDecoder();
-  let buffer = "";
+) {
   let text = "";
   let reasoning = "";
   let resolvedModel = fallbackModel;
@@ -66,6 +58,62 @@ export async function parseSseStream(
     } catch {}
   };
 
+  const finalize = (): LlmChatResponse => {
+    const toolCalls = toolCallAcc.size > 0
+      ? Array.from(toolCallAcc.values()).map((tc) => {
+          let args: Record<string, any> = {};
+          try {
+            args = tc.argsRaw ? JSON.parse(tc.argsRaw) : {};
+          } catch {
+            args = { raw: tc.argsRaw };
+          }
+          return { id: tc.id, name: tc.name, arguments: args };
+        })
+      : undefined;
+
+    return {
+      text: text || reasoning,
+      reasoningContent: reasoning || undefined,
+      toolCalls,
+      model: resolvedModel,
+      usage
+    };
+  };
+
+  return { processLine, finalize };
+}
+
+/**
+ * Parses a buffered OpenAI-compatible Server-Sent Events (SSE) payload string.
+ */
+export function parseSseText(
+  rawText: string,
+  fallbackModel: string,
+  onToken?: (chunk: string) => void,
+  onReasoningToken?: (chunk: string) => void
+): LlmChatResponse {
+  const { processLine, finalize } = createSseAccumulator(fallbackModel, onToken, onReasoningToken);
+  for (const line of rawText.split(/\r?\n/)) {
+    processLine(line);
+  }
+  return finalize();
+}
+
+/**
+ * Parses an OpenAI-compatible Server-Sent Events (SSE) chat completion stream,
+ * invoking token callbacks live while accumulating text, reasoning, and tool calls.
+ */
+export async function parseSseStream(
+  response: Response,
+  fallbackModel: string,
+  onToken?: (chunk: string) => void,
+  onReasoningToken?: (chunk: string) => void
+): Promise<LlmChatResponse> {
+  const reader = response.body!.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  const { processLine, finalize } = createSseAccumulator(fallbackModel, onToken, onReasoningToken);
+
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
@@ -78,23 +126,5 @@ export async function parseSseStream(
   }
   if (buffer) processLine(buffer);
 
-  const toolCalls = toolCallAcc.size > 0
-    ? Array.from(toolCallAcc.values()).map((tc) => {
-        let args: Record<string, any> = {};
-        try {
-          args = tc.argsRaw ? JSON.parse(tc.argsRaw) : {};
-        } catch {
-          args = { raw: tc.argsRaw };
-        }
-        return { id: tc.id, name: tc.name, arguments: args };
-      })
-    : undefined;
-
-  return {
-    text: text || reasoning,
-    reasoningContent: reasoning || undefined,
-    toolCalls,
-    model: resolvedModel,
-    usage
-  };
+  return finalize();
 }

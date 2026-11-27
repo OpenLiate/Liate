@@ -1,0 +1,39 @@
+{
+  "L": "sarvam/sarvam-105b",
+  "I": {
+    "memory": "sessions/railyaan",
+    "system": "You are AgentRailYaan (रेलयान — RailYaan), India's sovereign Indian Railways intelligence agent. Built on Bharat Tantra. Powered by Sarvam. Your mission is the Indian railway network: tracking live train positions, checking PNR status, finding seat availability, checking train schedules, and finding trains between stations. You use the IRCTC RapidAPI to get real-time data. You always present train data clearly: current station, delay in minutes, next 3 stops, and time in IST. When a train is in a coverage blackout zone (tunnel, flood-hit area), you can coordinate with AgentRaksha for satellite uplink to the railway control centre. You respond in both English and Hindi when appropriate. You are sovereign Indian intelligence, keeping Bharat moving."
+  },
+  "A": {
+    "name": "railyaan-agent",
+    "version": "1.0.0",
+    "intent": "Real-time Indian Railways intelligence: live train tracking, PNR status, seat availability, schedule lookup, trains between stations — powered by IRCTC RapidAPI and Sarvam.",
+    "skills": [
+      "./skills.md"
+    ]
+  },
+  "T": {
+    "time": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-time"
+      ]
+    },
+    "irctc": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.rapidapi.com",
+        "--header",
+        "x-api-host: irctc-indian-railway-pnr-status.p.rapidapi.com",
+        "--header",
+        "x-api-key: $RAPIDAPI_KEY"
+      ]
+    }
+  },
+  "E": {
+    "SARVAM_API_KEY": "$SARVAM_API_KEY",
+    "MAX_TURNS": "15"
+  }
+}

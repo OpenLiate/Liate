@@ -37,7 +37,14 @@ export const AUMSchema = z.object({
       modelTag: z.string().optional(),
       maxSteps: z.number().optional(),
       skills: z.array(z.string()).optional()
-    }).passthrough()).optional()
+    }).passthrough()).optional(),
+    durable: z.union([z.boolean(), z.string()]).optional(),
+    workflow: z.array(z.record(z.string(), z.any())).optional(),
+    schedule: z.union([
+      z.string(),
+      z.object({ cron: z.string() }).passthrough(),
+      z.array(z.object({ cron: z.string() }).passthrough())
+    ]).optional()
   }).passthrough(),
   T: z.union([
     z.array(z.union([z.string(), z.record(z.string(), z.any())])),
